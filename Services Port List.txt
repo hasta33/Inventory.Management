@@ -1,0 +1,15 @@
+-- > InventoryManagement.API
+     Http Port  : https://localhost:2000
+     Https Port : https://localhost:2001
+
+
+
+
+
+
+
+dotnet cli üzerinden db update komutlarý
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+
+
