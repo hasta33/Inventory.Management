@@ -1,17 +1,14 @@
 ﻿using System.Linq.Expressions;
 
-namespace InventoryManagement.Core.Services
+namespace InventoryManagement.Core.Services.Entity
 {
+    /* Entity şeklinde yapmak için */
     public interface IService<T> where T : class
     {
-
         Task<T> GetByIdAsync(int id);
         Task<IEnumerable<T>> GetAllAsync();
-
         IQueryable<T> Where(Expression<Func<T, bool>> expression);
         Task<bool> AnyAsync(Expression<Func<T, bool>> expression);
-
-
         Task<T> AddAsync(T entity);
         Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities);
         Task UpdateAsync(T entity);

@@ -1,6 +1,9 @@
 ﻿using InventoryManagement.Core.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Diagnostics;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace InventoryManagement.API.Filters
 {
@@ -14,5 +17,7 @@ namespace InventoryManagement.API.Filters
                 context.Result = new BadRequestObjectResult(CustomResponseDto<NoContent>.Fail(400, errors));
             }
         }
+
+
     }
 }

@@ -1,19 +1,21 @@
 ﻿using Autofac;
 using InventoryManagement.Core.Repositories;
 using InventoryManagement.Core.Services;
+using InventoryManagement.Core.Services.Entity;
 using InventoryManagement.Core.UnitOfWork;
 using InventoryManagement.Repository;
 using InventoryManagement.Repository.Repositories;
 using InventoryManagement.Repository.UnitOfWork;
 using InventoryManagement.Services.Mapping;
 using InventoryManagement.Services.Services;
+using InventoryManagement.Services.Services.Entity;
 using System.Reflection;
 using Module = Autofac.Module;
 
 
 namespace InventoryManagement.API.Modules
 {
-    public class RepositoryServiceModule: Module
+    public class RepositoryServiceModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -21,11 +23,19 @@ namespace InventoryManagement.API.Modules
                 .As(typeof(IGenericRepository<>))
                 .InstancePerLifetimeScope();
 
+
             builder.RegisterGeneric(typeof(Service<>))
                 .As(typeof(IService<>))
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
+            builder.RegisterGeneric(typeof(ServiceWithDto<,>))
+                .As(typeof(ServiceWithDto<,>))
+               .InstancePerLifetimeScope();
+
+            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerLifetimeScope();
+
+            builder.RegisterType<CategoryServiceWithDto>().As<ICategoryServiceWithDto>().InstancePerLifetimeScope();
+
 
             var apiAssembly = Assembly.GetExecutingAssembly();
             var repoAsssembly = Assembly.GetAssembly(typeof(DataContext));

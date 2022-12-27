@@ -1,11 +1,12 @@
 ﻿using InventoryManagement.Core.Repositories;
-using InventoryManagement.Core.Services;
+using InventoryManagement.Core.Services.Entity;
 using InventoryManagement.Core.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace InventoryManagement.Services.Services
+namespace InventoryManagement.Services.Services.Entity
 {
+    /* Entity şeklinde yapmak için */
     public class Service<T> : IService<T> where T : class
     {
         private readonly IGenericRepository<T> _repository;
@@ -42,12 +43,13 @@ namespace InventoryManagement.Services.Services
 
         public async Task<T> GetByIdAsync(int id)
         {
-           return await _repository.GetByIdAsync(id);
+            return await _repository.GetByIdAsync(id);
         }
+
 
         public async Task RemoveAsync(T entity)
         {
-           _repository.Remove(entity);
+            _repository.Remove(entity);
             await _unitOfWork.CommitAsync();
         }
 
@@ -59,13 +61,14 @@ namespace InventoryManagement.Services.Services
 
         public async Task UpdateAsync(T entity)
         {
-           _repository.Update(entity);
+            _repository.Update(entity);
             await _unitOfWork.CommitAsync();
         }
 
+
         public IQueryable<T> Where(Expression<Func<T, bool>> expression)
         {
-           return _repository.Where(expression);
+            return _repository.Where(expression);
         }
     }
 }

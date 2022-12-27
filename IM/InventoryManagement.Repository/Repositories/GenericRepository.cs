@@ -46,17 +46,20 @@ namespace InventoryManagement.Repository.Repositories
 
         public void RemoveRange(IEnumerable<T> entities)
         {
-           _dbSet.RemoveRange(entities);
+            _dbSet.RemoveRange(entities);
         }
 
         public void Update(T entity)
         {
-           _dbSet.Update(entity);
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            _dbSet.Update(entity);
         }
 
         public IQueryable<T> Where(Expression<Func<T, bool>> expression)
         {
-           return _dbSet.Where(expression);
+            return _dbSet.Where(expression);
         }
     }
 }

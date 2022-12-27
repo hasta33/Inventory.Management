@@ -1,6 +1,6 @@
 ﻿using InventoryManagement.Core.DTOs;
 using InventoryManagement.Core.Models;
-using InventoryManagement.Core.Services;
+using InventoryManagement.Core.Services.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
