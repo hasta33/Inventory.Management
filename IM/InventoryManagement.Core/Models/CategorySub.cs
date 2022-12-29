@@ -1,6 +1,6 @@
 ﻿namespace InventoryManagement.Core.Models
 {
-    public class Category : BaseEntity
+    public class CategorySub : BaseEntity
     {
         public string? Name { get; set; }
     }

@@ -43,6 +43,21 @@ namespace InventoryManagement.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CategorySub",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CategorySub", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Compaines",
                 columns: table => new
                 {
@@ -61,17 +76,17 @@ namespace InventoryManagement.Repository.Migrations
             migrationBuilder.InsertData(
                 table: "BrandModel",
                 columns: new[] { "Id", "Brand", "CreatedDate", "Model", "UpdatedDate" },
-                values: new object[] { 1, "Samsung", new DateTime(2022, 12, 15, 13, 17, 57, 498, DateTimeKind.Local).AddTicks(5547), "A3", null });
+                values: new object[] { 1, "Samsung", new DateTime(2022, 12, 29, 8, 56, 26, 616, DateTimeKind.Local).AddTicks(9174), "A3", null });
 
             migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "CreatedDate", "Name", "UpdatedDate" },
-                values: new object[] { 1, new DateTime(2022, 12, 15, 13, 17, 57, 498, DateTimeKind.Local).AddTicks(5889), "Bilgisayar", null });
+                values: new object[] { 1, new DateTime(2022, 12, 29, 8, 56, 26, 616, DateTimeKind.Local).AddTicks(9321), "Bilgisayar", null });
 
             migrationBuilder.InsertData(
                 table: "Compaines",
                 columns: new[] { "Id", "CreatedDate", "Description", "Name", "UpdatedDate" },
-                values: new object[] { 1, new DateTime(2022, 12, 15, 13, 17, 57, 498, DateTimeKind.Local).AddTicks(6026), "Enerya genel merkez", "Enerya Enerji A.Ş.", null });
+                values: new object[] { 1, new DateTime(2022, 12, 29, 8, 56, 26, 616, DateTimeKind.Local).AddTicks(9373), "Enerya genel merkez", "Enerya Enerji A.Ş.", null });
         }
 
         /// <inheritdoc />
@@ -82,6 +97,9 @@ namespace InventoryManagement.Repository.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "CategorySub");
 
             migrationBuilder.DropTable(
                 name: "Compaines");

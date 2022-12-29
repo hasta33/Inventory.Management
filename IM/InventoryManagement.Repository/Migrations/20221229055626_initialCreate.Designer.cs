@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagement.Repository.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221215101757_initialCreate")]
+    [Migration("20221229055626_initialCreate")]
     partial class initialCreate
     {
         /// <inheritdoc />
@@ -56,7 +56,7 @@ namespace InventoryManagement.Repository.Migrations
                         {
                             Id = 1,
                             Brand = "Samsung",
-                            CreatedDate = new DateTime(2022, 12, 15, 13, 17, 57, 498, DateTimeKind.Local).AddTicks(5547),
+                            CreatedDate = new DateTime(2022, 12, 29, 8, 56, 26, 616, DateTimeKind.Local).AddTicks(9174),
                             Model = "A3"
                         });
                 });
@@ -88,9 +88,33 @@ namespace InventoryManagement.Repository.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2022, 12, 15, 13, 17, 57, 498, DateTimeKind.Local).AddTicks(5889),
+                            CreatedDate = new DateTime(2022, 12, 29, 8, 56, 26, 616, DateTimeKind.Local).AddTicks(9321),
                             Name = "Bilgisayar"
                         });
+                });
+
+            modelBuilder.Entity("InventoryManagement.Core.Models.CategorySub", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CategorySub", (string)null);
                 });
 
             modelBuilder.Entity("InventoryManagement.Core.Models.Company", b =>
@@ -124,7 +148,7 @@ namespace InventoryManagement.Repository.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2022, 12, 15, 13, 17, 57, 498, DateTimeKind.Local).AddTicks(6026),
+                            CreatedDate = new DateTime(2022, 12, 29, 8, 56, 26, 616, DateTimeKind.Local).AddTicks(9373),
                             Description = "Enerya genel merkez",
                             Name = "Enerya Enerji A.Ş."
                         });

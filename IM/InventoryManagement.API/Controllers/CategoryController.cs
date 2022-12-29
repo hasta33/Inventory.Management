@@ -15,7 +15,7 @@ namespace InventoryManagement.API.Controllers
             _categoryServiceWithDto = categoryServiceWithDto;
         }
 
-
+        
         [HttpGet]
         public async Task<IActionResult> GetCategories()
         {
@@ -31,6 +31,7 @@ namespace InventoryManagement.API.Controllers
         }
 
 
+        //[ServiceFilter(typeof(NotFoundFilter<Category>))]
         [HttpGet("{page}/{pageSize}")]
         public async Task<IActionResult> GetCategoriesPageList(int page, int pageSize)
         {

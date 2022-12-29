@@ -110,5 +110,6 @@ namespace InventoryManagement.Services.Services
 
             return CustomResponseDto<IEnumerable<Dto>>.Success(StatusCodes.Status200OK, dtoList);
         }
+
     }
 }

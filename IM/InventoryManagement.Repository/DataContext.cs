@@ -21,7 +21,9 @@ namespace InventoryManagement.Repository
 
         public DbSet<Company> Companies { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<CategorySub> CategoriesSub { get; set; }
         public DbSet<BrandModel> Brands { get; set; }
+
 
 
 

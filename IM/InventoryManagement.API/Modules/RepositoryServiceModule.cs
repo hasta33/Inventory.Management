@@ -24,13 +24,13 @@ namespace InventoryManagement.API.Modules
                 .InstancePerLifetimeScope();
 
 
-            builder.RegisterGeneric(typeof(Service<>))
-                .As(typeof(IService<>))
-                .InstancePerLifetimeScope();
+            //TEntity şeklinde donus sağlamak
+            builder.RegisterGeneric(typeof(Service<>)).As(typeof(IService<>)).InstancePerLifetimeScope();
 
-            builder.RegisterGeneric(typeof(ServiceWithDto<,>))
-                .As(typeof(ServiceWithDto<,>))
-               .InstancePerLifetimeScope();
+            //Entity verip, dto şeklinde dönüş sağlamak
+            builder.RegisterGeneric(typeof(ServiceWithDto<,>)).As(typeof(IServiceWithDto<,>)).InstancePerLifetimeScope();
+
+
 
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerLifetimeScope();
 

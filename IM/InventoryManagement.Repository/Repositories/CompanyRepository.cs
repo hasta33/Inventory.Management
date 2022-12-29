@@ -35,9 +35,9 @@ namespace InventoryManagement.Repository.Repositories
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    CreatedDate = x.CreatedDate,
+                    CreatedDate = Convert.ToDateTime(x.CreatedDate),
                     Description = x.Description,
-                    UpdatedDate = x.UpdatedDate,
+                    UpdatedDate = Convert.ToDateTime(x.UpdatedDate),
                 }).ToListAsync();
             return response;
         }

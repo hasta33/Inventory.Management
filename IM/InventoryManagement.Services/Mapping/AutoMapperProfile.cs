@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
-using InventoryManagement.Core.DTOs;
 using InventoryManagement.Core.DTOs.BrandModel;
 using InventoryManagement.Core.DTOs.Category;
+using InventoryManagement.Core.DTOs.CategorySub;
 using InventoryManagement.Core.DTOs.Company;
 using InventoryManagement.Core.Models;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Reflection;
 
 namespace InventoryManagement.Services.Mapping
 {
@@ -24,22 +21,6 @@ namespace InventoryManagement.Services.Mapping
             CreateMap<Company, CompanyDto>().ReverseMap();
             CreateMap<Company, CompanyCreateDto>().ReverseMap();
             CreateMap<Company, CompanyUpdateDto>().ReverseMap();
-
-            //CreateMap<Company, CompanyUpdateDto>().ReverseMap().ForAllMembers(x => x.Condition((source, dest, inMember) => Filter(inMember)));
-
-            //CreateMap<Company, CompanyUpdateDto>().ReverseMap().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-
-            //CreateMap<Company, CompanyUpdateDto>().ReverseMap().ForMember(dest => dest.Description, opt => opt.Ignore());
-            //CreateMap<Company, CompanyUpdateDto>().ReverseMap().ForMember(dest => dest.Description.GetValueOrDefault(), opt => opt.MapFrom(src => src.Description));
-            //CreateMap<Company, CompanyUpdateDto>().ReverseMap().ForAllMembers(x => x.Condition((source, destination, arg3, arg4, resolutionContext) =>
-            //{
-            //    Console.WriteLine($"Mapping to {destination.GetType().Name}.{x.DestinationMember.Name}");
-            //    return true;
-            //})); ;
-
-
-            //
-            //CreateMap<Company, CompanyUpdateDto>().ReverseMap().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             #endregion
 
             #region Category DTO
@@ -49,8 +30,14 @@ namespace InventoryManagement.Services.Mapping
             #endregion
 
 
+            #region CategorySub DTO
+            CreateMap<CategorySub, CategorySubDto>().ReverseMap();
+            CreateMap<CategorySub, CategorySubCreateDto>().ReverseMap();
+            CreateMap<CategorySub, CategorySubUpdateDto>().ReverseMap();
+            #endregion
+
             #region BrandModel DTO
-            CreateMap<BrandModel, BrandModelGetDto>().ReverseMap();
+            CreateMap<BrandModel, BrandModelDto>().ReverseMap();
             CreateMap<BrandModel, BrandModelCreateDto>().ReverseMap();
             CreateMap<BrandModel, BrandModelUpdateDto>().ReverseMap();
             #endregion

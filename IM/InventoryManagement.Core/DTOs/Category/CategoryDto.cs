@@ -1,8 +1,6 @@
-﻿using InventoryManagement.Core.Models;
-
-namespace InventoryManagement.Core.DTOs.Category
+﻿namespace InventoryManagement.Core.DTOs.Category
 {
-    public class CategoryDto : BaseEntity
+    public class CategoryDto : BaseDto
     {
         public string? Name { get; set; }
     }

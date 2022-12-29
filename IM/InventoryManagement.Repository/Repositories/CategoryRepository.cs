@@ -18,7 +18,7 @@ namespace InventoryManagement.Repository.Repositories
 
         public async Task<List<Category>> GetCategoriesById(int id)
         {
-            return await _context.Categories.Where(x => x.Id == id).OrderByDescending(x => x.CreatedDate).ToListAsync();
+            return await _context.Categories.Where(x => x.Id == id).ToListAsync(); //.OrderByDescending(x => x.CreatedDate)
         }
 
         public async Task<List<CategoryDto>> GetCategoriesList(int page, int pageSize)
@@ -34,8 +34,8 @@ namespace InventoryManagement.Repository.Repositories
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    CreatedDate = x.CreatedDate,
-                    UpdatedDate = x.UpdatedDate,
+                    CreatedDate = Convert.ToDateTime(x.CreatedDate),
+                    UpdatedDate = Convert.ToDateTime(x.UpdatedDate),
                 }).ToListAsync();
             return response;
         }
