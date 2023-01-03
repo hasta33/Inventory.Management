@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace InventoryManagement.Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class initialCreate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,7 +28,7 @@ namespace InventoryManagement.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Categories",
+                name: "Category",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -39,22 +39,7 @@ namespace InventoryManagement.Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CategorySub",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CategorySub", x => x.Id);
+                    table.PrimaryKey("PK_Category", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -73,20 +58,31 @@ namespace InventoryManagement.Repository.Migrations
                     table.PrimaryKey("PK_Compaines", x => x.Id);
                 });
 
-            migrationBuilder.InsertData(
-                table: "BrandModel",
-                columns: new[] { "Id", "Brand", "CreatedDate", "Model", "UpdatedDate" },
-                values: new object[] { 1, "Samsung", new DateTime(2022, 12, 29, 8, 56, 26, 616, DateTimeKind.Local).AddTicks(9174), "A3", null });
+            migrationBuilder.CreateTable(
+                name: "CategorySubs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CategorySubs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CategorySubs_Category_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Category",
+                        principalColumn: "Id");
+                });
 
-            migrationBuilder.InsertData(
-                table: "Categories",
-                columns: new[] { "Id", "CreatedDate", "Name", "UpdatedDate" },
-                values: new object[] { 1, new DateTime(2022, 12, 29, 8, 56, 26, 616, DateTimeKind.Local).AddTicks(9321), "Bilgisayar", null });
-
-            migrationBuilder.InsertData(
-                table: "Compaines",
-                columns: new[] { "Id", "CreatedDate", "Description", "Name", "UpdatedDate" },
-                values: new object[] { 1, new DateTime(2022, 12, 29, 8, 56, 26, 616, DateTimeKind.Local).AddTicks(9373), "Enerya genel merkez", "Enerya Enerji A.Ş.", null });
+            migrationBuilder.CreateIndex(
+                name: "IX_CategorySubs_CategoryId",
+                table: "CategorySubs",
+                column: "CategoryId");
         }
 
         /// <inheritdoc />
@@ -96,13 +92,13 @@ namespace InventoryManagement.Repository.Migrations
                 name: "BrandModel");
 
             migrationBuilder.DropTable(
-                name: "Categories");
-
-            migrationBuilder.DropTable(
-                name: "CategorySub");
+                name: "CategorySubs");
 
             migrationBuilder.DropTable(
                 name: "Compaines");
+
+            migrationBuilder.DropTable(
+                name: "Category");
         }
     }
 }

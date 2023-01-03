@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagement.Repository.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221229055626_initialCreate")]
-    partial class initialCreate
+    [Migration("20221230211301_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,15 +50,6 @@ namespace InventoryManagement.Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BrandModel", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Brand = "Samsung",
-                            CreatedDate = new DateTime(2022, 12, 29, 8, 56, 26, 616, DateTimeKind.Local).AddTicks(9174),
-                            Model = "A3"
-                        });
                 });
 
             modelBuilder.Entity("InventoryManagement.Core.Models.Category", b =>
@@ -82,15 +73,7 @@ namespace InventoryManagement.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedDate = new DateTime(2022, 12, 29, 8, 56, 26, 616, DateTimeKind.Local).AddTicks(9321),
-                            Name = "Bilgisayar"
-                        });
+                    b.ToTable("Category", (string)null);
                 });
 
             modelBuilder.Entity("InventoryManagement.Core.Models.CategorySub", b =>
@@ -100,6 +83,9 @@ namespace InventoryManagement.Repository.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -114,7 +100,9 @@ namespace InventoryManagement.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CategorySub", (string)null);
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("CategorySubs", (string)null);
                 });
 
             modelBuilder.Entity("InventoryManagement.Core.Models.Company", b =>
@@ -143,15 +131,20 @@ namespace InventoryManagement.Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Compaines", (string)null);
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedDate = new DateTime(2022, 12, 29, 8, 56, 26, 616, DateTimeKind.Local).AddTicks(9373),
-                            Description = "Enerya genel merkez",
-                            Name = "Enerya Enerji A.Ş."
-                        });
+            modelBuilder.Entity("InventoryManagement.Core.Models.CategorySub", b =>
+                {
+                    b.HasOne("InventoryManagement.Core.Models.Category", "Category")
+                        .WithMany("CategorySubs")
+                        .HasForeignKey("CategoryId");
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("InventoryManagement.Core.Models.Category", b =>
+                {
+                    b.Navigation("CategorySubs");
                 });
 #pragma warning restore 612, 618
         }

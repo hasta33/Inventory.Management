@@ -27,6 +27,9 @@ namespace InventoryManagement.Services.Mapping
             CreateMap<Category, CategoryDto>().ReverseMap();
             CreateMap<Category, CategoryCreateDto>().ReverseMap();
             CreateMap<Category, CategoryUpdateDto>().ReverseMap();
+
+            CreateMap<CategoryCreateDto, CategoryDto>().ReverseMap();
+            CreateMap<CategoryWithCategorySubDto, Category>().ReverseMap();
             #endregion
 
 

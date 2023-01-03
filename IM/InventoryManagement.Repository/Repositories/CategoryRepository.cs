@@ -1,5 +1,4 @@
-﻿using InventoryManagement.Core.DTOs.Category;
-using InventoryManagement.Core.Models;
+﻿using InventoryManagement.Core.Models;
 using InventoryManagement.Core.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,33 +10,19 @@ namespace InventoryManagement.Repository.Repositories
         {
         }
 
-        public async Task<List<Category>> GetCategories()
-        {
-            return await _context.Categories.ToListAsync();
-        }
+        //public async Task<List<Category>> GetCategoryByIdWithSubCategory(int id)
+        //{
+        //    //return await _context.CategoriesSub.Include(x => x.Category).Where(x => x.Id == id).SingleOrDefaultAsync();
+        //    return await _context.CategoriesSub.Include(c => c.CategoryId).ToListAsync();
+        //}
 
-        public async Task<List<Category>> GetCategoriesById(int id)
+        public async Task<List<Category>> GetCategoryByIdWithSubCategory(int id)
         {
-            return await _context.Categories.Where(x => x.Id == id).ToListAsync(); //.OrderByDescending(x => x.CreatedDate)
-        }
+            //return await _context.CategoriesSub.Include(x => x.Category).Where(x => x.Id == id).SingleOrDefaultAsync();
+            //return await _context.Categories.Where(x => x.Id == id).ToListAsync();
 
-        public async Task<List<CategoryDto>> GetCategoriesList(int page, int pageSize)
-        {
-            IQueryable<Category> query;
-            query = _context.Categories
-                .OrderByDescending(x => x.CreatedDate);
-
-            int totalCount = query.Count();
-            var response = await query.Skip((pageSize * (page - 1)))
-                .Take(pageSize)
-                .Select(x => new CategoryDto()
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    CreatedDate = Convert.ToDateTime(x.CreatedDate),
-                    UpdatedDate = Convert.ToDateTime(x.UpdatedDate),
-                }).ToListAsync();
-            return response;
+            return await _context.Categories.Where(x => x.Id == id).ToListAsync();
+            //return await _context.Categories.Where(x => x.Id == id).Include(x => x.CategorySubs).ToListAsync();
         }
     }
 }

@@ -9,52 +9,37 @@ using Microsoft.AspNetCore.Http;
 
 namespace InventoryManagement.Services.Services
 {
-    /* CustomRespondeDto şeklinde yapmak için */
     public class CategoryServiceWithDto : ServiceWithDto<Category, CategoryDto>, ICategoryServiceWithDto
     {
-        private readonly ICategoryRepository _repository;
-        public CategoryServiceWithDto(IGenericRepository<Category> repository, ICategoryRepository categoryRepository, IUnitOfWork unitOfWork, IMapper mapper) : base(repository, unitOfWork, mapper)
+        private readonly ICategoryRepository _categoryRepository;
+        public CategoryServiceWithDto(IGenericRepository<Category> repository, IUnitOfWork unitOfWork, IMapper mapper, ICategoryRepository categoryRepository) : base(repository, unitOfWork, mapper)
         {
-            _repository = categoryRepository;
+            _categoryRepository = categoryRepository;
         }
 
         public async Task<CustomResponseDto<CategoryDto>> AddAsync(CategoryCreateDto dto)
         {
             var newEntity = _mapper.Map<Category>(dto);
-            await _repository.AddAsync(newEntity);
+            await _categoryRepository.AddAsync(newEntity);
             await _unitOfWork.CommitAsync();
 
-            var newDto = _mapper.Map<CategoryDto>(newEntity);
+            var newDto = _mapper.Map<CategoryDto>(dto);
             return CustomResponseDto<CategoryDto>.Success(StatusCodes.Status200OK, newDto);
         }
 
-        public async Task<CustomResponseDto<List<CategoryDto>>> GetCategories()
+        public async Task<CustomResponseDto<List<CategoryWithCategorySubDto>>> GetCategoryByIdWithSubCategory(int id)
         {
-            var categories = await _repository.GetCategories();
-            var categoriesDto = _mapper.Map<List<CategoryDto>>(categories);
-            return CustomResponseDto<List<CategoryDto>>.Success(200, categoriesDto);
+            var category = await _categoryRepository.GetCategoryByIdWithSubCategory(id);
+
+            var categoryDto = _mapper.Map<List<CategoryWithCategorySubDto>>(category);
+            return CustomResponseDto<List<CategoryWithCategorySubDto>>.Success(StatusCodes.Status200OK, categoryDto);
         }
 
-        public async Task<CustomResponseDto<List<CategoryDto>>> GetCategoriesById(int id)
-        {
-            var category = await _repository.GetByIdAsync(id);
-            var categoryDto = _mapper.Map<List<CategoryDto>>(category);
-            return CustomResponseDto<List<CategoryDto>>.Success(200, categoryDto);
-        }
-
-        public async Task<CustomResponseDto<List<CategoryDto>>> GetCategoriesPageList(int page, int pageSize)
-        {
-            var categoryList = await _repository.GetCategoriesList(page, pageSize);
-            return CustomResponseDto<List<CategoryDto>>.Success(200, categoryList);
-        }
-        
         public async Task<CustomResponseDto<NoContent>> UpdateAsync(CategoryUpdateDto dto)
         {
             var entity = _mapper.Map<Category>(dto);
-            _repository.Update(entity);
-
+            _categoryRepository.Update(entity);
             await _unitOfWork.CommitAsync();
-
             return CustomResponseDto<NoContent>.Success(StatusCodes.Status204NoContent);
         }
     }
