@@ -1,9 +1,6 @@
 ﻿using InventoryManagement.Core.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Diagnostics;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace InventoryManagement.API.Filters
 {

@@ -7,8 +7,10 @@
 
 
 
-        //public ICollection<CategorySub> ? CategorySubs { get; set; }
-       
-        public IEnumerable<CategorySub>? CategorySubs { get; set; }
+        public int? CompanyId { get; set; }
+        public Company Company { get; set; }
+
+
+        public ICollection<CategorySub> CategorySubs { get; set; }
     }
 }

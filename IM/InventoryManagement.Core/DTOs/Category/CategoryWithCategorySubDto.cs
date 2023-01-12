@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using InventoryManagement.Core.DTOs.CategorySub;
 
 namespace InventoryManagement.Core.DTOs.Category
 {
-    public class CategoryWithCategorySubDto
+    public class CategoryWithCategorySubDto : CategoryDto
     {
+        public List<CategorySubDto> CategorySubs { get; set; }
     }
 }

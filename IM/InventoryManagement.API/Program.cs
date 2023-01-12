@@ -1,7 +1,5 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using AutoMapper;
-using FluentValidation.AspNetCore;
 using InventoryManagement.API.Filters;
 using InventoryManagement.API.MiddlewaresExtension;
 using InventoryManagement.API.Modules;
@@ -11,39 +9,37 @@ using InventoryManagement.Core.UnitOfWork;
 using InventoryManagement.Repository;
 using InventoryManagement.Repository.Repositories;
 using InventoryManagement.Repository.UnitOfWork;
+using InventoryManagement.Services;
 using InventoryManagement.Services.Mapping;
 using InventoryManagement.Services.Services.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddHealthChecks();
 
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add(new ValidateFilterAttribute()); //options.Filters.Add(new AuthorizeFilter()); //tum kontrollerde authorize attribute etkinleþtirilmis olacak
-}).AddFluentValidation(x =>
-{
-    x.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-})
-.AddJsonOptions(options =>
+}).AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.IgnoreReadOnlyFields = true;
     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault | JsonIgnoreCondition.WhenWritingNull; //db'de null olan deðerleri getirme
 });
-
-
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
 });
 builder.Services.AddEndpointsApiExplorer();
+
+//Custom FluentValidation
+builder.Services.AddCustomApplicationServices();
+
+
 
 #region Swagger
 builder.Services.AddSwaggerGen();
@@ -53,7 +49,7 @@ builder.Services.AddSwaggerGen();
 #region Dependencies
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-builder.Services.AddScoped(typeof(IService<>), typeof(Service<>)); //IService yapýlabilir herhangi bir sorunda
+builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));
 builder.Services.AddScoped(typeof(NotFoundFilter<>));
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 //var config = new MapperConfiguration(cfg =>
@@ -95,10 +91,5 @@ app.MapControllers();
 
 //Custom exceptions
 app.UseCustomException();
-
-#region Health check
-app.UseHealthChecks("/health");
-#endregion
-
 
 app.Run();

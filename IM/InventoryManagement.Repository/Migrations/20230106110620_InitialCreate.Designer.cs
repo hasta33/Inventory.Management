@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagement.Repository.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221230211301_InitialCreate")]
+    [Migration("20230106110620_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,12 +20,12 @@ namespace InventoryManagement.Repository.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.0")
+                .HasAnnotation("ProductVersion", "7.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("InventoryManagement.Core.Models.BrandModel", b =>
+            modelBuilder.Entity("InventoryManagement.Core.Models.Brand", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,32 +33,9 @@ namespace InventoryManagement.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Brand")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Model")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("BrandModel", (string)null);
-                });
-
-            modelBuilder.Entity("InventoryManagement.Core.Models.Category", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int?>("BusinessCode")
+                        .IsRequired()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -73,6 +50,39 @@ namespace InventoryManagement.Repository.Migrations
 
                     b.HasKey("Id");
 
+                    b.ToTable("Brand", (string)null);
+                });
+
+            modelBuilder.Entity("InventoryManagement.Core.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("BusinessCode")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
                     b.ToTable("Category", (string)null);
                 });
 
@@ -84,11 +94,20 @@ namespace InventoryManagement.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("BusinessCode")
+                        .IsRequired()
+                        .HasColumnType("int");
+
                     b.Property<int?>("CategoryId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -113,6 +132,9 @@ namespace InventoryManagement.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("BusinessCode")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -133,13 +155,74 @@ namespace InventoryManagement.Repository.Migrations
                     b.ToTable("Compaines", (string)null);
                 });
 
+            modelBuilder.Entity("InventoryManagement.Core.Models.Model", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("BrandId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BusinessCode")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BrandId");
+
+                    b.ToTable("Model", (string)null);
+                });
+
+            modelBuilder.Entity("InventoryManagement.Core.Models.Category", b =>
+                {
+                    b.HasOne("InventoryManagement.Core.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("Company");
+                });
+
             modelBuilder.Entity("InventoryManagement.Core.Models.CategorySub", b =>
                 {
                     b.HasOne("InventoryManagement.Core.Models.Category", "Category")
                         .WithMany("CategorySubs")
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("InventoryManagement.Core.Models.Model", b =>
+                {
+                    b.HasOne("InventoryManagement.Core.Models.Brand", "Brand")
+                        .WithMany("Models")
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brand");
+                });
+
+            modelBuilder.Entity("InventoryManagement.Core.Models.Brand", b =>
+                {
+                    b.Navigation("Models");
                 });
 
             modelBuilder.Entity("InventoryManagement.Core.Models.Category", b =>

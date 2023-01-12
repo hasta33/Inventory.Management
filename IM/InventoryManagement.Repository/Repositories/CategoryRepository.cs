@@ -18,11 +18,9 @@ namespace InventoryManagement.Repository.Repositories
 
         public async Task<List<Category>> GetCategoryByIdWithSubCategory(int id)
         {
-            //return await _context.CategoriesSub.Include(x => x.Category).Where(x => x.Id == id).SingleOrDefaultAsync();
             //return await _context.Categories.Where(x => x.Id == id).ToListAsync();
-
-            return await _context.Categories.Where(x => x.Id == id).ToListAsync();
-            //return await _context.Categories.Where(x => x.Id == id).Include(x => x.CategorySubs).ToListAsync();
+            //return await _context.Categories.Include(x => x.CategorySubs).Where(x => x.Id == id).SingleOrDefaultAsync();
+            return await _context.Categories.Include(x => x.CategorySubs).Where(x => x.Id == id).ToListAsync();
         }
     }
 }

@@ -4,21 +4,18 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace InventoryManagement.Repository.Configurations
 {
-    public class CategoryConfiguration : IEntityTypeConfiguration<Category>
+    public class BrandConfiguration : IEntityTypeConfiguration<Brand>
     {
-        public void Configure(EntityTypeBuilder<Category> builder)
+        public void Configure(EntityTypeBuilder<Brand> builder)
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).UseIdentityColumn();
+
             builder.Property(x => x.Name).IsRequired().HasMaxLength(100);
             builder.Property(x => x.BusinessCode).IsRequired();
 
-            builder.ToTable("Category");
-
-            //builder.HasOne(x => x.CategorySub).WithMany(x => x.Categories).HasPrincipalKey(x => x.Id);
-
-            //Relationship
-            //builder.HasOne(x => x.Company).WithMany(x => x.Categories).HasForeignKey(x => x.CompanyId);
+            //builder.ToTable("Brands");
+            builder.ToTable(nameof(Brand));
         }
     }
 }

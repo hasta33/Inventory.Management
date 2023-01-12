@@ -1,7 +1,8 @@
 ﻿namespace InventoryManagement.Core.DTOs.Category
 {
-    public class CategoryCreateDto : BaseDto
+    public class CategoryCreateDto //: BaseDto
     {
         public string? Name { get; set; }
+        public int BusinessCode { get; set; }
     }
 }

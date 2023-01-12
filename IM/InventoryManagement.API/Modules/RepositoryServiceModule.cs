@@ -19,23 +19,30 @@ namespace InventoryManagement.API.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterGeneric(typeof(GenericRepository<>))
-                .As(typeof(IGenericRepository<>))
-                .InstancePerLifetimeScope();
+            //Generic Repository
+            builder.RegisterGeneric(typeof(GenericRepository<>)).As(typeof(IGenericRepository<>)).InstancePerLifetimeScope();
 
 
-            //TEntity şeklinde donus sağlamak
+            //Generic Service, TEntity şeklinde donus sağlamak
             builder.RegisterGeneric(typeof(Service<>)).As(typeof(IService<>)).InstancePerLifetimeScope();
+
+
 
             //Entity verip, dto şeklinde dönüş sağlamak
             builder.RegisterGeneric(typeof(ServiceWithDto<,>)).As(typeof(IServiceWithDto<,>)).InstancePerLifetimeScope();
 
 
-
+            //UnitOfWork
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerLifetimeScope();
 
-            //builder.RegisterType<CategoryServiceWithDto>().As<ICategoryServiceWithDto>().InstancePerLifetimeScope();
+
+
+            #region Custom Service Dto
             builder.RegisterType<CategoryServiceWithDto>().As<ICategoryServiceWithDto>().InstancePerLifetimeScope();
+            builder.RegisterType<BrandServiceWithDto>().As<IBrandServiceWithDto>().InstancePerLifetimeScope();
+            #endregion
+
+
 
 
             var apiAssembly = Assembly.GetExecutingAssembly();

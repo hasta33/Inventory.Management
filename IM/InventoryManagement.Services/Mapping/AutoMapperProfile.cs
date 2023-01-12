@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using InventoryManagement.Core.DTOs.BrandModel;
 using InventoryManagement.Core.DTOs.Category;
 using InventoryManagement.Core.DTOs.CategorySub;
 using InventoryManagement.Core.DTOs.Company;
@@ -18,32 +17,28 @@ namespace InventoryManagement.Services.Mapping
         public AutoMapperProfile()
         {
             #region Company DTO
-            CreateMap<Company, CompanyDto>().ReverseMap();
-            CreateMap<Company, CompanyCreateDto>().ReverseMap();
-            CreateMap<Company, CompanyUpdateDto>().ReverseMap();
+            CreateMap<CompanyDto, Company>().ReverseMap();
+            CreateMap<CompanyCreateDto, CompanyDto>().ReverseMap();
+            CreateMap<CompanyUpdateDto, CompanyDto>().ReverseMap();
+            
             #endregion
 
             #region Category DTO
-            CreateMap<Category, CategoryDto>().ReverseMap();
-            CreateMap<Category, CategoryCreateDto>().ReverseMap();
-            CreateMap<Category, CategoryUpdateDto>().ReverseMap();
+            CreateMap<Category, CategoryDto>().ReverseMap();  //Get işlemleri için
+            CreateMap<Category, CategoryUpdateDto>().ReverseMap(); //Update islemi için calısıyor
 
-            CreateMap<CategoryCreateDto, CategoryDto>().ReverseMap();
-            CreateMap<CategoryWithCategorySubDto, Category>().ReverseMap();
+            CreateMap<Category, CategoryCreateDto>().ReverseMap(); //post islemi için
+            CreateMap<CategoryDto, CategoryCreateDto>().ReverseMap(); //post islemi için
+            CreateMap<Category, CategoryWithCategorySubDto>().ReverseMap(); //kategory ve alt kategorileri almak için
             #endregion
 
 
             #region CategorySub DTO
-            CreateMap<CategorySub, CategorySubDto>().ReverseMap();
-            CreateMap<CategorySub, CategorySubCreateDto>().ReverseMap();
-            CreateMap<CategorySub, CategorySubUpdateDto>().ReverseMap();
+            CreateMap<CategorySub, CategorySubDto>().ReverseMap(); //Get islemi için
+            CreateMap<CategorySubDto, CategorySubCreateDto>().ReverseMap(); // post için mapleme
+            CreateMap<CategorySubDto, CategorySubUpdateDto>().ReverseMap(); //çalışıyor put içi
             #endregion
 
-            #region BrandModel DTO
-            CreateMap<BrandModel, BrandModelDto>().ReverseMap();
-            CreateMap<BrandModel, BrandModelCreateDto>().ReverseMap();
-            CreateMap<BrandModel, BrandModelUpdateDto>().ReverseMap();
-            #endregion
         }
     }
 }
