@@ -1,14 +1,12 @@
 ﻿using Autofac;
 using InventoryManagement.Core.Repositories;
 using InventoryManagement.Core.Services;
-using InventoryManagement.Core.Services.Entity;
 using InventoryManagement.Core.UnitOfWork;
 using InventoryManagement.Repository;
 using InventoryManagement.Repository.Repositories;
 using InventoryManagement.Repository.UnitOfWork;
 using InventoryManagement.Services.Mapping;
 using InventoryManagement.Services.Services;
-using InventoryManagement.Services.Services.Entity;
 using System.Reflection;
 using Module = Autofac.Module;
 
@@ -38,8 +36,8 @@ namespace InventoryManagement.API.Modules
 
 
             #region Custom Service Dto
-            builder.RegisterType<CategoryServiceWithDto>().As<ICategoryServiceWithDto>().InstancePerLifetimeScope();
-            builder.RegisterType<BrandServiceWithDto>().As<IBrandServiceWithDto>().InstancePerLifetimeScope();
+            //builder.RegisterType<CategoryServiceWithDto>().As<ICategoryServiceWithDto>().InstancePerLifetimeScope();
+            //builder.RegisterType<BrandServiceWithDto>().As<IBrandServiceWithDto>().InstancePerLifetimeScope();
             #endregion
 
 

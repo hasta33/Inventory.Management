@@ -10,9 +10,9 @@ namespace InventoryManagement.API.Controllers
     [ApiController]
     public class CompanyController : CustomBaseController
     {
-
         private readonly IServiceWithDto<Company, CompanyDto> _service;
         private readonly IMapper _mapper;
+
         public CompanyController(IServiceWithDto<Company, CompanyDto> service, IMapper mapper)
         {
             _service = service;
@@ -25,6 +25,7 @@ namespace InventoryManagement.API.Controllers
         {
             return CreateActionResult(await _service.GetAllAsync());
         }
+
 
         [HttpPost]
         public async Task<IActionResult> AddAsync(CompanyCreateDto dto)
@@ -48,19 +49,21 @@ namespace InventoryManagement.API.Controllers
         }
 
 
-
         [HttpPost("SaveAll")]
-        public async Task<IActionResult> SaveAll(List<CompanyDto> dtos)
+        public async Task<IActionResult> SaveAll(List<CompanyCreateDto> dtos)
         {
-            return CreateActionResult(await _service.AddRangeAsync(dtos));
+            var result = _mapper.Map<List<CompanyDto>>(dtos);
+            return CreateActionResult(await _service.AddRangeAsync(result));
         }
-
 
         [HttpDelete("RemoveAll")]
         public async Task<IActionResult> RemoveAll(List<int> ids)
         {
             return CreateActionResult(await _service.RemoveRangeAsync(ids));
         }
+
+
+
 
 
     }

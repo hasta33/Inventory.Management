@@ -1,0 +1,13 @@
+
+Sınıf-Model oluşturmak için
+ng generate class SınıfAdı
+
+Environment oluşturma
+ng generate environments
+
+
+
+** Servis oluşturma
+ng generate service [name]
+
+

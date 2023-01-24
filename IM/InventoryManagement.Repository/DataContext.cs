@@ -18,12 +18,7 @@ namespace InventoryManagement.Repository
 
         }
 
-
         public DbSet<Company> Companies { get; set; }
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<CategorySub> CategoriesSub { get; set; }
-        public DbSet<Brand> Brands { get; set; }
-        public DbSet<Model> Models { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -47,40 +42,30 @@ namespace InventoryManagement.Repository
 
         public override int SaveChanges()
         {
-            //foreach (var item in ChangeTracker.Entries())
-            //{
-            //    if (item.Entity is BaseEntity entityReference)
-            //    {
-            //        switch (item.Entity)
-            //        {
-            //            case EntityState.Added:
-            //                {
-            //                    Entry(entityReference).Property(x => x.UpdatedDate).IsModified = false;
-            //                    entityReference.CreatedDate = DateTime.UtcNow;
-            //                    break;
-            //                }
-            //            case EntityState.Modified:
-            //                {
-            //                    entityReference.UpdatedDate = DateTime.UtcNow;
-            //                    break;
-            //                }
-            //        }
-            //    }
-            //}
-            UpdateChangeTracker();
+            foreach (var item in ChangeTracker.Entries())
+            {
+                if (item.Entity is BaseEntity entityReference)
+                {
+                    switch (item.Entity)
+                    {
+                        case EntityState.Added:
+                            {
+                                Entry(entityReference).Property(x => x.UpdatedDate).IsModified = false;
+                                entityReference.CreatedDate = DateTime.UtcNow;
+                                break;
+                            }
+                        case EntityState.Modified:
+                            {
+                                entityReference.UpdatedDate = DateTime.UtcNow;
+                                break;
+                            }
+                    }
+                }
+            }
             return base.SaveChanges();
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            //Console.WriteLine(ChangeTracker.Entries());
-
-            UpdateChangeTracker();
-          
-            return base.SaveChangesAsync(cancellationToken);
-        }
-
-        public void UpdateChangeTracker()
         {
             foreach (var item in ChangeTracker.Entries())
             {
@@ -104,7 +89,10 @@ namespace InventoryManagement.Repository
                     }
                 }
             }
+
+            return base.SaveChangesAsync(cancellationToken);
         }
+
 
 
 

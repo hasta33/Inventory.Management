@@ -1,0 +1,29 @@
+{
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:2001"
+  },
+
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/company",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/company",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "Get", "Put"]
+    }
+
+
+  ]
+}

@@ -22,105 +22,6 @@ namespace InventoryManagement.Repository.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("InventoryManagement.Core.Models.Brand", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("BusinessCode")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Brand", (string)null);
-                });
-
-            modelBuilder.Entity("InventoryManagement.Core.Models.Category", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("BusinessCode")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
-
-                    b.ToTable("Category", (string)null);
-                });
-
-            modelBuilder.Entity("InventoryManagement.Core.Models.CategorySub", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("BusinessCode")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CategoryId")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("CategorySubs", (string)null);
-                });
-
             modelBuilder.Entity("InventoryManagement.Core.Models.Company", b =>
                 {
                     b.Property<int>("Id")
@@ -129,102 +30,51 @@ namespace InventoryManagement.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BusinessCode")
+                    b.Property<int>("BusinessCode")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Compaines", (string)null);
-                });
+                    b.ToTable("Company", (string)null);
 
-            modelBuilder.Entity("InventoryManagement.Core.Models.Model", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("BrandId")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<int?>("BusinessCode")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BrandId");
-
-                    b.ToTable("Model", (string)null);
-                });
-
-            modelBuilder.Entity("InventoryManagement.Core.Models.Category", b =>
-                {
-                    b.HasOne("InventoryManagement.Core.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
-
-                    b.Navigation("Company");
-                });
-
-            modelBuilder.Entity("InventoryManagement.Core.Models.CategorySub", b =>
-                {
-                    b.HasOne("InventoryManagement.Core.Models.Category", "Category")
-                        .WithMany("CategorySubs")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("InventoryManagement.Core.Models.Model", b =>
-                {
-                    b.HasOne("InventoryManagement.Core.Models.Brand", "Brand")
-                        .WithMany("Models")
-                        .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Brand");
-                });
-
-            modelBuilder.Entity("InventoryManagement.Core.Models.Brand", b =>
-                {
-                    b.Navigation("Models");
-                });
-
-            modelBuilder.Entity("InventoryManagement.Core.Models.Category", b =>
-                {
-                    b.Navigation("CategorySubs");
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BusinessCode = 3000,
+                            Description = "Enerya istanbul",
+                            Name = "Enerya İstanbul Gaz Dağıtım A.Ş."
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BusinessCode = 3100,
+                            Description = "Enerya ereğli",
+                            Name = "Enerya Ereğli Gaz Dağıtım A.Ş."
+                        },
+                        new
+                        {
+                            Id = 3,
+                            BusinessCode = 3200,
+                            Description = "Enerya konya",
+                            Name = "Enerya Konya Gaz Dağıtım A.Ş."
+                        });
                 });
 #pragma warning restore 612, 618
         }
