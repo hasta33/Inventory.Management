@@ -8,6 +8,9 @@ import {InputTextModule} from "primeng/inputtext";
 import {ButtonModule} from "primeng/button";
 import {RippleModule} from "primeng/ripple";
 import {FormsModule} from "@angular/forms";
+import {ToastModule} from "primeng/toast";
+import {PaginatorModule} from "primeng/paginator";
+import {ContextMenuModule} from "primeng/contextmenu";
 
 
 @NgModule({
@@ -20,8 +23,11 @@ import {FormsModule} from "@angular/forms";
     TableModule,
     InputTextModule,
     ButtonModule,
-    RippleModule,
     FormsModule,
+    ToastModule,
+    RippleModule,
+    PaginatorModule,
+    ContextMenuModule
   ]
 })
 export class CompanyListModule { }

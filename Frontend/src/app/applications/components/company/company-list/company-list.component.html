@@ -1,16 +1,45 @@
-<p>company-list works!</p>
-<p-table [value]="companies" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}">
+<p-toast></p-toast>
+
+<p-contextMenu #cm [model]="itemsMenu"></p-contextMenu>
+
+<p-table #dt [value]="companyList"
+         styleClass="p-datatable-company"
+         dataKey="id"
+         editMode="row"
+         [tableStyle]="{'min-width': '50rem'}"
+         [rowHover]="true"
+         [rows]="pageSize"
+         [loading]="loading"
+         [filterDelay]="0"
+         [globalFilterFields]="['name','description','businessCode']"
+
+         [contextMenu]="cm"
+
+         [(contextMenuSelection)]="selectedCompany"
+>
+
+  <ng-template pTemplate="caption">
+    <div class="table-header">
+      Şirket Listesi
+      <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal( $any($event.target).value, 'contains')" placeholder="Global Arama" />
+                    </span>
+    </div>
+  </ng-template>
+
   <ng-template pTemplate="header">
     <tr>
-      <th style="width:5%">Id</th>
-      <th style="width:20%">Name</th>
-      <th style="width:20%">Description</th>
-      <th style="width:10%">Business Code</th>
+      <th style="width:5%" pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+      <th style="width:20%" pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+      <th style="width:20%" pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
+      <th style="width:10%" pSortableColumn="businessCode">Business Code <p-sortIcon field="businessCode"></p-sortIcon></th>
       <th style="width:20%"></th>
     </tr>
   </ng-template>
+
   <ng-template pTemplate="body" let-company let-editing="editing" let-ri="rowIndex">
-    <tr [pEditableRow]="company">
+    <tr [pEditableRow]="company" [pContextMenuRow]="company">
       <td>{{company.id}}</td>
 
       <td>
@@ -35,8 +64,6 @@
         </p-cellEditor>
       </td>
 
-
-
       <td>
         <p-cellEditor>
           <ng-template pTemplate="input">
@@ -56,24 +83,19 @@
       </td>
     </tr>
   </ng-template>
+
 </p-table>
 
+<p-paginator
+  [rows]="pageSize"
+  (onPageChange)="handlePagination($event)"
+  styleClass="p-paginator"
+  [totalRecords]="totalRecords"
 
-<!--
-<p-table [value]="companies" editMode="row">
-  <ng-template pTemplate="header">
-    <tr>
-      <th *ngFor="let col of cols">
-        {{col.header}}
-      </th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-company>
-    <tr>
-      <td *ngFor="let col of cols">
-        {{company[col.field]}}
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
--->
+
+  [showPageLinks]="true"
+  [pageLinkSize]="3"
+  [showCurrentPageReport]="true"
+  currentPageReportTemplate="{first}. sayfa {last} kayıt, Toplam: {totalRecords} kayıt"
+  [rowsPerPageOptions]="['2', '3', '6', '5']"
+></p-paginator>

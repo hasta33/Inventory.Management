@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagement.Repository.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230124061128_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230126054500_TotalCountAdded")]
+    partial class TotalCountAdded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

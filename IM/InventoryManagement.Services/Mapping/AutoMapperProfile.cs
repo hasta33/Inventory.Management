@@ -16,8 +16,9 @@ namespace InventoryManagement.Services.Mapping
         {
             #region Company
             CreateMap<CompanyDto, Company>().ReverseMap();
-            CreateMap<CompanyUpdateDto, CompanyDto>();
+            CreateMap<CompanyUpdateDto, Company>();
             CreateMap<CompanyCreateDto, CompanyDto>();
+            CreateMap<CompanyCreateDto, Company>();
             #endregion
 
 

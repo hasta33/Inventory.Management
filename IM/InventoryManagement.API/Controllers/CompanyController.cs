@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using InventoryManagement.Core.DTOs.Company;
-using InventoryManagement.Core.Models;
+﻿using InventoryManagement.Core.DTOs.Company;
 using InventoryManagement.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,36 +8,32 @@ namespace InventoryManagement.API.Controllers
     [ApiController]
     public class CompanyController : CustomBaseController
     {
-        private readonly IServiceWithDto<Company, CompanyDto> _service;
-        private readonly IMapper _mapper;
+        private readonly ICompanyServiceWithDto _service;
 
-        public CompanyController(IServiceWithDto<Company, CompanyDto> service, IMapper mapper)
+        public CompanyController(ICompanyServiceWithDto service)
         {
             _service = service;
-            _mapper = mapper;
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
+        [HttpGet("{page}/{pageSize}")]
+        public async Task<IActionResult> GetCompanyList(int page, int pageSize)
         {
-            return CreateActionResult(await _service.GetAllAsync());
+            return CreateActionResult(await _service.GetCompanyList(page, pageSize));
         }
 
 
         [HttpPost]
         public async Task<IActionResult> AddAsync(CompanyCreateDto dto)
         {
-            var result = _mapper.Map<CompanyDto>(dto);
-            return CreateActionResult(await _service.AddAsync(result));
+            return CreateActionResult(await _service.AddAsync(dto));
         }
 
 
         [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody] CompanyUpdateDto dto)
+        public async Task<IActionResult> UpdateAsync(CompanyUpdateDto dto)
         {
-            var result = _mapper.Map<CompanyDto>(dto);
-            return CreateActionResult(await _service.UpdateAsync(result));
+            return CreateActionResult(await _service.UpdateAsync(dto));
         }
 
         [HttpDelete("{id}")]
@@ -49,11 +43,11 @@ namespace InventoryManagement.API.Controllers
         }
 
 
+
         [HttpPost("SaveAll")]
-        public async Task<IActionResult> SaveAll(List<CompanyCreateDto> dtos)
+        public async Task<IActionResult> SaveAll(List<CompanyDto> dtos)
         {
-            var result = _mapper.Map<List<CompanyDto>>(dtos);
-            return CreateActionResult(await _service.AddRangeAsync(result));
+            return CreateActionResult(await _service.AddRangeAsync(dtos));
         }
 
         [HttpDelete("RemoveAll")]
@@ -61,10 +55,6 @@ namespace InventoryManagement.API.Controllers
         {
             return CreateActionResult(await _service.RemoveRangeAsync(ids));
         }
-
-
-
-
 
     }
 }

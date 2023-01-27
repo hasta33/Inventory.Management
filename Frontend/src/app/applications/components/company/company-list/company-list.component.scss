@@ -1,0 +1,42 @@
+:host ::ng-deep {
+  .p-paginator {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .table-header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .p-datatable.p-datatable-company {
+    .p-datatable-header {
+      padding: 1rem;
+      text-align: left;
+      font-size: 1.5rem;
+    }
+
+    .p-datatable-thead > tr > th {
+      text-align: left;
+      padding: 0.8rem 0.1rem;
+    }
+
+    .p-datatable-tbody > tr > td {
+      cursor:auto;
+      text-align: left;
+      padding: 0.1rem 0.1rem;
+    }
+
+    .p-component{
+      box-sizing: border-box;
+    }
+
+  }
+
+  /* Responsive */
+  .p-datatable-company .p-datatable-tbody > tr > td .p-column-title {
+    display: none;
+  }
+}

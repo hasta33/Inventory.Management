@@ -5,4 +5,5 @@ export class CompanyModel {
   businessCode: number | undefined;
   createdDate: Date | undefined;
   updatedDate: Date | undefined;
+  totalCount: number | any;
 }
