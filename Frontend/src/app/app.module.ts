@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import {AppLayoutModule} from "./layout/app-layout.module";
 import {HttpClientModule} from "@angular/common/http";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {RippleModule} from "primeng/ripple";
 
 
 @NgModule({
@@ -18,9 +19,11 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     AppLayoutModule,
     HttpClientModule,
 
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    RippleModule
   ],
   providers: [],
+  exports: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

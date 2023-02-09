@@ -2,6 +2,7 @@ import {environment} from "../../../environments/environment";
 
 export const constants = {
   GET_COMPANY_LIST_URL : `${environment.gatewayUrl}/api/services/inventory/company`,
+  POST_COMPANY_URL: `${environment.gatewayUrl}/api/services/inventory/company`,
   PUT_COMPANY_URL: `${environment.gatewayUrl}/api/services/inventory/company`,
   DELETE_COMPANY_URL: `${environment.gatewayUrl}/api/services/inventory/company`,
 

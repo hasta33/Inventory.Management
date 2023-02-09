@@ -41,7 +41,7 @@
         "PeriodTimespan": 30,
         "Limit": 10
       },
-      "UpstreamHttpMethod": [ "PUT" ]
+      "UpstreamHttpMethod": [ "PUT", "POST" ]
     }
 
 

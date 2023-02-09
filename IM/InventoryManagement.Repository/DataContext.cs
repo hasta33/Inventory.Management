@@ -19,6 +19,8 @@ namespace InventoryManagement.Repository
         }
 
         public DbSet<Company> Companies { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<CategorySub> CategoriesSub { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

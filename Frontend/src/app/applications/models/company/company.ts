@@ -1,8 +1,8 @@
 export class CompanyModel {
-  id: number | undefined;
+  id: number | any;
   name: string | undefined;
   description: string | undefined;
-  businessCode: number | undefined;
+  businessCode: number | any;
   createdDate: Date | undefined;
   updatedDate: Date | undefined;
   totalCount: number | any;

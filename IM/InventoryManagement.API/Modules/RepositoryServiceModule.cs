@@ -37,8 +37,8 @@ namespace InventoryManagement.API.Modules
 
             #region Custom Service Dto
             builder.RegisterType<CompanyServiceWithDto>().As<ICompanyServiceWithDto>().InstancePerLifetimeScope();
-            //builder.RegisterType<CategoryServiceWithDto>().As<ICategoryServiceWithDto>().InstancePerLifetimeScope();
-            //builder.RegisterType<BrandServiceWithDto>().As<IBrandServiceWithDto>().InstancePerLifetimeScope();
+            builder.RegisterType<CategoryServiceWithDto>().As<ICategoryServiceWithDto>().InstancePerLifetimeScope();
+            builder.RegisterType<CategorySubServiceWithDto>().As<ICategorySubServiceWithDto>().InstancePerLifetimeScope();
             #endregion
 
 

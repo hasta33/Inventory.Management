@@ -6,16 +6,18 @@ import { CompanyListComponent } from './company-list.component';
 import {TableModule} from "primeng/table";
 import {InputTextModule} from "primeng/inputtext";
 import {ButtonModule} from "primeng/button";
-import {RippleModule} from "primeng/ripple";
 import {FormsModule} from "@angular/forms";
 import {ToastModule} from "primeng/toast";
 import {PaginatorModule} from "primeng/paginator";
 import {ContextMenuModule} from "primeng/contextmenu";
-
+import {RippleModule} from "primeng/ripple";
+import { AddRowDirective } from '../../../directive/add-row.directive';
+import {AutoFocusModule} from 'primeng/autofocus';
 
 @NgModule({
   declarations: [
-    CompanyListComponent
+    CompanyListComponent,
+    AddRowDirective
   ],
   imports: [
     CommonModule,
@@ -25,9 +27,10 @@ import {ContextMenuModule} from "primeng/contextmenu";
     ButtonModule,
     FormsModule,
     ToastModule,
-    RippleModule,
     PaginatorModule,
-    ContextMenuModule
+    ContextMenuModule,
+    RippleModule,
+    AutoFocusModule
   ]
 })
 export class CompanyListModule { }

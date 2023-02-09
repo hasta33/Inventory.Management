@@ -16,22 +16,28 @@ namespace InventoryManagement.API.Controllers
         }
 
 
-        [HttpGet("{page}/{pageSize}")]
-        public async Task<IActionResult> GetCompanyList(int page, int pageSize)
+        [HttpGet("{page}/{pageSize}/{businessCode}")]
+        public async Task<IActionResult> GetCompanyList(int page, int pageSize, int businessCode)
         {
-            return CreateActionResult(await _service.GetCompanyList(page, pageSize));
+            return CreateActionResult(await _service.GetCompanyList(page, pageSize, businessCode));
+        }
+
+        [HttpGet("{businessCode}")]
+        public async Task<IActionResult> GetCompanyWithCategoryListAsync(int businessCode)
+        {
+            return CreateActionResult(await _service.GetCompanyWithCategoryListAsync(businessCode));
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> AddAsync(CompanyCreateDto dto)
+        public async Task<IActionResult> AddAsync([FromBody] CompanyCreateDto dto)
         {
             return CreateActionResult(await _service.AddAsync(dto));
         }
 
 
         [HttpPut]
-        public async Task<IActionResult> UpdateAsync(CompanyUpdateDto dto)
+        public async Task<IActionResult> UpdateAsync([FromBody] CompanyUpdateDto dto)
         {
             return CreateActionResult(await _service.UpdateAsync(dto));
         }
@@ -44,17 +50,17 @@ namespace InventoryManagement.API.Controllers
 
 
 
-        [HttpPost("SaveAll")]
-        public async Task<IActionResult> SaveAll(List<CompanyDto> dtos)
-        {
-            return CreateActionResult(await _service.AddRangeAsync(dtos));
-        }
+        //[HttpPost("SaveAll")]
+        //public async Task<IActionResult> SaveAll(List<CompanyDto> dtos)
+        //{
+        //    return CreateActionResult(await _service.AddRangeAsync(dtos));
+        //}
 
-        [HttpDelete("RemoveAll")]
-        public async Task<IActionResult> RemoveAll(List<int> ids)
-        {
-            return CreateActionResult(await _service.RemoveRangeAsync(ids));
-        }
+        //[HttpDelete("RemoveAll")]
+        //public async Task<IActionResult> RemoveAll(List<int> ids)
+        //{
+        //    return CreateActionResult(await _service.RemoveRangeAsync(ids));
+        //}
 
     }
 }

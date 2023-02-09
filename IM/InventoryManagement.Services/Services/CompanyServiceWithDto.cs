@@ -23,16 +23,23 @@ namespace InventoryManagement.Services.Services
             await _companyRepository.AddAsync(newEntity);
             await _unitOfWork.CommitAsync();
 
-            var newDto = _mapper.Map<CompanyDto>(dto);
+            var newDto = _mapper.Map<CompanyDto>(newEntity);
             return CustomResponseDto<CompanyDto>.Success(StatusCodes.Status200OK, newDto);
 
         }
 
-        public async Task<CustomResponseDto<List<CompanyDto>>> GetCompanyList(int page, int pageSize)
+        public async Task<CustomResponseDto<List<CompanyDto>>> GetCompanyList(int page, int pageSize, int businessCode)
         {
-            var company = await _companyRepository.GetCompanyList(page, pageSize);
+            var company = await _companyRepository.GetCompanyList(page, pageSize, businessCode);
             var companyDto = _mapper.Map<List<CompanyDto>>(company);
             return CustomResponseDto<List<CompanyDto>>.Success(StatusCodes.Status200OK, companyDto);
+        }
+
+        public async Task<CustomResponseDto<List<CompanyDto>>> GetCompanyWithCategoryListAsync(int businessCode)
+        {
+            var result = await _companyRepository.GetCompanyWithCategoryListAsync(businessCode);
+            var resultDto = _mapper.Map<List<CompanyDto>>(result);
+            return CustomResponseDto<List<CompanyDto>>.Success(StatusCodes.Status200OK, resultDto);
         }
 
         public async Task<CustomResponseDto<NoContent>> UpdateAsync(CompanyUpdateDto dto)

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {CompanyModel} from "../../models/company/company";
-import {catchError, Observable, retry, tap, throwError} from "rxjs";
+import {catchError, Observable, retry, throwError} from "rxjs";
 import {constants} from "../../constants/constants";
 
 @Injectable({
@@ -12,10 +12,18 @@ export class CompanyService {
   constructor(private httpClient: HttpClient) { }
 
 
-  getCompanyList(page: number, pageSize: number) {
-    return this.httpClient.get<{data: CompanyModel[]}>(constants.GET_COMPANY_LIST_URL+`/${page}/${pageSize}`).pipe(tap(x => {
-      console.log("getCompanyList");
-    }));
+  getCompanyList(page: number, pageSize: number, businessCode: number) {
+    return this.httpClient
+      .get<{data: CompanyModel[]}>(constants.GET_COMPANY_LIST_URL+`/${page}/${pageSize}/${businessCode}`)
+      .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
+  }
+
+
+
+  postCompany(data: any): Observable<CompanyModel> {
+    return this.httpClient
+      .post<any>(constants.POST_COMPANY_URL, data)
+      .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
   }
 
   putCompany(data: any): Observable<CompanyModel> {

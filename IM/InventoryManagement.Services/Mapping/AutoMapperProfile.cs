@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using InventoryManagement.Core.DTOs.Category;
+using InventoryManagement.Core.DTOs.CategorySub;
 using InventoryManagement.Core.DTOs.Company;
 using InventoryManagement.Core.Models;
 
@@ -22,6 +24,18 @@ namespace InventoryManagement.Services.Mapping
             #endregion
 
 
+            #region Category
+            CreateMap<CategoryCreateDto, Category>();
+            CreateMap<Category, CategoryDto>();
+            CreateMap<CategoryUpdateDto, Category>();
+            #endregion
+
+
+            #region CategorySub
+            CreateMap<CategorySubCreateDto, CategorySub>();
+            CreateMap<CategorySub, CategorySubDto>();
+            
+            #endregion
 
 
 

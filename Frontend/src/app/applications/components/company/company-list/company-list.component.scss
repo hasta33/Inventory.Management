@@ -1,14 +1,17 @@
 :host ::ng-deep {
-  .p-paginator {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    flex-wrap: wrap;
-  }
-
   .table-header {
     display: flex;
     justify-content: space-between;
+  }
+
+  .notRecord {
+    font-weight: 700;
+    background-color: rgba(197, 14, 14, 0.15) !important;
+  }
+
+  .editRecord {
+    font-weight: 700;
+    background-color: rgba(80, 245, 39, 0.8) !important;
   }
 
   .p-datatable.p-datatable-company {
@@ -29,10 +32,58 @@
       padding: 0.1rem 0.1rem;
     }
 
+    .p-datatable-tfoot > tr > td {
+      text-align: left;
+      padding: 0.1rem 0.1rem;
+      font-weight: 600;
+      color: #495057;
+      background: #f8f9fa;
+    }
+
     .p-component{
       box-sizing: border-box;
     }
 
+
+
+    /*paginator*/
+    .p-paginator {
+      border: 0 none;
+      padding: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      height: 46px;
+      .p-dropdown {
+        float: left;
+        .p-dropdown-panel {
+          ul {
+            p-dropdownItem:last-child > li {
+              &:last-child {
+                span::before {
+                  content: 'All';
+                  visibility: visible;
+                }
+
+                span::after {
+                  content: '';
+                }
+
+                span {
+                  visibility: hidden;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .p-paginator-current {
+        float: right;
+      }
+    }
+    /*paginator*/
   }
 
   /* Responsive */
@@ -40,3 +91,4 @@
     display: none;
   }
 }
+
