@@ -20,7 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{D2883697-C0A3-4BBD-9A65-24835530451E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryManagement.Gateway", "Gateway\InventoryManagement.Gateway\InventoryManagement.Gateway.csproj", "{8C9DE995-BE19-4B8D-98E1-34ED9FB49E52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryManagement.Gateway", "Gateway\InventoryManagement.Gateway\InventoryManagement.Gateway.csproj", "{8C9DE995-BE19-4B8D-98E1-34ED9FB49E52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

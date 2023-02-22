@@ -8,9 +8,30 @@
      Https Port : https://localhost:2003
 
 
+-- > Keycloak Jwt Token Services
+     Http Port  : https://localhost:2010
+     Https Port : https://localhost:2011
+
+
+
+__________________________ Keycloak roller __________________________
+--> Super Admin Role
+--> Admin Role
+--> Computing Role
+--> User Role
+
+
+-- > Secret key alma: Realm, enerya-inventory-client, Credentials, Client secret
+-- > Pulic key alma : Realm Settings, Keys, RS256(public key) alma
+
+---------------------------------------------------------------------------------------------------
+
+
+
+
+
+
 
 dotnet cli üzerinden db update komutlarý
 dotnet ef migrations add InitialCreate
 dotnet ef database update
-
-

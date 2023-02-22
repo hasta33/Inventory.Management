@@ -6,6 +6,8 @@ namespace InventoryManagement.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
+
     public class CompanyController : CustomBaseController
     {
         private readonly ICompanyServiceWithDto _service;
@@ -15,18 +17,21 @@ namespace InventoryManagement.API.Controllers
             _service = service;
         }
 
-
+        
         [HttpGet("{page}/{pageSize}/{businessCode}")]
         public async Task<IActionResult> GetCompanyList(int page, int pageSize, int businessCode)
         {
             return CreateActionResult(await _service.GetCompanyList(page, pageSize, businessCode));
         }
 
+
+        
         [HttpGet("{businessCode}")]
         public async Task<IActionResult> GetCompanyWithCategoryListAsync(int businessCode)
         {
             return CreateActionResult(await _service.GetCompanyWithCategoryListAsync(businessCode));
         }
+
 
 
         [HttpPost]
@@ -36,11 +41,14 @@ namespace InventoryManagement.API.Controllers
         }
 
 
+
         [HttpPut]
         public async Task<IActionResult> UpdateAsync([FromBody] CompanyUpdateDto dto)
         {
             return CreateActionResult(await _service.UpdateAsync(dto));
         }
+
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveAsync(int id)

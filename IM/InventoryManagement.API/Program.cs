@@ -1,4 +1,4 @@
-using Autofac;
+ï»¿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using InventoryManagement.API.Filters;
 using InventoryManagement.API.MiddlewaresExtension;
@@ -12,8 +12,10 @@ using InventoryManagement.Repository.UnitOfWork;
 using InventoryManagement.Services;
 using InventoryManagement.Services.Mapping;
 using InventoryManagement.Services.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text.Json.Serialization;
 
@@ -23,11 +25,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers(options =>
 {
-    options.Filters.Add(new ValidateFilterAttribute()); //options.Filters.Add(new AuthorizeFilter()); //tum kontrollerde authorize attribute etkinleþtirilmis olacak
+    options.Filters.Add(new ValidateFilterAttribute()); //options.Filters.Add(new AuthorizeFilter()); //tum kontrollerde authorize attribute etkinleÅŸtirilmis olacak
 }).AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.IgnoreReadOnlyFields = true;
-    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault | JsonIgnoreCondition.WhenWritingNull; //db'de null olan deðerleri getirme
+    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault | JsonIgnoreCondition.WhenWritingNull; //db'de null olan deÄŸerleri getirme
 });
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
@@ -42,8 +44,93 @@ builder.Services.AddCustomApplicationServices();
 
 
 #region Swagger
-builder.Services.AddSwaggerGen();
+//builder.Services.AddSwaggerGen(c =>
+//{
+//    c.SwaggerDoc("v1", new OpenApiInfo { Title = "InventoryManagement.API", Version = "v1" });
+//    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+//    {
+//        Name = "Authorization",
+//        Type = SecuritySchemeType.ApiKey,
+//        Scheme = "Bearer",
+//        BearerFormat = "JWT",
+//        In = ParameterLocation.Header,
+//        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\"",
+//    });
+//    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+//        {
+//            new OpenApiSecurityScheme {
+//                Reference = new OpenApiReference {
+//                    Type = ReferenceType.SecurityScheme,
+//                        Id = "Bearer"
+//                }
+//            },
+//            new string[] {}
+//        }
+//    });
+//});
+//builder.Services.AddSwaggerGen(c =>
+//{
+//    c.SwaggerDoc("v1", new OpenApiInfo { Title = "InventoryManagement.API", Version = "v1" });
+
+//    //First we define the security scheme
+//    c.AddSecurityDefinition("Bearer", //Name the security scheme
+//        new OpenApiSecurityScheme
+//        {
+//            Description = "JWT Authorization header using the Bearer scheme.",
+//            Type = SecuritySchemeType.Http, //We set the scheme type to http since we're using bearer authentication
+//            Scheme = JwtBearerDefaults.AuthenticationScheme //The name of the HTTP Authorization scheme to be used in the Authorization header. In this case "bearer".
+//        });
+
+//    c.AddSecurityRequirement(new OpenApiSecurityRequirement{
+//                    {
+//                        new OpenApiSecurityScheme{
+//                            Reference = new OpenApiReference{
+//                                Id = JwtBearerDefaults.AuthenticationScheme, //The name of the previously defined security scheme.
+//                                Type = ReferenceType.SecurityScheme
+//                            }
+//                        },new List<string>()
+//                    }
+//                });
+//});
+
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "IventoryManagement.API", Version = "v1" });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = JwtBearerDefaults.AuthenticationScheme,
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\"",
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+        {
+            new OpenApiSecurityScheme {
+                Reference = new OpenApiReference {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = JwtBearerDefaults.AuthenticationScheme, //The name of the previously defined security scheme.
+
+                }
+            },
+            new string[] {}
+        }
+    });
+});
 #endregion
+
+
+
+
+
+
+#region JWT
+
+#endregion
+
+
 
 
 #region Dependencies
@@ -79,6 +166,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerB
 
 
 
+
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
@@ -86,8 +174,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseHttpsRedirection();
+
+
+app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers();
+
+
+
+
+app.MapControllers().RequireAuthorization();
 
 //Custom exceptions
 app.UseCustomException();
