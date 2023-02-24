@@ -1,5 +1,6 @@
 ﻿using InventoryManagement.Core.DTOs.Company;
 using InventoryManagement.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagement.API.Controllers
@@ -27,6 +28,7 @@ namespace InventoryManagement.API.Controllers
 
         
         [HttpGet("{businessCode}")]
+        [Authorize(Roles = "SuperAdminRole", Policy = "company#get")]
         public async Task<IActionResult> GetCompanyWithCategoryListAsync(int businessCode)
         {
             return CreateActionResult(await _service.GetCompanyWithCategoryListAsync(businessCode));
@@ -35,6 +37,7 @@ namespace InventoryManagement.API.Controllers
 
 
         [HttpPost]
+        [Authorize("company#create")]
         public async Task<IActionResult> AddAsync([FromBody] CompanyCreateDto dto)
         {
             return CreateActionResult(await _service.AddAsync(dto));
@@ -43,6 +46,7 @@ namespace InventoryManagement.API.Controllers
 
 
         [HttpPut]
+        [Authorize("company#update")]
         public async Task<IActionResult> UpdateAsync([FromBody] CompanyUpdateDto dto)
         {
             return CreateActionResult(await _service.UpdateAsync(dto));
@@ -51,6 +55,7 @@ namespace InventoryManagement.API.Controllers
 
 
         [HttpDelete("{id}")]
+        [Authorize("company#delete")]
         public async Task<IActionResult> RemoveAsync(int id)
         {
             return CreateActionResult(await _service.RemoveAsync(id));

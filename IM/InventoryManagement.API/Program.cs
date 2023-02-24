@@ -1,8 +1,13 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using IdentityModel.Client;
+using InventoryManagement.API.Authentication;
+using InventoryManagement.API.Authorization.Decision;
+using InventoryManagement.API.Authorization.RPT;
 using InventoryManagement.API.Filters;
 using InventoryManagement.API.MiddlewaresExtension;
 using InventoryManagement.API.Modules;
+using InventoryManagement.API.Services;
 using InventoryManagement.Core.Repositories;
 using InventoryManagement.Core.Services;
 using InventoryManagement.Core.UnitOfWork;
@@ -12,9 +17,12 @@ using InventoryManagement.Repository.UnitOfWork;
 using InventoryManagement.Services;
 using InventoryManagement.Services.Mapping;
 using InventoryManagement.Services.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text.Json.Serialization;
@@ -44,91 +52,32 @@ builder.Services.AddCustomApplicationServices();
 
 
 #region Swagger
-//builder.Services.AddSwaggerGen(c =>
-//{
-//    c.SwaggerDoc("v1", new OpenApiInfo { Title = "InventoryManagement.API", Version = "v1" });
-//    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-//    {
-//        Name = "Authorization",
-//        Type = SecuritySchemeType.ApiKey,
-//        Scheme = "Bearer",
-//        BearerFormat = "JWT",
-//        In = ParameterLocation.Header,
-//        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\"",
-//    });
-//    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
-//        {
-//            new OpenApiSecurityScheme {
-//                Reference = new OpenApiReference {
-//                    Type = ReferenceType.SecurityScheme,
-//                        Id = "Bearer"
-//                }
-//            },
-//            new string[] {}
-//        }
-//    });
-//});
-//builder.Services.AddSwaggerGen(c =>
-//{
-//    c.SwaggerDoc("v1", new OpenApiInfo { Title = "InventoryManagement.API", Version = "v1" });
-
-//    //First we define the security scheme
-//    c.AddSecurityDefinition("Bearer", //Name the security scheme
-//        new OpenApiSecurityScheme
-//        {
-//            Description = "JWT Authorization header using the Bearer scheme.",
-//            Type = SecuritySchemeType.Http, //We set the scheme type to http since we're using bearer authentication
-//            Scheme = JwtBearerDefaults.AuthenticationScheme //The name of the HTTP Authorization scheme to be used in the Authorization header. In this case "bearer".
-//        });
-
-//    c.AddSecurityRequirement(new OpenApiSecurityRequirement{
-//                    {
-//                        new OpenApiSecurityScheme{
-//                            Reference = new OpenApiReference{
-//                                Id = JwtBearerDefaults.AuthenticationScheme, //The name of the previously defined security scheme.
-//                                Type = ReferenceType.SecurityScheme
-//                            }
-//                        },new List<string>()
-//                    }
-//                });
-//});
-
-
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "IventoryManagement.API", Version = "v1" });
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = JwtBearerDefaults.AuthenticationScheme,
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\"",
-    });
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
-        {
-            new OpenApiSecurityScheme {
-                Reference = new OpenApiReference {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = JwtBearerDefaults.AuthenticationScheme, //The name of the previously defined security scheme.
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "InventoryManagement.API", Version = "v1" });
 
-                }
-            },
-            new string[] {}
-        }
-    });
+    ////First we define the security scheme
+    //c.AddSecurityDefinition("Bearer", //Name the security scheme
+    //    new OpenApiSecurityScheme
+    //    {
+    //        Description = "JWT Authorization header using the Bearer scheme.",
+    //        Type = SecuritySchemeType.Http, //We set the scheme type to http since we're using bearer authentication
+    //        Scheme = JwtBearerDefaults.AuthenticationScheme //The name of the HTTP Authorization scheme to be used in the Authorization header. In this case "bearer".
+    //    });
+
+    //c.AddSecurityRequirement(new OpenApiSecurityRequirement{
+    //                {
+    //                    new OpenApiSecurityScheme{
+    //                        Reference = new OpenApiReference{
+    //                            Id = JwtBearerDefaults.AuthenticationScheme, //The name of the previously defined security scheme.
+    //                            Type = ReferenceType.SecurityScheme
+    //                        }
+    //                    },new List<string>()
+    //                }
+    //            });
 });
 #endregion
 
-
-
-
-
-
-#region JWT
-
-#endregion
 
 
 
@@ -165,6 +114,45 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerB
 
 
 
+#region JWT
+var jwtOptions = builder.Configuration.GetSection("JwtBearer").Get<JwtBearerOptions>();
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = jwtOptions.Authority;
+        options.Audience = jwtOptions.Audience;
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            NameClaimType = "preferred_username",
+            RoleClaimType = "role" //RoleClaimType
+        };
+    });
+
+builder.Services.AddTransient<IClaimsTransformation>(_ => new KeycloakRolesClaimsTransformation("role", jwtOptions.Audience));
+
+builder.Services.AddAuthorization(options =>
+{
+    #region Company Permissions
+    options.AddPolicy("company#get", builder => builder.AddRequirements(new RptRequirement("company", "get")));
+    options.AddPolicy("company#create", builder => builder.AddRequirements(new RptRequirement("company", "create")));
+    options.AddPolicy("company#update", builder => builder.AddRequirements(new RptRequirement("company", "update")));
+    options.AddPolicy("company#delete", builder => builder.AddRequirements(new RptRequirement("company", "delete")));
+    #endregion
+
+    #region Category Permissions
+
+    #endregion
+});
+
+builder.Services.AddHttpClient<KeycloakServiceTest>(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["KeycloakResourceUrl"]); //new Uri(Configuration["KeycloakResourceUrl"]); KeycloakResourceUrl
+});
+builder.Services.AddHttpClient<IdentityModel.Client.TokenClient>();
+builder.Services.AddSingleton(builder.Configuration.GetSection("ClientCredentialsTokenRequest").Get<ClientCredentialsTokenRequest>());
+#endregion
 
 
 var app = builder.Build();
@@ -182,7 +170,7 @@ app.UseAuthorization();
 
 
 
-app.MapControllers().RequireAuthorization();
+app.MapControllers(); //.RequireAuthorization();
 
 //Custom exceptions
 app.UseCustomException();

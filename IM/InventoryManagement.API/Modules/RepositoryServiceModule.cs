@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using InventoryManagement.API.Authorization.Decision;
+using InventoryManagement.API.Authorization.RPT;
 using InventoryManagement.Core.Repositories;
 using InventoryManagement.Core.Services;
 using InventoryManagement.Core.UnitOfWork;
@@ -7,6 +9,9 @@ using InventoryManagement.Repository.Repositories;
 using InventoryManagement.Repository.UnitOfWork;
 using InventoryManagement.Services.Mapping;
 using InventoryManagement.Services.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
 using System.Reflection;
 using Module = Autofac.Module;
 
@@ -42,7 +47,14 @@ namespace InventoryManagement.API.Modules
             #endregion
 
 
-
+            #region TEST
+            builder.RegisterType<DecisionRequirementHandler>().As<IAuthorizationHandler>().SingleInstance();
+            builder.RegisterType<RptRequirementHandler>().As<IAuthorizationHandler>().SingleInstance();
+            builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().SingleInstance(); builder.Register(c => c.Resolve<IOptions<JwtBearerOptions>>().Value).As<JwtBearerOptions>();
+           
+            //builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().SingleInstance();
+            //builder.Register(c => c.Resolve<IOptions<JwtBearerOptions>>().Value).As<JwtBearerOptions>();
+            #endregion
 
             var apiAssembly = Assembly.GetExecutingAssembly();
             var repoAsssembly = Assembly.GetAssembly(typeof(DataContext));
