@@ -11,3 +11,7 @@ ng generate environments
 ng generate service [name]
 
 
+-- Module olusturma routing eklemeli
+ng generate module [module-name] --routing
+
+

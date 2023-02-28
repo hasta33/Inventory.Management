@@ -42,9 +42,7 @@
   >
 
     <ng-template pTemplate="caption">
-      <div class="table-header">
-        Şirket Listesi
-        <span class="p-input-icon-left">
+      <div class="table-header">Şirket Listesi<span class="p-input-icon-left">
       <i class="pi pi-search"></i>
       <input pInputText type="text" (input)="dt.filterGlobal( $any($event.target).value, 'contains')" placeholder="Genel Arama" />
       </span>
@@ -64,11 +62,11 @@
     </ng-template>
 
     <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
-      <tr [pEditableRow]="rowData" [pContextMenuRow]="rowData"
+      <tr [pEditableRow]="rowData"
+          [pContextMenuRow]="rowData"
           [ngClass]="{
           'editRecord': rowData.id === rowData.id.toString().indexOf(' '),
-          'notRecord': !rowData.id.toString().indexOf(' ')}"
-      >
+          'notRecord': !rowData.id.toString().indexOf(' ')}">
         <td>{{rowData.id}}</td>
 
         <td>
@@ -76,9 +74,7 @@
             <ng-template pTemplate="input">
               <input pInputText type="text" [(ngModel)]="rowData.name" pAutoFocus  [autofocus]="true" >
             </ng-template>
-            <ng-template pTemplate="output">
-              {{rowData.name}}
-            </ng-template>
+            <ng-template pTemplate="output">{{rowData.name}}</ng-template>
           </p-cellEditor>
         </td>
 

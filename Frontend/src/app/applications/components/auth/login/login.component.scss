@@ -1,0 +1,50 @@
+
+:host ::ng-deep .pi-eye,
+:host ::ng-deep .pi-eye-slash {
+  transform:scale(1.6);
+  margin-right: 1rem;
+  color: var(--primary-color) !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+.overflow-hidden {
+  overflow: hidden !important;
+}
+
+.min-h-screen {
+  min-height: 100vh !important;
+}
+.min-w-screen {
+  min-width: 100vw !important;
+}
+.align-items-center {
+  align-items: center !important;
+}
+.justify-content-center {
+  justify-content: center !important;
+}
+.flex {
+  display: flex !important;
+}
+.surface-ground {
+  background-color: #577193 !important;
+}
+
+.align-items-center {
+  align-items: center !important;
+}
+
+.justify-content-center {
+  justify-content: center !important;
+}
+.flex-column {
+  flex-direction: column !important;
+}
+.flex {
+  display: flex !important;
+}
+* {
+  box-sizing: border-box;
+}

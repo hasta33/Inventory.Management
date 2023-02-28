@@ -11,14 +11,18 @@ import {ToastModule} from "primeng/toast";
 import {PaginatorModule} from "primeng/paginator";
 import {ContextMenuModule} from "primeng/contextmenu";
 import {RippleModule} from "primeng/ripple";
-import { AddRowDirective } from '../../../directive/add-row.directive';
+//import { AddRowDirective } from '../../../directive/add-row.directive';
 import {AutoFocusModule} from 'primeng/autofocus';
+import {SharedModule} from "../../../directive/shared.module";
 
 @NgModule({
-  declarations: [
-    CompanyListComponent,
-    AddRowDirective
-  ],
+    declarations: [
+        CompanyListComponent,
+      //  AddRowDirective
+    ],
+    /*exports: [
+        AddRowDirective
+    ],*/
   imports: [
     CommonModule,
     CompanyListRoutingModule,
@@ -30,7 +34,8 @@ import {AutoFocusModule} from 'primeng/autofocus';
     PaginatorModule,
     ContextMenuModule,
     RippleModule,
-    AutoFocusModule
+    AutoFocusModule,
+    SharedModule
   ]
 })
 export class CompanyListModule { }

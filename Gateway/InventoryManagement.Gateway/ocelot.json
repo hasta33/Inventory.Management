@@ -4,6 +4,59 @@
   },
 
   "Routes": [
+
+    // ------------------------------------ Keycloak -------------------------------------------
+    //Keycloak - Get Access Token
+    {
+      "DownstreamPathTemplate": "/realms/EneryaInventoryApiRealm/protocol/openid-connect/token",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2011
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/keycloak",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    // ------------------------------------ Keycloak -------------------------------------------
+
+
+
+
+
+    // ------------------------------------ Company -------------------------------------------
+    //// Get All Company
+    //{
+    //  "DownstreamPathTemplate": "/api/company",
+    //  "DownstreamScheme": "https",
+    //  "DownstreamHostAndPorts": [
+    //    {
+    //      "Host": "localhost",
+    //      "Port": 2003
+    //    }
+    //  ],
+    //  "UpstreamPathTemplate": "/api/services/inventory/company",
+    //  "RateLimitOptions": {
+    //    "ClientWhitelist": [],
+    //    "EnableRateLimiting": true,
+    //    "Period": "1m",
+    //    "PeriodTimespan": 30,
+    //    "Limit": 10
+    //  },
+    //  "UpstreamHttpMethod": [ "GET" ]
+    //},
+
+
+    // ---- Get Company {page}/{pageSize}
+    // ---- Delete Company {id}
     {
       "DownstreamPathTemplate": "/api/company/{everythings}",
       "DownstreamScheme": "https",
@@ -21,9 +74,10 @@
         "PeriodTimespan": 30,
         "Limit": 10
       },
-      "UpstreamHttpMethod": [ "GET", "DELETE"]
+      "UpstreamHttpMethod": [ "GET", "DELETE" ]
     },
 
+    /// ---- Company Post, Put
     {
       "DownstreamPathTemplate": "/api/company",
       "DownstreamScheme": "https",
@@ -42,7 +96,63 @@
         "Limit": 10
       },
       "UpstreamHttpMethod": [ "PUT", "POST" ]
+    },
+    // ------------------------------------ Company -------------------------------------------
+
+
+
+
+
+
+
+    // ------------------------------------ Category -------------------------------------------
+
+    /// ---- Get Category {page}/{pageSize}
+    /// ---- Delete Category {id}
+    {
+      "DownstreamPathTemplate": "/api/category/{everythings}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/category/{everythings}",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "GET", "DELETE" ]
+    },
+
+
+    /// ---- Category ---- --> PUT, POST
+    {
+      "DownstreamPathTemplate": "/api/category",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/category",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "PUT", "POST" ]
     }
+
+    // ------------------------------------ Category -------------------------------------------
+
 
 
   ]

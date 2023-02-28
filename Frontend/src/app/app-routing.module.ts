@@ -14,7 +14,9 @@ const routes: Routes = [
     ]
   },
 
-  {path: 'notfound', component: NotfoundComponent},
+  { path: 'auth', loadChildren: () => import('./applications/components/auth/auth.module').then(m => m.AuthModule)},
+
+  { path: 'notfound', component: NotfoundComponent },
   { path: '**', redirectTo: '/notfound'}
 ];
 

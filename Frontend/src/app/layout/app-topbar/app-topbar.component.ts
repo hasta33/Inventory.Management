@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import {MenuItem} from "primeng/api";
 
 @Component({
-  selector: 'app-app-menu',
-  templateUrl: './app-menu.component.html',
-  styleUrls: ['./app-menu.component.scss']
+  selector: 'app-app-topbar',
+  templateUrl: './app-topbar.component.html',
+  styleUrls: ['./app-topbar.component.scss']
 })
-export class AppMenuComponent {
+export class AppTopbarComponent {
 
   menuItems: MenuItem[] | any ;
 
@@ -62,12 +62,7 @@ export class AppMenuComponent {
                 label:'Şirket Listesi',
                 icon:'pi pi-fw pi-building',
                 routerLink: ['/company/company-list']
-              },
-              {
-                label:'Şirket Tanımlama',
-                icon:'pi pi-fw pi-calendar-minus'
-              },
-
+              }
             ]
           },
           {
@@ -75,8 +70,9 @@ export class AppMenuComponent {
             icon:'pi pi-fw pi-calendar-times',
             items:[
               {
-                label:'Remove',
-                icon:'pi pi-fw pi-calendar-minus'
+                label:'Kategori Listesi',
+                icon:'pi pi-fw pi-calendar-minus',
+                routerLink: ['/category/category-list']
               }
             ]
           }

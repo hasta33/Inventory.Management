@@ -21,6 +21,7 @@ namespace InventoryManagement.Services.Mapping
             CreateMap<CompanyUpdateDto, Company>();
             CreateMap<CompanyCreateDto, CompanyDto>();
             CreateMap<CompanyCreateDto, Company>();
+            CreateMap<Company, CompanyOnlyNameAndBusinessCodeDto>();
             #endregion
 
 

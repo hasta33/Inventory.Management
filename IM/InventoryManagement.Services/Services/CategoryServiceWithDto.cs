@@ -34,6 +34,13 @@ namespace InventoryManagement.Services.Services
             return CustomResponseDto<List<CategoryDto>>.Success(StatusCodes.Status200OK, categoryDto);
         }
 
+        public async Task<CustomResponseDto<List<CategoryDto>>> GetCategoryList(int page, int pageSize)
+        {
+            var category = await _categoryRepository.GetCategoryList(page, pageSize);
+            var categoryDto = _mapper.Map<List<CategoryDto>>(category);
+            return CustomResponseDto<List<CategoryDto>>.Success(StatusCodes.Status200OK, categoryDto);
+        }
+
         public async Task<CustomResponseDto<NoContent>> UpdateAsync(CategoryUpdateDto dto)
         {
             var entity = _mapper.Map<Category>(dto);

@@ -26,11 +26,11 @@ builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange
 
 
 #region Keycloak Server -> JWT Auth
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-{
-    options.Authority = builder.Configuration["KeycloakServerUrl"];
-    options.Audience = "InventoryManagementGateway";
-});
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+//{
+//    options.Authority = builder.Configuration["KeycloakServerUrl"];
+//    options.Audience = "InventoryManagementGateway";
+//});
 #endregion
 
 

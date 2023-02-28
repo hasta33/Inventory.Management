@@ -4,7 +4,6 @@ import {CompanyService} from "../../../service/company/company.service";
 import {MenuItem, MessageService, PrimeNGConfig} from "primeng/api";
 import {constants} from "../../../constants/constants";
 import {Table} from "primeng/table";
-import {count, startWith} from "rxjs";
 
 @Component({
   selector: 'app-company-list',
@@ -16,9 +15,7 @@ export class CompanyListComponent implements OnInit {
   constructor(
     private companyService: CompanyService,
     private messageService: MessageService,
-    private primengConfig: PrimeNGConfig
-  ) {
-  }
+    private primengConfig: PrimeNGConfig) { }
 
   @ViewChild(Table, { read: Table }) pTable: Table | any;
 
@@ -28,7 +25,7 @@ export class CompanyListComponent implements OnInit {
   page: number = 1;
   pageSize: number = 10;
   loading: boolean = true;
-  totalRecords: number =0;
+  totalRecords: number = 0;
 
   //#contextMenu
   itemsMenu: MenuItem[] = [];
@@ -57,7 +54,7 @@ export class CompanyListComponent implements OnInit {
     ];
   }
 
-  //#Get companies list
+  //#Get companies list {page}/{pageSize}
   getCompanies() {
     this.companyService.getCompanyList(this.page, this.pageSize).subscribe({
       next: (data) => {

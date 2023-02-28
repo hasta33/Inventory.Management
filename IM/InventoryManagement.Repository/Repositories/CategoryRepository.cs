@@ -19,5 +19,30 @@ namespace InventoryManagement.Repository.Repositories
                 .OrderByDescending(x => x.CreatedDate)
                 .ToListAsync();
         }
+
+        public async Task<List<Category>> GetCategoryList(int page, int pageSize)
+        {
+            IQueryable<Category> query;
+            query = _context.Categories
+                .OrderByDescending(x => x.CreatedDate);
+
+            int totalCount = query.Count();
+
+            var response = await query.Skip((pageSize * (page - 1)))
+                .Take(pageSize)
+                .Select(x => new Category()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    BusinessCode = x.BusinessCode,
+                    CompanyId = x.CompanyId,
+                    UpdatedDate = x.UpdatedDate,
+                    CreatedDate = x.CreatedDate,
+                    TotalCount = totalCount
+
+                }).ToListAsync();
+
+            return response;
+        }
     }
 }

@@ -12,9 +12,9 @@ export class CompanyService {
   constructor(private httpClient: HttpClient) { }
 
 
-  getCompanyList(page: number, pageSize: number, businessCode: number) {
+  getCompanyList(page: number, pageSize: number) {
     return this.httpClient
-      .get<{data: CompanyModel[]}>(constants.GET_COMPANY_LIST_URL+`/${page}/${pageSize}/${businessCode}`)
+      .get<{data: CompanyModel[]}>(constants.GET_COMPANY_LIST_URL+`/${page}/${pageSize}/`)
       .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
   }
 

@@ -28,11 +28,18 @@ namespace InventoryManagement.Services.Services
 
         }
 
-        public async Task<CustomResponseDto<List<CompanyDto>>> GetCompanyList(int page, int pageSize, int businessCode)
+        public async Task<CustomResponseDto<List<CompanyDto>>> GetCompanyList(int page, int pageSize)
         {
-            var company = await _companyRepository.GetCompanyList(page, pageSize, businessCode);
+            var company = await _companyRepository.GetCompanyList(page, pageSize);
             var companyDto = _mapper.Map<List<CompanyDto>>(company);
             return CustomResponseDto<List<CompanyDto>>.Success(StatusCodes.Status200OK, companyDto);
+        }
+
+        public async Task<CustomResponseDto<List<CompanyOnlyNameAndBusinessCodeDto>>> GetCompanyOnlyNameAndBusinessCode()
+        {
+            var company = await _companyRepository.GetCompanyOnlyNameAndBusinessCode();
+            var companyDto = _mapper.Map<List<CompanyOnlyNameAndBusinessCodeDto>>(company);
+            return CustomResponseDto<List<CompanyOnlyNameAndBusinessCodeDto>>.Success(StatusCodes.Status200OK, companyDto);
         }
 
         public async Task<CustomResponseDto<List<CompanyDto>>> GetCompanyWithCategoryListAsync(int businessCode)

@@ -10,13 +10,15 @@ namespace InventoryManagement.Repository.Repositories
         {
         }
 
-        public async Task<List<Company>> GetCompanyList(int page, int pageSize, int businessCode)
+        public async Task<List<Company>> GetCompanyList(int page, int pageSize)
         {
             IQueryable<Company> query;
+
             query = _context.Companies
-                .Where(x => x.BusinessCode == businessCode)
+                //.Where(x => x.BusinessCode == businessCode)
                 .OrderByDescending(x => x.CreatedDate);
             int totalCount = query.Count();
+
             var response = await query.Skip((pageSize * (page - 1)))
                 .Take(pageSize)
                 .Select(x => new Company()
@@ -29,6 +31,23 @@ namespace InventoryManagement.Repository.Repositories
                     UpdatedDate = Convert.ToDateTime(x.UpdatedDate),
                     TotalCount = totalCount,
                 }).ToListAsync();
+
+            return response;
+        }
+
+        public async Task<List<Company>> GetCompanyOnlyNameAndBusinessCode()
+        {
+            IQueryable<Company> query;
+
+            query = _context.Companies
+                .OrderByDescending(x => x.CreatedDate);
+
+            var response = await query.Select(x => new Company()
+            {
+                Id= x.Id,
+                BusinessCode = x.BusinessCode,
+                Name = x.Name,
+            }).ToListAsync();
 
             return response;
         }

@@ -18,17 +18,28 @@ namespace InventoryManagement.API.Controllers
             _service = service;
         }
 
-        
-        [HttpGet("{page}/{pageSize}/{businessCode}")]
-        public async Task<IActionResult> GetCompanyList(int page, int pageSize, int businessCode)
+
+
+        //GetCompanyOnlyNameAndBusinessCode
+        [HttpGet]
+        public async Task<IActionResult> GetCompanyOnlyNameAndBusinessCode()
         {
-            return CreateActionResult(await _service.GetCompanyList(page, pageSize, businessCode));
+            return CreateActionResult(await _service.GetCompanyOnlyNameAndBusinessCode());
         }
 
 
-        
+        [HttpGet("{page}/{pageSize}")]
+        //[Authorize(Roles = "SuperAdminRole", Policy = "company#get")]
+        public async Task<IActionResult> GetCompanyList(int page, int pageSize)
+        {
+            return CreateActionResult(await _service.GetCompanyList(page, pageSize));
+        }
+
+
+
+        //BU ALAN ŞİMDİLİK KULLANILMADI, FRONTEND TARAFINDA KULLANILACAK
         [HttpGet("{businessCode}")]
-        [Authorize(Roles = "SuperAdminRole", Policy = "company#get")]
+        //[Authorize(Roles = "SuperAdminRole", Policy = "company#get")]
         public async Task<IActionResult> GetCompanyWithCategoryListAsync(int businessCode)
         {
             return CreateActionResult(await _service.GetCompanyWithCategoryListAsync(businessCode));
@@ -37,7 +48,7 @@ namespace InventoryManagement.API.Controllers
 
 
         [HttpPost]
-        [Authorize("company#create")]
+        //[Authorize("company#create")]
         public async Task<IActionResult> AddAsync([FromBody] CompanyCreateDto dto)
         {
             return CreateActionResult(await _service.AddAsync(dto));
@@ -46,7 +57,7 @@ namespace InventoryManagement.API.Controllers
 
 
         [HttpPut]
-        [Authorize("company#update")]
+        //[Authorize("company#update")]
         public async Task<IActionResult> UpdateAsync([FromBody] CompanyUpdateDto dto)
         {
             return CreateActionResult(await _service.UpdateAsync(dto));
@@ -55,7 +66,7 @@ namespace InventoryManagement.API.Controllers
 
 
         [HttpDelete("{id}")]
-        [Authorize("company#delete")]
+        //[Authorize("company#delete")]
         public async Task<IActionResult> RemoveAsync(int id)
         {
             return CreateActionResult(await _service.RemoveAsync(id));
