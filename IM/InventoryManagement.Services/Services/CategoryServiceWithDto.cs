@@ -27,16 +27,16 @@ namespace InventoryManagement.Services.Services
             return CustomResponseDto<CategoryDto>.Success(StatusCodes.Status200OK, newDto);
         }
 
-        public async Task<CustomResponseDto<List<CategoryDto>>> GetCategoryList(int businessCode)
+        public async Task<CustomResponseDto<List<CategoryDto>>> GetCategoryList(int companyId)
         {
-            var category = await _categoryRepository.GetCategoryList(businessCode);
+            var category = await _categoryRepository.GetCategoryList(companyId);
             var categoryDto = _mapper.Map<List<CategoryDto>>(category);
             return CustomResponseDto<List<CategoryDto>>.Success(StatusCodes.Status200OK, categoryDto);
         }
 
-        public async Task<CustomResponseDto<List<CategoryDto>>> GetCategoryList(int page, int pageSize)
+        public async Task<CustomResponseDto<List<CategoryDto>>> GetCategoryList(int companyId, int page, int pageSize)
         {
-            var category = await _categoryRepository.GetCategoryList(page, pageSize);
+            var category = await _categoryRepository.GetCategoryList(companyId, page, pageSize);
             var categoryDto = _mapper.Map<List<CategoryDto>>(category);
             return CustomResponseDto<List<CategoryDto>>.Success(StatusCodes.Status200OK, categoryDto);
         }

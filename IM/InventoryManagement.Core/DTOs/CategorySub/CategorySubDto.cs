@@ -3,7 +3,7 @@
     public class CategorySubDto
     {
         public string Name { get; set; } = string.Empty;
-        public int BusinessCode { get; set; }
+        //public int BusinessCode { get; set; }
 
 
 

@@ -34,14 +34,15 @@ export class CompanyListComponent implements OnInit {
   clonedCompanyList: { [s: string]: CompanyModel } = {};
   rowCounter: number = 0;
 
+
   ngOnInit() {
     this.primengConfig.ripple = true;
 
     this.columns = [
       {field: 'id', header: 'id'},
       {field: 'name', header: 'name'},
-      {field: 'description', header: 'description'},
       {field: 'businessCode', header: 'businessCode'},
+      {field: 'description', header: 'description'},
       {field: 'createdDate', header: 'createdDate'},
       {field: 'updatedDate', header: 'updatedDate'},
     ]
@@ -53,6 +54,7 @@ export class CompanyListComponent implements OnInit {
       {label: 'Şirketi sil', icon: 'pi pi-fw pi-times', command: () => this.showConfirm(this.selectedCompany)}
     ];
   }
+
 
   //#Get companies list {page}/{pageSize}
   getCompanies() {

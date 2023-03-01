@@ -20,30 +20,29 @@ namespace InventoryManagement.API.Controllers
 
 
 
-        //GetCompanyOnlyNameAndBusinessCode
-        [HttpGet]
-        public async Task<IActionResult> GetCompanyOnlyNameAndBusinessCode()
-        {
-            return CreateActionResult(await _service.GetCompanyOnlyNameAndBusinessCode());
-        }
-
-
         [HttpGet("{page}/{pageSize}")]
-        //[Authorize(Roles = "SuperAdminRole", Policy = "company#get")]
-        public async Task<IActionResult> GetCompanyList(int page, int pageSize)
+        public async Task<IActionResult> GetCompanyAllList(int page, int pageSize)
         {
-            return CreateActionResult(await _service.GetCompanyList(page, pageSize));
+            return CreateActionResult(await _service.GetCompanyAllList(page, pageSize));
+        }
+        
+
+        [HttpGet("{companyId}/{page}/{pageSize}")]
+        //[Authorize(Roles = "SuperAdminRole", Policy = "company#get")]
+        public async Task<IActionResult> GetCompanyListWithSubTables(int companyId, int page, int pageSize)
+        {
+            return CreateActionResult(await _service.GetCompanyListWithSubTables(companyId, page, pageSize));
         }
 
 
 
-        //BU ALAN ŞİMDİLİK KULLANILMADI, FRONTEND TARAFINDA KULLANILACAK
-        [HttpGet("{businessCode}")]
-        //[Authorize(Roles = "SuperAdminRole", Policy = "company#get")]
-        public async Task<IActionResult> GetCompanyWithCategoryListAsync(int businessCode)
-        {
-            return CreateActionResult(await _service.GetCompanyWithCategoryListAsync(businessCode));
-        }
+        ////BU ALAN ŞİMDİLİK KULLANILMADI, FRONTEND TARAFINDA KULLANILACAK
+        //[HttpGet("{businessCode}")]
+        ////[Authorize(Roles = "SuperAdminRole", Policy = "company#get")]
+        //public async Task<IActionResult> GetCompanyWithCategoryListAsync(int businessCode)
+        //{
+        //    return CreateActionResult(await _service.GetCompanyWithCategoryListAsync(businessCode));
+        //}
 
 
 

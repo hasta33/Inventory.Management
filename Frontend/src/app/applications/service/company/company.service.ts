@@ -18,6 +18,12 @@ export class CompanyService {
       .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
   }
 
+  getCompanyOnlyNameAndBusinessCode(){
+    return this.httpClient
+      .get<{data: CompanyModel[]}>(constants.GET_COMPANY_ONLY_NAME_AND_BUSINESS_CODE)
+      .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
+  }
+
 
 
   postCompany(data: any): Observable<CompanyModel> {

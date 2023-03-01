@@ -33,30 +33,30 @@
 
 
     // ------------------------------------ Company -------------------------------------------
-    //// Get All Company
-    //{
-    //  "DownstreamPathTemplate": "/api/company",
-    //  "DownstreamScheme": "https",
-    //  "DownstreamHostAndPorts": [
-    //    {
-    //      "Host": "localhost",
-    //      "Port": 2003
-    //    }
-    //  ],
-    //  "UpstreamPathTemplate": "/api/services/inventory/company",
-    //  "RateLimitOptions": {
-    //    "ClientWhitelist": [],
-    //    "EnableRateLimiting": true,
-    //    "Period": "1m",
-    //    "PeriodTimespan": 30,
-    //    "Limit": 10
-    //  },
-    //  "UpstreamHttpMethod": [ "GET" ]
-    //},
 
+    // ---- Get Company  - GetCompanyOnlyNameAndBusinessCode
+    {
+      "DownstreamPathTemplate": "/api/company",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/company",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "GET" ]
+    },
 
-    // ---- Get Company {page}/{pageSize}
-    // ---- Delete Company {id}
+    // ---- Get    - GetCompanyList {companyId}/{page}/{pageSize}
+    // ---- Delete - Company {id}
     {
       "DownstreamPathTemplate": "/api/company/{everythings}",
       "DownstreamScheme": "https",
@@ -77,7 +77,7 @@
       "UpstreamHttpMethod": [ "GET", "DELETE" ]
     },
 
-    /// ---- Company Post, Put
+    /// ---- Post, Put - Company - AddAsync, UpdateAsync
     {
       "DownstreamPathTemplate": "/api/company",
       "DownstreamScheme": "https",
@@ -107,8 +107,30 @@
 
     // ------------------------------------ Category -------------------------------------------
 
-    /// ---- Get Category {page}/{pageSize}
-    /// ---- Delete Category {id}
+    // Category - GetCategoryList {categoryId}
+    {
+      "DownstreamPathTemplate": "/api/category",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/category",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+
+
+    //  Category - GetCategoryList {companyId}/{page}/{pageSize}
+    //  Category - RemoveAsync {id}
     {
       "DownstreamPathTemplate": "/api/category/{everythings}",
       "DownstreamScheme": "https",
@@ -130,7 +152,7 @@
     },
 
 
-    /// ---- Category ---- --> PUT, POST
+    // Category - AddAsync, UpdateAsync
     {
       "DownstreamPathTemplate": "/api/category",
       "DownstreamScheme": "https",

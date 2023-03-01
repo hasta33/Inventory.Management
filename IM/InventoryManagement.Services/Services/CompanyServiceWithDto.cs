@@ -28,27 +28,6 @@ namespace InventoryManagement.Services.Services
 
         }
 
-        public async Task<CustomResponseDto<List<CompanyDto>>> GetCompanyList(int page, int pageSize)
-        {
-            var company = await _companyRepository.GetCompanyList(page, pageSize);
-            var companyDto = _mapper.Map<List<CompanyDto>>(company);
-            return CustomResponseDto<List<CompanyDto>>.Success(StatusCodes.Status200OK, companyDto);
-        }
-
-        public async Task<CustomResponseDto<List<CompanyOnlyNameAndBusinessCodeDto>>> GetCompanyOnlyNameAndBusinessCode()
-        {
-            var company = await _companyRepository.GetCompanyOnlyNameAndBusinessCode();
-            var companyDto = _mapper.Map<List<CompanyOnlyNameAndBusinessCodeDto>>(company);
-            return CustomResponseDto<List<CompanyOnlyNameAndBusinessCodeDto>>.Success(StatusCodes.Status200OK, companyDto);
-        }
-
-        public async Task<CustomResponseDto<List<CompanyDto>>> GetCompanyWithCategoryListAsync(int businessCode)
-        {
-            var result = await _companyRepository.GetCompanyWithCategoryListAsync(businessCode);
-            var resultDto = _mapper.Map<List<CompanyDto>>(result);
-            return CustomResponseDto<List<CompanyDto>>.Success(StatusCodes.Status200OK, resultDto);
-        }
-
         public async Task<CustomResponseDto<NoContent>> UpdateAsync(CompanyUpdateDto dto)
         {
             var entity = _mapper.Map<Company>(dto);
@@ -56,5 +35,27 @@ namespace InventoryManagement.Services.Services
             await _unitOfWork.CommitAsync();
             return CustomResponseDto<NoContent>.Success(StatusCodes.Status204NoContent);
         }
+
+
+        public async Task<CustomResponseDto<List<CompanyDto>>> GetCompanyListWithSubTables(int companyId, int page, int pageSize)
+        {
+            var company = await _companyRepository.GetCompanyListWithSubTables(companyId, page, pageSize);
+            var companyDto = _mapper.Map<List<CompanyDto>>(company);
+            return CustomResponseDto<List<CompanyDto>>.Success(StatusCodes.Status200OK, companyDto);
+        }
+
+        public async Task<CustomResponseDto<List<CompanyAllDto>>> GetCompanyAllList(int page, int pageSize)
+        {
+            var company = await _companyRepository.GetCompanyAllList(page, pageSize);
+            var companyDto = _mapper.Map<List<CompanyAllDto>>(company);
+            return CustomResponseDto<List<CompanyAllDto>>.Success(StatusCodes.Status200OK, companyDto);
+        }
+
+        //public async Task<CustomResponseDto<List<CompanyDto>>> GetCompanyWithCategoryListAsync(int businessCode)
+        //{
+        //    var result = await _companyRepository.GetCompanyWithCategoryListAsync(businessCode);
+        //    var resultDto = _mapper.Map<List<CompanyDto>>(result);
+        //    return CustomResponseDto<List<CompanyDto>>.Success(StatusCodes.Status200OK, resultDto);
+        //}
     }
 }

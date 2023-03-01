@@ -24,6 +24,7 @@
 <p-contextMenu #cm [model]="itemsMenu"></p-contextMenu>
 
 
+
 <div style="height: calc(100vh - 149px)">
   <p-table #dt [value]="companyList"
            styleClass="p-datatable-company"
@@ -38,14 +39,16 @@
            [scrollable]="true"
            scrollHeight="flex"
            [contextMenu]="cm"
-           [(contextMenuSelection)]="selectedCompany"
-  >
+           [(contextMenuSelection)]="selectedCompany">
+
+
+
 
     <ng-template pTemplate="caption">
       <div class="table-header">Şirket Listesi<span class="p-input-icon-left">
-      <i class="pi pi-search"></i>
-      <input pInputText type="text" (input)="dt.filterGlobal( $any($event.target).value, 'contains')" placeholder="Genel Arama" />
-      </span>
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="dt.filterGlobal( $any($event.target).value, 'contains')" placeholder="Genel Arama" />
+        </span>
       </div>
     </ng-template>
 

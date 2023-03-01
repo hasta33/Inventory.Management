@@ -10,12 +10,13 @@ namespace InventoryManagement.Repository.Repositories
         {
         }
 
-        public async Task<List<Company>> GetCompanyList(int page, int pageSize)
+        public async Task<List<Company>> GetCompanyListWithSubTables(int companyId, int page, int pageSize)
         {
             IQueryable<Company> query;
 
             query = _context.Companies
-                //.Where(x => x.BusinessCode == businessCode)
+                .Where(x => x.Id == companyId)
+                .Include(x => x.Categories.Where(x => x.CompanyId == companyId)).ThenInclude(x => x.CategorySubs)
                 .OrderByDescending(x => x.CreatedDate);
             int totalCount = query.Count();
 
@@ -29,37 +30,44 @@ namespace InventoryManagement.Repository.Repositories
                     Id = x.Id,
                     Name = x.Name,
                     UpdatedDate = Convert.ToDateTime(x.UpdatedDate),
+                    Categories = x.Categories,
                     TotalCount = totalCount,
                 }).ToListAsync();
 
             return response;
         }
 
-        public async Task<List<Company>> GetCompanyOnlyNameAndBusinessCode()
+        public async Task<List<Company>> GetCompanyAllList(int page, int pageSize)
         {
             IQueryable<Company> query;
 
             query = _context.Companies
                 .OrderByDescending(x => x.CreatedDate);
 
+            int totalCount = query.Count();
+
             var response = await query.Select(x => new Company()
             {
-                Id= x.Id,
+                Id = x.Id,
                 BusinessCode = x.BusinessCode,
+                Description = x.Description,
                 Name = x.Name,
+                TotalCount = totalCount,
+                CreatedDate = x.CreatedDate,
+                UpdatedDate = x.UpdatedDate
             }).ToListAsync();
 
             return response;
         }
 
-        public async Task<List<Company>> GetCompanyWithCategoryListAsync(int businessCode)
-        {
-            return await _context.Companies
-                .Where(b => b.BusinessCode == businessCode)
-                .Include(c => c.Categories.Where(x => x.BusinessCode == businessCode)).ThenInclude(x => x.CategorySubs)
+        //public async Task<List<Company>> GetCompanyWithCategoryListAsync(int businessCode)
+        //{
+        //    return await _context.Companies
+        //        .Where(b => b.BusinessCode == businessCode)
+        //        .Include(c => c.Categories.Where(x => x.BusinessCode == businessCode)).ThenInclude(x => x.CategorySubs)
 
-                .OrderByDescending(x => x.CreatedDate)
-                .ToListAsync();
-        }
+        //        .OrderByDescending(x => x.CreatedDate)
+        //        .ToListAsync();
+        //}
     }
 }

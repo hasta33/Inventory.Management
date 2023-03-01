@@ -80,7 +80,8 @@
         <td>
           <p-cellEditor>
             <ng-template pTemplate="input">
-              <p-dropdown  appendTo="body" [(ngModel)]="rowData.businessCode" [style]="{'width':'100%'}"></p-dropdown>
+              <p-dropdown [options]="prodResp" optionLabel="name" optionValue="id"
+                          [(ngModel)]="feedDropDown" scrollHeight='150px'  (onChange)="onChange()"> </p-dropdown>
             </ng-template>
             <ng-template pTemplate="output">{{rowData.businessCode}}</ng-template>
           </p-cellEditor>

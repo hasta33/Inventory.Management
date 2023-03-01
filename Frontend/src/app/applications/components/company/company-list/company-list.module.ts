@@ -23,19 +23,19 @@ import {SharedModule} from "../../../directive/shared.module";
     /*exports: [
         AddRowDirective
     ],*/
-  imports: [
-    CommonModule,
-    CompanyListRoutingModule,
-    TableModule,
-    InputTextModule,
-    ButtonModule,
-    FormsModule,
-    ToastModule,
-    PaginatorModule,
-    ContextMenuModule,
-    RippleModule,
-    AutoFocusModule,
-    SharedModule
-  ]
+    imports: [
+        CommonModule,
+        CompanyListRoutingModule,
+        TableModule,
+        InputTextModule,
+        ButtonModule,
+        FormsModule,
+        ToastModule,
+        PaginatorModule,
+        ContextMenuModule,
+        RippleModule,
+        AutoFocusModule,
+        SharedModule
+    ]
 })
 export class CompanyListModule { }

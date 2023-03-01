@@ -1,9 +1,11 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {CategoryModel} from "../../../models/category/category";
 import {CategoryService} from "../../../service/category/category.service";
-import {MenuItem, MessageService, PrimeNGConfig} from "primeng/api";
+import {MenuItem, MessageService, PrimeNGConfig, SelectItem} from "primeng/api";
 import {constants} from "../../../constants/constants";
 import {Table} from "primeng/table";
+import {CompanyService} from "../../../service/company/company.service";
+import {CompanyModel} from "../../../models/company/company";
 
 @Component({
   selector: 'app-category-list',
@@ -14,6 +16,7 @@ import {Table} from "primeng/table";
 export class CategoryListComponent implements OnInit {
   constructor(
     private categoryService: CategoryService,
+    private companyService: CompanyService,
     private messageService: MessageService,
     private primengConfig: PrimeNGConfig) { }
 
@@ -21,6 +24,13 @@ export class CategoryListComponent implements OnInit {
 
   //#table
   categoryList: CategoryModel[] = [];
+
+//dropdown
+  cmpDropDown = null;
+  deptDropDown = null;
+  feedDropDown = null;
+  public cmpResp: any;
+
   columns: [] | any;
   page: number = 1;
   pageSize: number = 10;
@@ -34,7 +44,14 @@ export class CategoryListComponent implements OnInit {
   clonedCategoryList: { [s: string]: CategoryModel } = {};
   rowCounter: number = 0;
 
+  public prodResp: any = [
+    {"id": "1", "name": "ereğli", "businessCode": "120"},
+    {"id": "2", "name": "konya", "businessCode": "130"},
+    {"id": "3", "name": "istanbul", "businessCode": "140"},
+  ];
+
   ngOnInit() {
+
     this.primengConfig.ripple = true;
 
     this.columns = [
@@ -48,6 +65,31 @@ export class CategoryListComponent implements OnInit {
       {label: 'Yenile', icon: 'pi pi-fw pi-refresh', command: () => this.getCategories()},
       {label: 'Kategori sil', icon: 'pi pi-fw pi-times', command: () => this.showConfirm(this.selectedCategory)}
     ];
+  }
+
+
+  onChange(): void {
+    console.log("Compnay Id :- ", this.feedDropDown)
+    console.log("Department Id :- ", this.deptDropDown)
+    console.log("Product Id :- ", this.feedDropDown)
+  }
+
+  getCompanyOnlyNameAndBusinessCode(){
+    this.companyService.getCompanyOnlyNameAndBusinessCode().subscribe({
+      next: (data) => {
+        /*this.companies = data.data.map((name) => {
+          return { label: name.name, value: name.businessCode}
+        });*/
+      },
+      error: (e) => {
+        this.messageService.add({severity:'error', summary: 'Hata', detail: `Şirket listesi alınamadı \n${e}`, life: constants.TOAST_ERROR_LIFETIME});
+        this.messageService.clear('c');
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      }
+    });
   }
 
   //#Get categories list
@@ -64,6 +106,7 @@ export class CategoryListComponent implements OnInit {
       },
       complete: () => {
         this.loading = false;
+        this.getCompanyOnlyNameAndBusinessCode();
       }
     });
   }

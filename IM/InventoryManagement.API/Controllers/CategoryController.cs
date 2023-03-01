@@ -17,20 +17,20 @@ namespace InventoryManagement.API.Controllers
         }
 
 
-        [HttpGet("{page}/{pageSize}")]
+        [HttpGet("{companyId}/{page}/{pageSize}")]
         //[Authorize(Roles = "SuperAdminRole", Policy = "company#get")]
-        public async Task<IActionResult> GetCategoryList(int page, int pageSize)
+        public async Task<IActionResult> GetCategoryList(int companyId, int page, int pageSize)
         {
-            return CreateActionResult( await _service.GetCategoryList(page, pageSize));
+            return CreateActionResult( await _service.GetCategoryList(companyId, page, pageSize));
         }
 
 
         //bu alan kaldırılacak
-        [HttpGet("{businessCode}")]
-        [Authorize(Roles = "SuperAdminRole", Policy = "company#get")]
-        public async Task<IActionResult> GetCategoryList(int businessCode)
+        [HttpGet("{companyId}")]
+       // [Authorize(Roles = "SuperAdminRole", Policy = "company#get")]
+        public async Task<IActionResult> GetCategoryList(int companyId)
         {
-            return CreateActionResult(await _service.GetCategoryList(businessCode));
+            return CreateActionResult(await _service.GetCategoryList(companyId));
         }
 
 

@@ -11,19 +11,22 @@ namespace InventoryManagement.Repository.Repositories
 
         }
 
-        public async Task<List<Category>> GetCategoryList(int businessCode)
+        public async Task<List<Category>> GetCategoryList(int companyId)
         {
             return await _context.Categories
-                .Where(b => b.BusinessCode == businessCode)
-                .Include(x => x.CategorySubs.Where(x => x.BusinessCode == businessCode))
+                 //.Where(b => b.BusinessCode == businessCode)
+                 .Where(c => c.CompanyId == companyId)
+                .Include(x => x.CategorySubs.Where(x => x.CategoryId == companyId))  //kategoriye ait alt kategorileri listeleme
                 .OrderByDescending(x => x.CreatedDate)
                 .ToListAsync();
         }
 
-        public async Task<List<Category>> GetCategoryList(int page, int pageSize)
+        public async Task<List<Category>> GetCategoryList(int companyId, int page, int pageSize)
         {
             IQueryable<Category> query;
             query = _context.Categories
+                .Where(x => x.CompanyId == companyId)
+                .Include( x => x.CategorySubs.Where(x => x.CategoryId == companyId))
                 .OrderByDescending(x => x.CreatedDate);
 
             int totalCount = query.Count();
@@ -34,10 +37,10 @@ namespace InventoryManagement.Repository.Repositories
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    BusinessCode = x.BusinessCode,
                     CompanyId = x.CompanyId,
                     UpdatedDate = x.UpdatedDate,
                     CreatedDate = x.CreatedDate,
+                    CategorySubs= x.CategorySubs,
                     TotalCount = totalCount
 
                 }).ToListAsync();
