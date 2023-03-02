@@ -6,7 +6,6 @@ import {constants} from "../../../constants/constants";
 import {Table} from "primeng/table";
 import {CompanyService} from "../../../service/company/company.service";
 import {CompanyModel} from "../../../models/company/company";
-import {CategorySubModel} from "../../../models/category/categorysub";
 
 @Component({
   selector: 'app-category-list',
@@ -21,63 +20,76 @@ export class CategoryListComponent implements OnInit {
     private messageService: MessageService,
     private primengConfig: PrimeNGConfig) { }
 
-  //@ViewChild(Table, { read: Table }) pTable: Table | any;
+  @ViewChild(Table, { read: Table }) pTable: Table | any;
 
   //#table
   categoryList: CategoryModel[] = [];
-  //categorySubList: CategorySubModel[] = [];
+
+//dropdown
+  cmpDropDown = null;
+  deptDropDown = null;
+  feedDropDown = null;
+  public cmpResp: any;
+
   columns: [] | any;
   page: number = 1;
-  pageSize: number = 100;
+  pageSize: number = 10;
   loading: boolean = true;
   totalRecords: number = 0;
 
-  //overlay menu
-  companies: CompanyModel[] = [];
-  selectedCompany: any;
-  selectedCompanyId: any;
-
-
-
-
   //#contextMenu
-  contextMenu: MenuItem[] = [];
+  itemsMenu: MenuItem[] = [];
   selectedCategory: CategoryModel | any;
 
   clonedCategoryList: { [s: string]: CategoryModel } = {};
   rowCounter: number = 0;
 
+  //overlay menu
+  companies: CompanyModel[] = [];
+  selectedCompany: any;
+
+  public prodResp: any = [
+    {"id": "1", "name": "ereðli", "businessCode": "120"},
+    {"id": "2", "name": "konya", "businessCode": "130"},
+    {"id": "3", "name": "istanbul", "businessCode": "140"},
+  ];
 
   ngOnInit() {
-    this.getCompanyAllList();
+    this.getCompanies();
 
     //ripple
     this.primengConfig.ripple = true;
 
-    //#contextMenu
-    this.contextMenu = [
-      {label: 'Yenile', icon: 'pi pi-fw pi-refresh', command: () => this.getCategoryList() },
+    //bunu kontrol et
+    this.columns = [
+      {field: 'id', header: 'id'},
+      {field: 'name', header: 'name'}
+    ]
+
+
+
+    //contextMenu
+    this.itemsMenu = [
+      {label: 'Yenile', icon: 'pi pi-fw pi-refresh', command: () => this.getCategories(this.selectedCompany)},
       {label: 'Kategori sil', icon: 'pi pi-fw pi-times', command: () => this.showConfirm(this.selectedCategory)}
     ];
   }
 
   //overlay
   onRowSelect(event: any) {
-    this.messageService.add({severity: 'info', summary: 'SeÃ§ilen ÅŸirket', detail: event.data.name});
-    this.selectedCompanyId = event.data.id;
-
-    this.getCategoryList();
+    this.messageService.add({severity: 'info', summary: 'Product Selected', detail: event.data.name});
+    this.getCategories(event.data.id);
   }
 
-  //#GetCompanyAllList {page}/{pageSize}
-  getCompanyAllList() {
-    this.companyService.getCompanyAllList(this.page, this.pageSize).subscribe({
+  //#Get companies list {page}/{pageSize}
+  getCompanies() {
+    this.companyService.getCompanyList(this.page, this.pageSize).subscribe({
       next: (data) => {
-        this.companies = data?.data;
-        this.totalRecords = data?.data[0].totalCount;
+        this.companies = data.data;
+        this.totalRecords = data.data[0].totalCount;
       },
       error: (e) => {
-        this.messageService.add({severity:'error', summary: 'Hata', detail: `Åžirket listesi alÄ±namadÄ± \n${e}`, life: constants.TOAST_ERROR_LIFETIME});
+        this.messageService.add({severity:'error', summary: 'Hata', detail: `Þirket listesi alýnamadý \n${e}`, life: constants.TOAST_ERROR_LIFETIME});
         this.messageService.clear('c');
         this.loading = false;
       },
@@ -87,16 +99,42 @@ export class CategoryListComponent implements OnInit {
     });
   }
 
-  //#GetCategoryList {companyId}/{page}/{pageSize}
-  getCategoryList() {
-    this.categoryService.getCategoryList(this.selectedCompanyId, this.page, this.pageSize).subscribe({
+  //#Get categories list
+  getCategories(companyId: number) {
+    this.categoryService.getCategoryList(companyId, this.page, this.pageSize).subscribe({
       next: (data) => {
-        this.categoryList = data?.data;
-        this.totalRecords = data.data[0]?.totalCount;
-        //console.log(this.categoryList.map(response => response.categorySubs))
+        this.categoryList = data.data;
+        this.totalRecords = data.data[0].totalCount;
       },
       error: (e) => {
-        this.messageService.add({severity:'error', summary: 'Hata', detail: `Kategori listesi alÄ±namadÄ± \n${e}`, life: constants.TOAST_ERROR_LIFETIME});
+        this.messageService.add({severity:'error', summary: 'Hata', detail: `Kategori listesi alýnamadý \n${e}`, life: constants.TOAST_ERROR_LIFETIME});
+        this.messageService.clear('c');
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+        this.getCompanyOnlyNameAndBusinessCode();
+      }
+    });
+  }
+
+
+
+  onChange(): void {
+    console.log("Compnay Id :- ", this.feedDropDown)
+    console.log("Department Id :- ", this.deptDropDown)
+    console.log("Product Id :- ", this.feedDropDown)
+  }
+
+  getCompanyOnlyNameAndBusinessCode(){
+    this.companyService.getCompanyOnlyNameAndBusinessCode().subscribe({
+      next: (data) => {
+        /*this.companies = data.data.map((name) => {
+          return { label: name.name, value: name.businessCode}
+        });*/
+      },
+      error: (e) => {
+        this.messageService.add({severity:'error', summary: 'Hata', detail: `Þirket listesi alýnamadý \n${e}`, life: constants.TOAST_ERROR_LIFETIME});
         this.messageService.clear('c');
         this.loading = false;
       },
@@ -114,11 +152,11 @@ export class CategoryListComponent implements OnInit {
       next: (response) => {
       },
       error: (e) => {
-        this.messageService.add({severity:'error', summary: 'Hata', detail: `BaÅŸarÄ±sÄ±z kayÄ±t \n${e}`, life: constants.TOAST_ERROR_LIFETIME});
+        this.messageService.add({severity:'error', summary: 'Hata', detail: `Baþarýsýz kayýt \n${e}`, life: constants.TOAST_ERROR_LIFETIME});
         this.messageService.clear('c');
       },
       complete: () => {
-        this.messageService.add({severity:'success', summary: 'BaÅŸarÄ±lÄ±', detail: 'KayÄ±t gÃ¼ncellendi', life: constants.TOAST_SUCCESS_LIFETIME});
+        this.messageService.add({severity:'success', summary: 'Baþarýlý', detail: 'Kayýt güncellendi', life: constants.TOAST_SUCCESS_LIFETIME});
         this.messageService.clear('c');
       },
     });
@@ -129,6 +167,7 @@ export class CategoryListComponent implements OnInit {
     this.categoryService.deleteCategory(this.selectedCategory.id)
       .subscribe({
         next: (response) => {
+
         },
         error: (e) => {
           this.messageService.add({severity: 'error', summary: 'Hata', detail: `${this.selectedCategory.name}  kategori silinemedi ${e}`, life: constants.TOAST_ERROR_LIFETIME});
@@ -136,11 +175,11 @@ export class CategoryListComponent implements OnInit {
         },
         complete: () => {
           this.categoryList = this.categoryList.filter((p) => p.id !== this.selectedCategory.id);//table uzerinden sil
-          this.messageService.add({severity: 'success', summary: 'BaÅŸarÄ±lÄ±', detail: `${this.selectedCategory.name} isimli ÅŸirket silindi`, life: constants.TOAST_SUCCESS_LIFETIME});
+          this.messageService.add({severity: 'success', summary: 'Baþarýlý', detail: `${this.selectedCategory.name} isimli þirket silindi`, life: constants.TOAST_SUCCESS_LIFETIME});
           this.messageService.clear('c');
           this.selectedCategory = null;  //null yap secileni
         }
-      });
+      })
   }
 
   addCategory(category: CategoryModel, index: number) {
@@ -151,11 +190,11 @@ export class CategoryListComponent implements OnInit {
           this.categoryList = [...this.categoryList];
         },
         error: (e) => {
-          this.messageService.add({severity: 'error', summary: 'Hata', detail: `kayÄ±t yapÄ±lamadÄ± \n${e}`, life: constants.TOAST_ERROR_LIFETIME});
+          this.messageService.add({severity: 'error', summary: 'Hata', detail: `kayýt yapýlamadý \n${e}`, life: constants.TOAST_ERROR_LIFETIME});
           this.messageService.clear('c');
         },
         complete: () => {
-          this.messageService.add({severity: 'success', summary: 'BaÅŸarÄ±lÄ±', detail: `${category.name} isimli kategori kaydedildi.`, life: constants.TOAST_SUCCESS_LIFETIME});
+          this.messageService.add({severity: 'success', summary: 'Baþarýlý', detail: `${category.name} isimli kategori kaydedildi.`, life: constants.TOAST_SUCCESS_LIFETIME});
           this.messageService.clear('c');
           this.categoryList[index] = this.clonedCategoryList[category.id];
           delete this.clonedCategoryList[category.id];
@@ -170,8 +209,6 @@ export class CategoryListComponent implements OnInit {
 
   //#Save
   onRowEditSave(category: CategoryModel, index: number) {
-    category.companyId = this.selectedCompany;
-
     if (!category.id.toString().indexOf(' ')){
       this.addCategory(category, index);
     } else if (category.id.toString().indexOf(' ')) {
@@ -191,7 +228,7 @@ export class CategoryListComponent implements OnInit {
   public handlePagination(paginationData: any): void {
     this.page = paginationData.page +1;
     this.pageSize = paginationData.rows;
-    this.getCategoryList();
+    this.getCategories(1);
   }
 
 
@@ -201,8 +238,9 @@ export class CategoryListComponent implements OnInit {
 
   showConfirm(selectedCompany: CategoryModel) {
     this.messageService.clear();
-    this.messageService.add({key: 'c', sticky: true, severity:'warn', summary:'Silmek istediÄŸinizden emin misiniz ?', detail:'Devam etmek iÃ§in onaylayÄ±n'});
+    this.messageService.add({key: 'c', sticky: true, severity:'warn', summary:'Silmek istediðinizden emin misiniz ?', detail:'Devam etmek için onaylayýn'});
   }
+
 
 
   newRow() {
@@ -212,10 +250,3 @@ export class CategoryListComponent implements OnInit {
     };
   }
 }
-
-/*
-Bugs
-1. deleteCategory() iÃ§inde, ÅŸirket seÃ§ilip, ardÄ±ndan bir tane kayÄ±t yapÄ±lÄ±p ve aynÄ± kaydÄ± tekrar sildiÄŸimizde console'da
-hata cÄ±kÄ±yor daha sonra kontrol edilmesi gerekiyor.
-
- */

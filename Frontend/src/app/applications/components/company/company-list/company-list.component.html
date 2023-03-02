@@ -21,7 +21,7 @@
   </ng-template>
 </p-toast>
 
-<p-contextMenu #cm [model]="itemsMenu"></p-contextMenu>
+<p-contextMenu #cm [model]="contextMenu"></p-contextMenu>
 
 
 
@@ -86,9 +86,7 @@
             <ng-template pTemplate="input">
               <input pInputText type="text" [(ngModel)]="rowData.description" required>
             </ng-template>
-            <ng-template pTemplate="output">
-              {{rowData.description}}
-            </ng-template>
+            <ng-template pTemplate="output">{{rowData.description}}</ng-template>
           </p-cellEditor>
         </td>
 
@@ -97,9 +95,7 @@
             <ng-template pTemplate="input">
               <input pInputText type="text" [(ngModel)]="rowData.businessCode">
             </ng-template>
-            <ng-template pTemplate="output">
-              {{rowData.businessCode}}
-            </ng-template>
+            <ng-template pTemplate="output">{{rowData.businessCode}}</ng-template>
           </p-cellEditor>
         </td>
 

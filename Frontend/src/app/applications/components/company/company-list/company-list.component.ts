@@ -17,7 +17,7 @@ export class CompanyListComponent implements OnInit {
     private messageService: MessageService,
     private primengConfig: PrimeNGConfig) { }
 
-  @ViewChild(Table, { read: Table }) pTable: Table | any;
+  //@ViewChild(Table, { read: Table }) pTable: Table | any;
 
   //#table
   companyList: CompanyModel[] = [];
@@ -28,7 +28,7 @@ export class CompanyListComponent implements OnInit {
   totalRecords: number = 0;
 
   //#contextMenu
-  itemsMenu: MenuItem[] = [];
+  contextMenu: MenuItem[] = [];
   selectedCompany: CompanyModel | any;
 
   clonedCompanyList: { [s: string]: CompanyModel } = {};
@@ -47,21 +47,21 @@ export class CompanyListComponent implements OnInit {
       {field: 'updatedDate', header: 'updatedDate'},
     ]
 
-    this.getCompanies();
+    this.getCompanyAllList();
 
-    this.itemsMenu = [
-      {label: 'Yenile', icon: 'pi pi-fw pi-refresh', command: () => this.getCompanies()},
+    this.contextMenu = [
+      {label: 'Yenile', icon: 'pi pi-fw pi-refresh', command: () => this.getCompanyAllList()},
       {label: 'Şirketi sil', icon: 'pi pi-fw pi-times', command: () => this.showConfirm(this.selectedCompany)}
     ];
   }
 
 
-  //#Get companies list {page}/{pageSize}
-  getCompanies() {
-    this.companyService.getCompanyList(this.page, this.pageSize).subscribe({
+  //#GetCompanyAllList {page}/{pageSize}
+  getCompanyAllList() {
+    this.companyService.getCompanyAllList(this.page, this.pageSize).subscribe({
       next: (data) => {
-        this.companyList = data.data;
-        this.totalRecords = data.data[0].totalCount;
+        this.companyList = data?.data;
+        this.totalRecords = data.data[0]?.totalCount;
       },
       error: (e) => {
         this.messageService.add({severity:'error', summary: 'Hata', detail: `Şirket listesi alınamadı \n${e}`, life: constants.TOAST_ERROR_LIFETIME});
@@ -156,7 +156,7 @@ export class CompanyListComponent implements OnInit {
   public handlePagination(paginationData: any): void {
     this.page = paginationData.page +1;
     this.pageSize = paginationData.rows;
-    this.getCompanies();
+    this.getCompanyAllList();
   }
 
 

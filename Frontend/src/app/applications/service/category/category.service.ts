@@ -12,9 +12,10 @@ export class CategoryService {
   constructor(private httpClient: HttpClient) { }
 
 
-  getCategoryList(page: number, pageSize: number) {
+  //GetCategoryList {companyId}/{page}/{pageSize}
+  getCategoryList(companyId: number, page: number, pageSize: number) {
     return this.httpClient
-      .get<{data: CategoryModel[]}>(constants.GET_CATEGORY_LIST_URL+`/${page}/${pageSize}/`)
+      .get<{data: CategoryModel[]}>(constants.GET_CATEGORY_LIST_URL+`/${companyId}/${page}/${pageSize}/`)
       .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
   }
 

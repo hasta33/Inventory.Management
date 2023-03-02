@@ -1,8 +1,7 @@
-export class CompanyModel {
+export class CategorySubModel {
   id: number | any;
-  name: string | undefined;
+  name: string | any;
   companyId: number | any;
-  description: string | undefined;
   createdDate: Date | undefined;
   updatedDate: Date | undefined;
   totalCount: number | any;

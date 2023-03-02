@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { CategoryListRoutingModule } from './category-list-routing.module';
-import { CategoryListComponent } from './category-list.component';
+import {CategoryListRoutingModule} from './category-list-routing.module';
+import {CategoryListComponent} from './category-list.component';
 import {TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ContextMenuModule} from "primeng/contextmenu";
@@ -14,6 +14,7 @@ import {AutoFocusModule} from "primeng/autofocus";
 import {FormsModule} from "@angular/forms";
 import {PaginatorModule} from "primeng/paginator";
 import {SharedModule} from "../../../directive/shared.module";
+import {OverlayPanelModule} from "primeng/overlaypanel";
 
 @NgModule({
   declarations: [
@@ -35,7 +36,9 @@ import {SharedModule} from "../../../directive/shared.module";
     AutoFocusModule,
     FormsModule,
     PaginatorModule,
-    SharedModule
+    SharedModule,
+    OverlayPanelModule
   ]
 })
-export class CategoryListModule { }
+export class CategoryListModule {
+}

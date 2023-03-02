@@ -12,17 +12,19 @@ export class CompanyService {
   constructor(private httpClient: HttpClient) { }
 
 
-  getCompanyList(page: number, pageSize: number) {
+  //#GetCompanyAllList {page}/{pageSize}
+  getCompanyAllList(page: number, pageSize: number) {
     return this.httpClient
       .get<{data: CompanyModel[]}>(constants.GET_COMPANY_LIST_URL+`/${page}/${pageSize}/`)
       .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
   }
 
-  getCompanyOnlyNameAndBusinessCode(){
+  //#GetCompanyListWithSubTables {companyId}/{page}/{pageSize}
+  /*getCompanyListWithSubTables(companyId: number, page: number, pageSize:number){
     return this.httpClient
-      .get<{data: CompanyModel[]}>(constants.GET_COMPANY_ONLY_NAME_AND_BUSINESS_CODE)
+      .get<{data: CompanyModel[]}>(constants.GET_COMPANY_ONLY_NAME_AND_BUSINESS_CODE+`/${companyId}/${page}/${pageSize}/`)
       .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
-  }
+  }*/
 
 
 

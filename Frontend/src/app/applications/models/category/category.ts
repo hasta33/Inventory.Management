@@ -5,4 +5,5 @@ export class CategoryModel {
   createdDate: Date | undefined;
   updatedDate: Date | undefined;
   totalCount: number | any;
+  categorySubs: any;
 }
