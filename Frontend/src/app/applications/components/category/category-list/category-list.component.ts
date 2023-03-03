@@ -25,7 +25,7 @@ export class CategoryListComponent implements OnInit {
 
   //#table
   categoryList: CategoryModel[] = [];
-  columns: any; //[] | any;
+  columns: any; //[] | any; //burası sonra silinecek
   page: number = 1;
   pageSize: number = 100;
   loading: boolean = true;
@@ -42,6 +42,7 @@ export class CategoryListComponent implements OnInit {
   selectedCategory: CategoryModel | any;
 
   clonedCategoryList: { [s: string]: CategoryModel } = {};
+  clonedCategorySubList: { [s: string]: CategorySubModel } = {};
   rowCounter: number = 0;
 
 
@@ -163,6 +164,10 @@ export class CategoryListComponent implements OnInit {
   //#Edit
   onRowEditInit(category: CategoryModel) {
     this.clonedCategoryList[category.id] = { ...category };
+  }
+  //Edit categorySub
+  onRowEditInitCategorySub(categorySub: CategorySubModel) {
+    this.clonedCategorySubList[categorySub.id] = { ...categorySub };
   }
 
   //#Save

@@ -66,7 +66,8 @@
            [scrollable]="true"
            scrollHeight="flex"
            [contextMenu]="cm"
-           [(contextMenuSelection)]="selectedCategory">
+           [(contextMenuSelection)]="selectedCategory"
+           [columns]="columns">
 
     <ng-template pTemplate="caption">
       <div class="table-header">
@@ -93,14 +94,14 @@
         <th style="width: 20%" pSortableColumn="companyId">Şirket Id<p-sortIcon field="companyId"></p-sortIcon>
         </th>
         <th style="text-align: center; width: 20%"><button pButton pRipple autofocus type="button" icon="pi pi-plus" class="p-button-rounded p-button-outlined"
-                  pAddRow [table]="dt" [newRow]="newRow()"></button>
+                                                           pAddRow [table]="dt" [newRow]="newRow()"></button>
         </th>
       </tr>
     </ng-template>
 
 
     <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex" let-categorySubs
-                 let-expanded="expanded">
+                 let-expanded="expanded" >
       <tr [pEditableRow]="rowData"
           [pContextMenuRow]="rowData"
           [ngClass]="{
@@ -153,19 +154,40 @@
     <ng-template pTemplate="rowexpansion" let-categorySubs>
       <td colspan="7">
         <div class="p-p-3">
-
           <p-table [value]="categorySubs.categorySubs" dataKey="id">
             <ng-template pTemplate="header">
               <tr>
                 <th pSortableColumn="id">Id</th>
-                <th pSortableColumn="name">Adı <p-sortIcon field="name"></p-sortIcon></th>
+                <th pSortableColumn="name">Alt Kategori Adı <p-sortIcon field="name"></p-sortIcon></th>
+                <th>Üst Kategori Id'si</th>
                 <th style="width: 4rem"></th>
               </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-order>
-              <tr>
-                <td>{{order.id}}</td>
-                <td>{{order.name}}</td>
+            <ng-template pTemplate="body" let-categorySub let-editing="editing" let-rowData let-ri="rowIndex">
+              <tr [pEditableRow]="rowData"
+                  [ngClass]="{
+                  'editRecord': rowData.id === rowData.id.toString().indexOf(' '),
+                  'notRecord': !rowData.id.toString().indexOf(' ')}">
+                <td>{{categorySub.id}}</td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" [(ngModel)]="rowData.name" pAutoFocus [autofocus]="true" >
+                    </ng-template>
+                    <ng-template pTemplate="output">{{rowData.name}}</ng-template>
+                  </p-cellEditor>
+                </td>
+
+
+                <td>
+                  <div class="flex align-items-center justify-content-center gap-2">
+                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInitCategorySub(rowData)" class="p-button-rounded p-button-text"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(rowData, ri)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(rowData, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+                    <button icon="pi pi-list" pButton pRipple class="p-button-rounded p-button-text p-button-secondary"></button>
+                  </div>
+                </td>
+
               </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">
@@ -174,6 +196,7 @@
               </tr>
             </ng-template>
           </p-table>
+
         </div>
       </td>
     </ng-template>
@@ -198,5 +221,16 @@
     </ng-template>
   </p-table>
 
+
+  <p-table [columns]="columns" [value]="categoryList" [tableStyle]="{'min-width': '50rem'}">
+
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr>
+        <td *ngFor="let col of columns">
+          {{rowData[col.field]}}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 
 </div>
