@@ -25,8 +25,7 @@ export class CategoryListComponent implements OnInit {
 
   //#table
   categoryList: CategoryModel[] = [];
-  //categorySubList: CategorySubModel[] = [];
-  columns: [] | any;
+  columns: any; //[] | any;
   page: number = 1;
   pageSize: number = 100;
   loading: boolean = true;
@@ -36,8 +35,6 @@ export class CategoryListComponent implements OnInit {
   companies: CompanyModel[] = [];
   selectedCompany: any;
   selectedCompanyId: any;
-
-
 
 
   //#contextMenu
@@ -53,6 +50,7 @@ export class CategoryListComponent implements OnInit {
 
     //ripple
     this.primengConfig.ripple = true;
+
 
     //#contextMenu
     this.contextMenu = [
@@ -93,7 +91,6 @@ export class CategoryListComponent implements OnInit {
       next: (data) => {
         this.categoryList = data?.data;
         this.totalRecords = data.data[0]?.totalCount;
-        //console.log(this.categoryList.map(response => response.categorySubs))
       },
       error: (e) => {
         this.messageService.add({severity:'error', summary: 'Hata', detail: `Kategori listesi alınamadı \n${e}`, life: constants.TOAST_ERROR_LIFETIME});
