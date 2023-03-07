@@ -129,6 +129,7 @@
     },
 
 
+    // ------------------------------------ Category -------------------------------------------
     //  Category - GetCategoryList {companyId}/{page}/{pageSize}
     //  Category - RemoveAsync {id}
     {
@@ -171,11 +172,32 @@
         "Limit": 10
       },
       "UpstreamHttpMethod": [ "PUT", "POST" ]
-    }
-
+    },
     // ------------------------------------ Category -------------------------------------------
 
 
+
+    // ------------------------------------ CategorySub ----------------------------------------
+    {
+      "DownstreamPathTemplate": "/api/categorySub",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/categorySub",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "PUT", "POST" ]
+    }
+    // --------------------------------------- CategorySub -------------------------------------
 
   ]
 }

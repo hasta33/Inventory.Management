@@ -14,6 +14,11 @@ export const constants = {
   PUT_CATEGORY_URL: `${environment.gatewayUrl}/api/services/inventory/category`,
   DELETE_CATEGORY_URL: `${environment.gatewayUrl}/api/services/inventory/category`,
 
+
+  //CategorySub
+  POST_CATEGORY_SUB: `${environment.gatewayUrl}/api/services/inventory/categorySub`,
+  PUT_CATEGORY_SUB_URL: `${environment.gatewayUrl}/api/services/inventory/categorySub`,
+
   TOAST_ERROR_LIFETIME:5000, //Toast timeout
   TOAST_SUCCESS_LIFETIME:3000,
   HTTP_SERVICE_RETRY:3, //Http servisine gonderilen istegin tekrarlanma istegi
