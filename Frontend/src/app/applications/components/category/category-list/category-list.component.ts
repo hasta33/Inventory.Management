@@ -232,7 +232,7 @@ export class CategoryListComponent implements OnInit {
 
   newRow() {
     return {
-      id: ' ' + this.rowCounter++,
+      id: ' '+this.rowCounter++,
       name: ''
     };
   }
