@@ -112,6 +112,7 @@ export class CategoryListComponent implements OnInit {
   }
   //addCategory
   addCategory(category: CategoryModel, index: number) {
+    //console.log(category.id.toString().trim())
     this.categoryService.postCategory(category)
       .subscribe({
         next: (response: any) => {
@@ -231,7 +232,7 @@ export class CategoryListComponent implements OnInit {
 
   newRow() {
     return {
-      id: ' '+this.rowCounter++,
+      id: ' ' + this.rowCounter++,
       name: ''
     };
   }
