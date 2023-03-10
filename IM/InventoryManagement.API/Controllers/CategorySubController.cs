@@ -28,5 +28,11 @@ namespace InventoryManagement.API.Controllers
         {
             return CreateActionResult(await _service.UpdateAsync(dto));
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> RemoveAsync(int id)
+        {
+            return CreateActionResult(await _service.RemoveAsync(id));
+        }
     }
 }

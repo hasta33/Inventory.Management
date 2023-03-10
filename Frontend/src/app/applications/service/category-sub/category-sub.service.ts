@@ -23,6 +23,12 @@ export class CategorySubService {
       .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
   }
 
+  deleteCategorySub(id: number) {
+    return this.httpClient
+      .delete<any>(constants.DELETE_CATEGORY_SUB_URL+`/${id}`)
+      .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
+  }
+
   private handleError(error: any) {
     let errorMessage = '';
     if (error.errorMessage instanceof ErrorEvent) {

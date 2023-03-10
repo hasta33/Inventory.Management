@@ -1,9 +1,8 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CompanyModel} from "../../../models/company/company";
 import {CompanyService} from "../../../service/company/company.service";
 import {MenuItem, MessageService, PrimeNGConfig} from "primeng/api";
 import {constants} from "../../../constants/constants";
-import {Table} from "primeng/table";
 
 @Component({
   selector: 'app-company-list',
@@ -16,8 +15,6 @@ export class CompanyListComponent implements OnInit {
     private companyService: CompanyService,
     private messageService: MessageService,
     private primengConfig: PrimeNGConfig) { }
-
-  //@ViewChild(Table, { read: Table }) pTable: Table | any;
 
   //#table
   companyList: CompanyModel[] = [];

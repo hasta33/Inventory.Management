@@ -15,6 +15,7 @@ import {FormsModule} from "@angular/forms";
 import {PaginatorModule} from "primeng/paginator";
 import {SharedModule} from "../../../directive/shared.module";
 import {OverlayPanelModule} from "primeng/overlaypanel";
+import {TreeTableModule} from "primeng/treetable";
 
 @NgModule({
   declarations: [
@@ -24,21 +25,22 @@ import {OverlayPanelModule} from "primeng/overlaypanel";
   /*exports: [
     AddRowDirective
   ],*/
-  imports: [
-    CommonModule,
-    CategoryListRoutingModule,
-    TableModule,
-    ToastModule,
-    ContextMenuModule,
-    InputTextModule,
-    ButtonModule,
-    RippleModule,
-    AutoFocusModule,
-    FormsModule,
-    PaginatorModule,
-    SharedModule,
-    OverlayPanelModule
-  ]
+    imports: [
+        CommonModule,
+        CategoryListRoutingModule,
+        TableModule,
+        ToastModule,
+        ContextMenuModule,
+        InputTextModule,
+        ButtonModule,
+        RippleModule,
+        AutoFocusModule,
+        FormsModule,
+        PaginatorModule,
+        SharedModule,
+        OverlayPanelModule,
+        TreeTableModule
+    ]
 })
 export class CategoryListModule {
 }

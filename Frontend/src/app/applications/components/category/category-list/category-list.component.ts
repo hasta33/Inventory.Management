@@ -6,9 +6,7 @@ import {constants} from "../../../constants/constants";
 import {CompanyService} from "../../../service/company/company.service";
 import {CompanyModel} from "../../../models/company/company";
 import {CategorySubService} from "../../../service/category-sub/category-sub.service";
-import {OverlayPanel} from "primeng/overlaypanel";
 import {CategorySubModel} from "../../../models/category/categorysub";
-import {elementAt} from "rxjs";
 
 @Component({
   selector: 'app-category-list',
@@ -24,7 +22,6 @@ export class CategoryListComponent implements OnInit {
     private messageService: MessageService,
     private primengConfig: PrimeNGConfig) { }
 
-  //@ViewChild(Table, { read: Table }) pTable: Table | any;
 
   //#table
   categoryList: CategoryModel[] = [];
@@ -47,6 +44,14 @@ export class CategoryListComponent implements OnInit {
   clonedCategoryList: { [s: string]: CategoryModel } = {};
   rowCounter: number = 0;
 
+  //categorySub
+  categorySubList: CategorySubModel[] = [];
+  clonedCategorySubList: { [s: string]: CategorySubModel } = {};
+  categorySubContextMenu: MenuItem[] = [];
+  selectedCategorySub: any;
+
+
+
 
   ngOnInit() {
     this.getCompanyAllList();
@@ -59,7 +64,13 @@ export class CategoryListComponent implements OnInit {
       {label: 'Yenile', icon: 'pi pi-fw pi-refresh', command: () => this.getCategoryList() },
       {label: 'Kategori sil', icon: 'pi pi-fw pi-times', command: () => this.showConfirm(this.selectedCategory)}
     ];
+
+    this.categorySubContextMenu = [
+      { label: 'Yenile', icon: 'pi pi-fw pi-refresh', command: () => this.getCategoryList() },
+      {label: 'Alt Kategori  sil', icon: 'pi pi-fw pi-times', command: () => this.showConfirmCategorySubDelete()}
+    ]
   }
+
 
   //overlay
   onRowSelect(event: any) {
@@ -69,6 +80,15 @@ export class CategoryListComponent implements OnInit {
 
     this.getCategoryList();
   }
+
+  selectedCategoryEvent(event: any) {
+    this.selectedCategory = event;
+  }
+  selectedCategorySubEvent(event: any, data: any) {
+    this.selectedCategorySub = data;
+  }
+
+
 
   // --------------------------- Company ---------------------------
   //#GetCompanyAllList {page}/{pageSize}
@@ -112,19 +132,24 @@ export class CategoryListComponent implements OnInit {
   }
   //addCategory
   addCategory(category: CategoryModel, index: number) {
-    //console.log(category.id.toString().trim())
+    category.id = category.id.toString().trim();
+
     this.categoryService.postCategory(category)
       .subscribe({
         next: (response: any) => {
           this.categoryList.push(response.data);
           this.categoryList = [...this.categoryList];
-        },
+          console.log(this.categoryList)
+          },
         complete: () => {
           this.messageService.add({severity: 'success', summary: 'Başarılı', detail: `${category.name} isimli kategori kaydedildi.`, life: constants.TOAST_SUCCESS_LIFETIME});
           this.messageService.clear('c');
 
-          this.categoryList[index] = this.clonedCategoryList[category.id];
-          delete this.clonedCategoryList[category.id];
+          this.categoryList = this.categoryList.filter((p) => p.id !== category.id);
+
+          //Tablo üzerinden bu şekilde silinmesi gerekiyor, yukarıdaki geçici çözümdür
+          //this.categoryList[index] = this.clonedCategoryList[category.id];
+          //delete this.clonedCategoryList[category.id];
         },
         error: (e) => {
           this.messageService.add({severity: 'error', summary: 'Hata', detail: `kayıt yapılamadı \n${e}`, life: constants.TOAST_ERROR_LIFETIME});
@@ -170,26 +195,128 @@ export class CategoryListComponent implements OnInit {
 
 
 
+  // --------------------------- CategorySub ---------------------------
+  addCategorySub(categorySub: CategorySubModel, index: number) {
+    categorySub.id = categorySub.id.toString().trim();
+
+    this.categorySubService.postCategorySub(categorySub)
+      .subscribe({
+        next: (response: any) => {
+          this.categorySubList.push(response.data);
+          this.categorySubList = [...this.categorySubList];
+        },
+        complete: () => {
+          this.messageService.add({severity: 'success', summary: 'Başarılı', detail: `${categorySub.name} isimli alt kategori kaydedildi.`, life: constants.TOAST_SUCCESS_LIFETIME});
+          this.messageService.clear('c');
+
+          this.categorySubList[index] = this.clonedCategorySubList[categorySub.id];
+          delete this.clonedCategorySubList[categorySub.id];
+        },
+        error: (e) => {
+          this.messageService.add({severity: 'error', summary: 'Hata', detail: `kayıt yapılamadı \n${e}`, life: constants.TOAST_ERROR_LIFETIME});
+          this.messageService.clear('c');
+        }
+      })
+  }
+  putCategorySub(categorySub: CategorySubModel) {
+    this.categorySubService.putCategorySub(categorySub)
+      .subscribe({
+        next: (response) => {
+
+        },
+        complete: () => {
+          this.messageService.add({severity:'success', summary: 'Başarılı', detail: 'Kayıt güncellendi', life: constants.TOAST_SUCCESS_LIFETIME});
+          this.messageService.clear('c');
+        },
+        error: (e) => {
+          this.messageService.add({severity:'error', summary: 'Hata', detail: `Başarısız kayıt \n${e}`, life: constants.TOAST_ERROR_LIFETIME});
+          this.messageService.clear('c');
+        }
+      })
+  }
+  deleteCategorySub() {
+
+    //console.log(this.selectedCategorySub)
+    this.categoryList = this.categoryList.filter((x) => x.id !== this.selectedCategorySub.id);
+    //console.log(this.categoryList)
+    console.log(this.categoryList.filter((x) => x.id !== this.selectedCategorySub.id))
+
+    //delete this.categoryList[2];
+    //console.log(this.categoryList)
+
+    //this.companyList[index] = this.clonedCompanyList[company.id];
+    //delete this.clonedCompanyList[company.id];
+
+    /*this.categorySubService.deleteCategorySub(this.selectedCategorySub.id)
+      .subscribe({
+        next: (response) => {
+
+        },
+        complete: () => {
+          //this.categorySubList = this.categorySubList.filter((p) => p.id !== this.selectedCategorySub.id);//table uzerinden sil
+          //this.messageService.add({severity: 'success', summary: 'Başarılı', detail: `${this.selectedCategory.name} isimli şirket silindi`, life: constants.TOAST_SUCCESS_LIFETIME});
+          //this.messageService.clear('c');
+          //this.selectedCategorySub = null; //null yap secileni
+
+          this.categoryList = this.categoryList.filter((p) => p.id !== this.selectedCategorySub.id);//table uzerinden sil
+          this.messageService.add({severity: 'success', summary: 'Başarılı', detail: `${this.selectedCategory.name} isimli şirket silindi`, life: constants.TOAST_SUCCESS_LIFETIME});
+          this.messageService.clear('c');
+          //this.selectedCategorySub = null; //null yap secileni
+
+          console.log(this.selectedCategorySub)
+          console.log(this.selectedCategorySub.id)
+          console.log(this.categoryList)
+          console.log(this.categorySubList)
+        },
+        error: (e) => {
+          this.messageService.add({severity: 'error', summary: 'Hata', detail: `${this.selectedCategory.name} alt kategori silinemedi ${e}`, life: constants.TOAST_ERROR_LIFETIME});
+          this.messageService.clear('c');
+        }
+      })*/
+  }
+  // --------------------------- CategorySub ---------------------------
+
+
+
   // --------------------------- Table Row ---------------------------
   //#Edit
-  onCategoryRowEditInit(category: CategoryModel) {
-    this.clonedCategoryList[category.id] = { ...category };
+  onCategoryRowEditInit(category: CategoryModel, selectedType: string) {
+    if (selectedType === 'category') {
+      this.clonedCategoryList[category?.id] = { ...category };
+    } else if (selectedType === 'categorySub') {
+      console.log("category sub edit ekranı")
+    }
   }
   //#Save
-  onCategoryRowEditSave(category: CategoryModel, index: number) {
+  onCategoryRowEditSave(category: any, index: number, selectedType: string) {
     category.companyId = this.selectedCompany.id;
+    category.categoryId = this.selectedCategory.id;
 
-    if (!category.id.toString().indexOf(' ')){
-      this.addCategory(category, index);
-    } else if (category.id.toString().indexOf(' ')) {
-      this.putCategory(category);
+
+    if (selectedType === 'category') {
+      if (!category.id.toString().indexOf(' ')){
+        this.addCategory(category, index);
+      } else if (category.id.toString().indexOf(' ')) {
+        this.putCategory(category);
+      }
+    } else if (selectedType === 'categorySub') {
+      if (!category.id.toString().indexOf(' ')) {
+        this.addCategorySub(category, index);
+      } else if (category.id.toString().indexOf(' ')) {
+        this.putCategorySub(category);
+      }
     }
   }
   //#Cancel
-  onCategoryRowEditCancel(category: CategoryModel, index: number) {
-    this.categoryList[index] = this.clonedCategoryList[category.id];
-    delete this.clonedCategoryList[category.id];
+  onCategoryRowEditCancel(category: CategoryModel, index: number, selectedType: string) {
+    if (selectedType === 'category') {
+      this.categoryList[index] = this.clonedCategoryList[category?.id];
+      delete this.clonedCategoryList[category?.id];
+    } else if (selectedType === 'categorySub') {
+      console.log("category sub cancel edildi")
+    }
   }
+
   //#Pagination
   public handlePagination(paginationData: any): void {
     this.page = paginationData.page +1;
@@ -199,32 +326,17 @@ export class CategoryListComponent implements OnInit {
 // --------------------------- Table Row ---------------------------
 
 
-  // --------------------------- Table Row - CategorySub ---------------------------
-  onCategorySubRowEditInit(categorySub: CategorySubModel) {
-    //this.clonedCategorySubList[categorySub.id] = { ...categorySub };
-  }
-  onCategorySubRowEditSave(categorySub: CategorySubModel, index: number) {
-    console.log(categorySub)
-    /*categorySub.companyId = this.selectedCompany.id;
-
-    if (!categorySub.id.toString().indexOf(' ')){
-      this.addCategory(categorySub, index);
-    } else if (categorySub.id.toString().indexOf(' ')) {
-      this.putCategory(categorySub);
-    }*/
-  }
-  onCategorySubRowEditCancel(categorySub: CategorySubModel, index: number) {
-    //this.categorySubList[index] = this.clonedCategorySubList[categorySub.id];
-    //delete this.clonedCategorySubList[categorySub.id];
-  }
-  // --------------------------- Table Row - CategorySub ---------------------------
-
 
   onReject() {
     this.messageService.clear('c');
   }
 
   showConfirm(selectedCompany: CategoryModel) {
+    this.messageService.clear();
+    this.messageService.add({key: 'c', sticky: true, severity:'warn', summary:'Silmek istediğinizden emin misiniz ?', detail:'Devam etmek için onaylayın'});
+  }
+
+  showConfirmCategorySubDelete() {
     this.messageService.clear();
     this.messageService.add({key: 'c', sticky: true, severity:'warn', summary:'Silmek istediğinizden emin misiniz ?', detail:'Devam etmek için onaylayın'});
   }
@@ -238,9 +350,14 @@ export class CategoryListComponent implements OnInit {
   }
 }
 
+
+
 /*
+------------------------------------------------------------------------------------------------------------------------
 Bugs
 1. deleteCategory() içinde, şirket seçilip, ardından bir tane kayıt yapılıp ve aynı kaydı tekrar sildiğimizde console'da
 hata cıkıyor daha sonra kontrol edilmesi gerekiyor.
 
+2. Yeni ana kategori satırı eklendi ve hemen ardından "Cancel - onCategoryRowEditCancel" butonuna bastıktan sonra chrome consol'da hata ortaya çkıyor
+düzeltilecek
  */

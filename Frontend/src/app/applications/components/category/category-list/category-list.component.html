@@ -21,8 +21,29 @@
   </ng-template>
 </p-toast>
 
-<p-contextMenu #cm [model]="contextMenu"></p-contextMenu>
+<p-toast position="bottom-center" key="c" (onClose)="onReject()" [baseZIndex]="5000">
+  <ng-template let-message pTemplate="message">
+    <div class="flex flex-column" style="flex: 1">
+      <div class="text-center">
+        <!--   <i class="pi pi-exclamation-triangle" style="font-size: 3rem"></i> -->
+        <h4>{{message.summary}}</h4>
+        <p>{{selectedCategorySub.name}} isimli alt kategoriyi silmek istediğinizden emin misiniz ?</p>
+        <p>{{message.detail}}</p>
+      </div>
+      <div class="grid p-fluid">
+        <div class="col-6">
+          <button type="button" pButton (click)="deleteCategorySub()" label="Sil" class="p-button-success"></button>
+        </div>
+        <div class="col-6">
+          <button type="button" pButton (click)="onReject()" label="İptal" class="p-button-secondary"></button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-toast>
 
+<p-contextMenu #cmCategory [model]="contextMenu"></p-contextMenu>
+<p-contextMenu #cmCategorySub [model]="categorySubContextMenu"></p-contextMenu>
 
 <p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '450px'}">
   <ng-template pTemplate="overlay">
@@ -30,15 +51,9 @@
              (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="5" responsiveLayout="scroll">
       <ng-template pTemplate="header">
         <tr>
-          <th pSortableColumn="id">Id
-            <p-sortIcon field="id"></p-sortIcon>
-          </th>
-          <th pSortableColumn="name">Şirket
-            <p-sortIcon field="name"></p-sortIcon>
-          </th>
-          <th pSortableColumn="companyId">Şirket Id
-            <p-sortIcon field="companyId"></p-sortIcon>
-          </th>
+          <th pSortableColumn="id">Id<p-sortIcon field="id"></p-sortIcon></th>
+          <th pSortableColumn="name">Şirket<p-sortIcon field="name"></p-sortIcon></th>
+          <th pSortableColumn="companyId">Şirket Id<p-sortIcon field="companyId"></p-sortIcon></th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowData>
@@ -54,7 +69,8 @@
 
 
 <div style="height: calc(100vh - 149px)" id="id">
-  <p-table #dt [value]="categoryList"
+  <p-table #dt
+           [value]="categoryList"
            styleClass="p-datatable-company"
            dataKey="id"
            editMode="row"
@@ -66,7 +82,7 @@
            [globalFilterFields]="['name','description','companyId']"
            [scrollable]="true"
            scrollHeight="flex"
-           [contextMenu]="cm"
+           [contextMenu]="cmCategory"
            [(contextMenuSelection)]="selectedCategory">
 
     <ng-template pTemplate="caption">
@@ -85,7 +101,7 @@
         <th style="width:1%" pSortableColumn="id"></th>
         <th style="width:5%" pSortableColumn="id">Id<p-sortIcon field="id"></p-sortIcon></th>
         <th style="width:20%" pSortableColumn="name">Kategori Adı<p-sortIcon field="name"></p-sortIcon></th>
-        <th style="width: 20%" pSortableColumn="companyId">Şirket Id<p-sortIcon field="companyId"></p-sortIcon></th>
+        <!-- <th style="width: 20%" pSortableColumn="companyId">Şirket Id<p-sortIcon field="companyId"></p-sortIcon></th> -->
         <th style="text-align: center; width: 20%"><button pButton pRipple autofocus type="button" icon="pi pi-plus" class="p-button-rounded p-button-outlined"
                                                            pAddRow [table]="dt" [newRow]="newRow()"></button></th>
       </tr>
@@ -106,6 +122,7 @@
           <button type="button"
                   pButton
                   pRipple
+                  (click)="selectedCategoryEvent(rowDataCategory)"
                   [pRowToggler]="categories"
                   class="p-button-text p-button-rounded p-button-plain"
                   [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
@@ -119,7 +136,8 @@
             <ng-template pTemplate="output">{{rowDataCategory.name}}</ng-template>
           </p-cellEditor>
         </td>
-        <td>
+
+        <!--<td>
           <p-cellEditor>
             <ng-template pTemplate="input">
               <p-dropdown [options]="companies"
@@ -131,29 +149,49 @@
             </ng-template>
             <ng-template pTemplate="output">{{rowDataCategory.companyId}}</ng-template>
           </p-cellEditor>
-        </td>
+        </td> -->
+
         <td>
           <div class="flex align-items-center justify-content-center gap-2">
-            <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onCategoryRowEditInit(rowDataCategory)" class="p-button-rounded p-button-text"></button>
-            <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onCategoryRowEditSave(rowDataCategory, ri)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
-            <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onCategoryRowEditCancel(rowDataCategory, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+            <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onCategoryRowEditInit(rowDataCategory, 'category')" class="p-button-rounded p-button-text"></button>
+            <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onCategoryRowEditSave(rowDataCategory, ri, 'category')" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+            <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onCategoryRowEditCancel(rowDataCategory, ri, 'category')" class="p-button-rounded p-button-text p-button-danger"></button>
             <button icon="pi pi-list" pButton pRipple class="p-button-rounded p-button-text p-button-secondary"></button>
           </div>
         </td>
       </tr>
     </ng-template>
 
+    <!--
+           [tableStyle]="{'min-width': '50rem'}"
+
+           [rows]="pageSize"
+           [loading]="loading"
+
+           [globalFilterFields]="['name','description','companyId']"
+
+           [contextMenu]="cm"
+           [(contextMenuSelection)]="selectedCategory"
+    -->
+
     <ng-template pTemplate="rowexpansion" let-categories>
       <td colspan="7">
         <div class="p-p-3">
-          <p-table #dtSub [value]="categories.categorySubs"
+          <p-table #dtSub
+                   styleClass="p-datatable-company"
+                   [value]="categories.categorySubs"
                    dataKey="id"
-                   editMode="row">
+                   editMode="row"
+                   [rowHover]="true"
+                   [scrollable]="true"
+                   scrollHeight="flex"
+
+                   [contextMenu]="cmCategorySub">
             <ng-template pTemplate="header">
               <tr>
                 <th>Id</th>
                 <th pSortableColumn="name">Alt Kategori Adı <p-sortIcon field="name"></p-sortIcon></th>
-                <th>Üst Kategori Id'si</th>
+               <!-- <th>Üst Kategori Id'si</th> -->
                 <th style="text-align: center; width: 20%">
                   <button pButton pRipple autofocus type="button" icon="pi pi-plus"
                           class="p-button-rounded p-button-outlined" pAddRow [table]="dtSub"
@@ -164,6 +202,8 @@
 
             <ng-template pTemplate="body" let-categorySubs let-editing="editing" let-rowData let-ri="rowIndex">
               <tr [pEditableRow]="rowData"
+                  [pContextMenuRow]="categorySubList"
+                  (mousedown)="selectedCategorySubEvent($event, rowData)"
                   [ngClass]="{
                   'editRecord': rowData.id === rowData.id.toString().indexOf(' '),
                   'notRecord': !rowData.id.toString().indexOf(' ')}">
@@ -176,19 +216,19 @@
                     <ng-template pTemplate="output">{{rowData.name}}</ng-template>
                   </p-cellEditor>
                 </td>
-                <td>
+                <!--<td>
                   <p-cellEditor>
                     <ng-template pTemplate="input">
                       <input pInputText type="text" [(ngModel)]="rowData.categoryId">
                     </ng-template>
                     <ng-template pTemplate="output">{{rowData.categoryId}}</ng-template>
                   </p-cellEditor>
-                </td>
+                </td> -->
                 <td>
                   <div class="flex align-items-center justify-content-center gap-2">
-                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onCategorySubRowEditInit(rowData)" class="p-button-rounded p-button-text"></button>
-                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onCategorySubRowEditSave(rowData, ri)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
-                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onCategorySubRowEditCancel(rowData, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onCategoryRowEditInit(rowData, 'categorySub')" class="p-button-rounded p-button-text"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onCategoryRowEditSave(rowData, ri, 'categorySub')" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onCategoryRowEditCancel(rowData, ri, 'categorySub')" class="p-button-rounded p-button-text p-button-danger"></button>
                     <button icon="pi pi-list" pButton pRipple class="p-button-rounded p-button-text p-button-secondary"></button>
                   </div>
                 </td>
@@ -196,7 +236,7 @@
             </ng-template>
             <ng-template pTemplate="emptymessage">
               <tr>
-                <td colspan="6">Herhangi bir kayıt bulunamadı</td>
+                <td colspan="6">Alt kategori bulunamadı</td>
               </tr>
             </ng-template>
           </p-table>
