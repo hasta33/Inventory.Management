@@ -22,12 +22,12 @@
 </p-toast>
 
 <p-toast position="bottom-center" key="c" (onClose)="onReject()" [baseZIndex]="5000">
-  <ng-template let-message pTemplate="message">
+  <ng-template let-message pTemplate="message" let-rowData>
     <div class="flex flex-column" style="flex: 1">
       <div class="text-center">
         <!--   <i class="pi pi-exclamation-triangle" style="font-size: 3rem"></i> -->
         <h4>{{message.summary}}</h4>
-        <p>{{selectedCategorySub.name}} isimli alt kategoriyi silmek istediğinizden emin misiniz ?</p>
+        <p>selectedCategorySub.name isimli alt kategoriyi silmek istediğinizden emin misiniz ?</p>
         <p>{{message.detail}}</p>
       </div>
       <div class="grid p-fluid">
@@ -69,6 +69,7 @@
 
 
 <div style="height: calc(100vh - 149px)" id="id">
+
   <p-table #dt
            [value]="categoryList"
            styleClass="p-datatable-company"
@@ -110,7 +111,7 @@
     <ng-template pTemplate="body"
                  let-rowDataCategory
                  let-editing="editing"
-                 let-ri="rowIndex"
+                 let-rowIndex="rowIndex"
                  let-categories
                  let-expanded="expanded">
       <tr [pEditableRow]="rowDataCategory"
@@ -122,7 +123,7 @@
           <button type="button"
                   pButton
                   pRipple
-                  (click)="selectedCategoryEvent(rowDataCategory)"
+                  (click)="selectedCategoryEvent(rowDataCategory, rowIndex)"
                   [pRowToggler]="categories"
                   class="p-button-text p-button-rounded p-button-plain"
                   [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
@@ -153,9 +154,9 @@
 
         <td>
           <div class="flex align-items-center justify-content-center gap-2">
-            <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onCategoryRowEditInit(rowDataCategory, 'category')" class="p-button-rounded p-button-text"></button>
-            <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onCategoryRowEditSave(rowDataCategory, ri, 'category')" class="p-button-rounded p-button-text p-button-success mr-2"></button>
-            <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onCategoryRowEditCancel(rowDataCategory, ri, 'category')" class="p-button-rounded p-button-text p-button-danger"></button>
+            <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowCategoryEditInit(rowDataCategory)" class="p-button-rounded p-button-text"></button>
+            <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowCategoryEditSave(rowDataCategory, rowIndex)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+            <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowCategoryEditCancel(rowDataCategory, rowIndex)" class="p-button-rounded p-button-text p-button-danger"></button>
             <button icon="pi pi-list" pButton pRipple class="p-button-rounded p-button-text p-button-secondary"></button>
           </div>
         </td>
@@ -185,13 +186,12 @@
                    [rowHover]="true"
                    [scrollable]="true"
                    scrollHeight="flex"
-
                    [contextMenu]="cmCategorySub">
             <ng-template pTemplate="header">
               <tr>
                 <th>Id</th>
                 <th pSortableColumn="name">Alt Kategori Adı <p-sortIcon field="name"></p-sortIcon></th>
-               <!-- <th>Üst Kategori Id'si</th> -->
+                <!-- <th>Üst Kategori Id'si</th> -->
                 <th style="text-align: center; width: 20%">
                   <button pButton pRipple autofocus type="button" icon="pi pi-plus"
                           class="p-button-rounded p-button-outlined" pAddRow [table]="dtSub"
@@ -200,10 +200,11 @@
               </tr>
             </ng-template>
 
-            <ng-template pTemplate="body" let-categorySubs let-editing="editing" let-rowData let-ri="rowIndex">
+            <ng-template pTemplate="body" let-categorySubs let-editing="editing" let-rowData let-rowIndexSub="rowIndex">
               <tr [pEditableRow]="rowData"
-                  [pContextMenuRow]="categorySubList"
+                  [pContextMenuRow]="categoryList"
                   (mousedown)="selectedCategorySubEvent($event, rowData)"
+                  (mouseup)="selectedCategorySubEvent($event, rowIndexSub)"
                   [ngClass]="{
                   'editRecord': rowData.id === rowData.id.toString().indexOf(' '),
                   'notRecord': !rowData.id.toString().indexOf(' ')}">
@@ -226,9 +227,9 @@
                 </td> -->
                 <td>
                   <div class="flex align-items-center justify-content-center gap-2">
-                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onCategoryRowEditInit(rowData, 'categorySub')" class="p-button-rounded p-button-text"></button>
-                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onCategoryRowEditSave(rowData, ri, 'categorySub')" class="p-button-rounded p-button-text p-button-success mr-2"></button>
-                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onCategoryRowEditCancel(rowData, ri, 'categorySub')" class="p-button-rounded p-button-text p-button-danger"></button>
+                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowCategorySubEditInit(rowData)" class="p-button-rounded p-button-text"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowCategorySubEditSave(rowData, rowIndexSub)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowCategorySubEditCancel(rowData, rowIndexSub)" class="p-button-rounded p-button-text p-button-danger"></button>
                     <button icon="pi pi-list" pButton pRipple class="p-button-rounded p-button-text p-button-secondary"></button>
                   </div>
                 </td>
@@ -327,4 +328,3 @@
     </ng-template>
   </p-table>
 </div>
-

@@ -35,7 +35,8 @@ namespace InventoryManagement.Services.Mapping
             #region CategorySub
             CreateMap<CategorySubCreateDto, CategorySub>();
             CreateMap<CategorySub, CategorySubDto>();
-            
+            CreateMap<CategorySubUpdateDto, CategorySub>();
+
             #endregion
 
 

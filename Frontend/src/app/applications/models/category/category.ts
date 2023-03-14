@@ -1,3 +1,5 @@
+import {CategorySubModel} from "./categorysub";
+
 export class CategoryModel {
   id: number | any;
   name: string | any;
@@ -5,5 +7,5 @@ export class CategoryModel {
   createdDate: Date | undefined;
   updatedDate: Date | undefined;
   totalCount: number | any;
-  categorySubs: any;
+  categorySubs: CategorySubModel[] = []; //any;
 }
