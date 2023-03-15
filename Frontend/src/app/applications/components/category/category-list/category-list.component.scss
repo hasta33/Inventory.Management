@@ -27,7 +27,7 @@
     }
 
     .p-datatable-tbody > tr > td {
-      cursor:auto;
+      cursor: auto;
       text-align: left;
       padding: 0.1rem 0.1rem;
     }
@@ -40,10 +40,9 @@
       background: #f8f9fa;
     }
 
-    .p-component{
+    .p-component {
       box-sizing: border-box;
     }
-
 
 
     /*paginator*/
@@ -55,8 +54,10 @@
       justify-content: flex-end;
       flex-wrap: wrap;
       height: 46px;
+
       .p-dropdown {
         float: left;
+
         .p-dropdown-panel {
           ul {
             p-dropdownItem:last-child > li {
@@ -83,6 +84,7 @@
         float: right;
       }
     }
+
     /*paginator*/
   }
 
