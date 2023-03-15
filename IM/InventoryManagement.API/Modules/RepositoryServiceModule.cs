@@ -44,14 +44,17 @@ namespace InventoryManagement.API.Modules
             builder.RegisterType<CompanyServiceWithDto>().As<ICompanyServiceWithDto>().InstancePerLifetimeScope();
             builder.RegisterType<CategoryServiceWithDto>().As<ICategoryServiceWithDto>().InstancePerLifetimeScope();
             builder.RegisterType<CategorySubServiceWithDto>().As<ICategorySubServiceWithDto>().InstancePerLifetimeScope();
+            builder.RegisterType<BrandServiceWithDto>().As<IBrandServiceWithDto>().InstancePerLifetimeScope();
+            builder.RegisterType<ModelServiceWithDto>().As<IModelServiceWithDto>().InstancePerLifetimeScope();
             #endregion
 
 
             #region TEST
             builder.RegisterType<DecisionRequirementHandler>().As<IAuthorizationHandler>().SingleInstance();
             builder.RegisterType<RptRequirementHandler>().As<IAuthorizationHandler>().SingleInstance();
-            builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().SingleInstance(); builder.Register(c => c.Resolve<IOptions<JwtBearerOptions>>().Value).As<JwtBearerOptions>();
-           
+            builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().SingleInstance();
+            builder.Register(c => c.Resolve<IOptions<JwtBearerOptions>>().Value).As<JwtBearerOptions>();
+
             //builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().SingleInstance();
             //builder.Register(c => c.Resolve<IOptions<JwtBearerOptions>>().Value).As<JwtBearerOptions>();
             #endregion

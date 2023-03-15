@@ -25,7 +25,7 @@ namespace InventoryManagement.API.Controllers
         }
 
 
-        //bu alan kaldırılacak
+       
         [HttpGet("{companyId}")]
        // [Authorize(Roles = "SuperAdminRole", Policy = "company#get")]
         public async Task<IActionResult> GetCategoryList(int companyId)

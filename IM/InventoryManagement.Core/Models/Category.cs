@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace InventoryManagement.Core.Models
+﻿namespace InventoryManagement.Core.Models
 {
     public class Category : BaseEntity
     {

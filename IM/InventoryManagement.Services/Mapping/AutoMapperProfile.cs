@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using InventoryManagement.Core.DTOs.Brand;
 using InventoryManagement.Core.DTOs.Category;
 using InventoryManagement.Core.DTOs.CategorySub;
 using InventoryManagement.Core.DTOs.Company;
+using InventoryManagement.Core.DTOs.Model;
 using InventoryManagement.Core.Models;
 
 namespace InventoryManagement.Services.Mapping
@@ -36,28 +38,20 @@ namespace InventoryManagement.Services.Mapping
             CreateMap<CategorySubCreateDto, CategorySub>();
             CreateMap<CategorySub, CategorySubDto>();
             CreateMap<CategorySubUpdateDto, CategorySub>();
-
             #endregion
 
 
+            #region Brand
+            CreateMap<BrandCreateDto, Brand>();
+            CreateMap<Brand, BrandDto>();
+            CreateMap<BrandUpdateDto, Brand>();
+            #endregion
 
-
-            //#region Category DTO
-            //CreateMap<Category, CategoryDto>().ReverseMap();  //Get işlemleri için
-            //CreateMap<Category, CategoryUpdateDto>().ReverseMap(); //Update islemi için calısıyor
-
-            //CreateMap<Category, CategoryCreateDto>().ReverseMap(); //post islemi için
-            //CreateMap<CategoryDto, CategoryCreateDto>().ReverseMap(); //post islemi için
-            //CreateMap<Category, CategoryWithCategorySubDto>().ReverseMap(); //kategory ve alt kategorileri almak için
-            //#endregion
-
-
-            //#region CategorySub DTO
-            //CreateMap<CategorySub, CategorySubDto>().ReverseMap(); //Get islemi için
-            //CreateMap<CategorySubDto, CategorySubCreateDto>().ReverseMap(); // post için mapleme
-            //CreateMap<CategorySubDto, CategorySubUpdateDto>().ReverseMap(); //çalışıyor put içi
-            //#endregion
-
+            #region Model
+            CreateMap<ModelCreateDto, Model>();
+            CreateMap<Model, ModelDto>();
+            CreateMap<ModelUpdateDto, Model>();
+            #endregion
         }
     }
 }

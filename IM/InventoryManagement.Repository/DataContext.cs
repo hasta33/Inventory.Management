@@ -23,6 +23,10 @@ namespace InventoryManagement.Repository
         public DbSet<CategorySub> CategoriesSub { get; set; }
 
 
+        public DbSet<Brand> Brands { get; set; }
+        public DbSet<Model> Models { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

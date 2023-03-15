@@ -26,7 +26,7 @@ namespace InventoryManagement.Repository.Repositories
             IQueryable<Category> query;
             query = _context.Categories
                 .Where(x => x.CompanyId == companyId)
-                .Include( x => x.CategorySubs.Where(x => x.CategoryId == companyId))
+                .Include(x => x.CategorySubs.Where(x => x.CategoryId == companyId))
                 .OrderByDescending(x => x.CreatedDate);
 
             int totalCount = query.Count();
@@ -40,9 +40,8 @@ namespace InventoryManagement.Repository.Repositories
                     CompanyId = x.CompanyId,
                     UpdatedDate = x.UpdatedDate,
                     CreatedDate = x.CreatedDate,
-                    CategorySubs= x.CategorySubs,
+                    CategorySubs = x.CategorySubs,
                     TotalCount = totalCount
-
                 }).ToListAsync();
 
             return response;

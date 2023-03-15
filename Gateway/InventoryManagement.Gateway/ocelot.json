@@ -244,18 +244,19 @@
         "Limit": 10
       },
       "UpstreamHttpMethod": [ "DELETE" ]
-    }
+    },
     // --------------------------------------- CategorySub -------------------------------------
 
-  ]
-}
 
 
 
-
-// ---- Get Company  - GetCompanyOnlyNameAndBusinessCode
-/*{
-      "DownstreamPathTemplate": "/api/company",
+    // --------------------------------------- Brand -------------------------------------
+    /*
+    Brand GET (GetCategoryList) - https://localhost:2001/api/services/inventory/brand/{companyId}/{page}/{pageSize}
+    Brand DELETE - https://localhost:2001/api/services/inventory/brand/{brandId}
+    */
+    {
+      "DownstreamPathTemplate": "/api/brand/{everythings}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -263,7 +264,7 @@
           "Port": 2003
         }
       ],
-      "UpstreamPathTemplate": "/api/services/inventory/company",
+      "UpstreamPathTemplate": "/api/services/inventory/brand/{everythings}",
       "RateLimitOptions": {
         "ClientWhitelist": [],
         "EnableRateLimiting": true,
@@ -271,5 +272,107 @@
         "PeriodTimespan": 30,
         "Limit": 10
       },
-      "UpstreamHttpMethod": [ "GET" ]
-    },*/
+      "UpstreamHttpMethod": [ "GET", "DELETE" ]
+    },
+
+    /*
+    Brand POST - https://localhost:2001/api/services/inventory/brand
+    {
+      "name": "string",
+      "companyId": 1
+    }
+
+    Brand PUT - https://localhost:2001/api/services/inventory/brand
+    {
+      "id": 7,
+      "name": "asdasdsad",
+      "companyId": 1
+    }
+    */
+    {
+      "DownstreamPathTemplate": "/api/brand",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/brand",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "PUT", "POST" ]
+    },
+    // --------------------------------------- Brand -------------------------------------
+
+
+
+
+    // --------------------------------------- Model -------------------------------------
+
+    /*
+    Model POST - https://localhost:2001/api/services/inventory/model
+    {
+      "name": "string",
+      "brandId": 1
+    }
+
+    Model PUT - https://localhost:2001/api/services/inventory/model
+    {
+      "id": 0,
+      "name": "string",
+      "brandId": 0
+    }
+    */
+    {
+      "DownstreamPathTemplate": "/api/model",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/model",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "PUT", "POST" ]
+    },
+
+    //Model DELETE - https://localhost:2001/api/services/inventory/model/idNumber
+    {
+      "DownstreamPathTemplate": "/api/model/{everythings}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/model/{everythings}",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "DELETE" ]
+    }
+    // --------------------------------------- Model -------------------------------------
+  ]
+}
+
+
+
+

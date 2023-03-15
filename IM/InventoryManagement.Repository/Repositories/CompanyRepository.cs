@@ -16,7 +16,11 @@ namespace InventoryManagement.Repository.Repositories
 
             query = _context.Companies
                 .Where(x => x.Id == companyId)
-                .Include(x => x.Categories.Where(x => x.CompanyId == companyId)).ThenInclude(x => x.CategorySubs)
+                .Include(x => x.Categories.Where(x => x.CompanyId == companyId))
+                .Include(x => x.Categories.Where(x => x.CompanyId == companyId))
+                .ThenInclude(x => x.CategorySubs)
+                .Include(x => x.Brands.Where(x => x.CompanyId == companyId))
+                .ThenInclude(x => x.Models)
                 .OrderByDescending(x => x.CreatedDate);
             int totalCount = query.Count();
 
@@ -32,6 +36,7 @@ namespace InventoryManagement.Repository.Repositories
                     UpdatedDate = Convert.ToDateTime(x.UpdatedDate),
                     Categories = x.Categories,
                     TotalCount = totalCount,
+                    Brands = x.Brands,
                 }).ToListAsync();
 
             return response;
@@ -54,7 +59,9 @@ namespace InventoryManagement.Repository.Repositories
                 Name = x.Name,
                 TotalCount = totalCount,
                 CreatedDate = x.CreatedDate,
-                UpdatedDate = x.UpdatedDate
+                UpdatedDate = x.UpdatedDate,
+                Categories = x.Categories,
+                Brands = x.Brands
             }).ToListAsync();
 
             return response;
