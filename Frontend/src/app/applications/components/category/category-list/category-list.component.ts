@@ -21,16 +21,20 @@ export class CategoryListComponent implements OnInit {
   pageSize: number = 100;
   loading: boolean = true;
   totalRecords: number = 0;
+
   //overlay menu
   companies: CompanyModel[] = [];
   selectedCompany: any;
   cloneSelectedCompany: any;
+
   //#contextMenu
   categoryContextMenu: MenuItem[] = [];
   selectedCategory: CategoryModel | any;
   selectedCategoryRowIndex: number = -1;
   clonedCategoryList: { [s: string]: CategoryModel } = {};
   rowCounter: number = 0;
+
+
   //categorySub
   clonedCategorySubList: { [s: string]: CategorySubModel } = {};
   categorySubContextMenu: MenuItem[] = [];
@@ -64,26 +68,6 @@ export class CategoryListComponent implements OnInit {
     ];
   }
 
-
-  // --------------------------- Events ---------------------------
-  onRowSelect(event: any) {
-    this.messageService.add({severity: 'info', summary: 'Şirket Seç', detail: event.data.name});
-    this.selectedCompany = event.data;
-    this.cloneSelectedCompany = event.data;
-
-    this.getCategoryList();
-  }
-
-  selectedCategoryEvent(event: any, data: any, index: any) {
-    this.selectedCategory = data;
-    this.selectedCategoryRowIndex = index;
-  }
-
-  selectedCategorySubEvent(event: any, data: any, rowIndex: number) {
-    this.selectedCategorySub = data;
-    this.selectedCategorySubRowIndex = rowIndex;
-  }
-  // --------------------------- Events ---------------------------
 
 
   // --------------------------- Company ---------------------------
@@ -135,8 +119,6 @@ export class CategoryListComponent implements OnInit {
       }
     });
   }
-
-  //addCategory
   addCategory(category: CategoryModel, index: number) {
     category.id = category.id.toString().trim();
 
@@ -173,8 +155,6 @@ export class CategoryListComponent implements OnInit {
         }
       });
   }
-
-  //#putCompany
   putCategory(category: CategoryModel) {
     this.categoryService.putCategory(category).subscribe({
       next: (response) => {
@@ -199,8 +179,6 @@ export class CategoryListComponent implements OnInit {
       },
     });
   }
-
-  //#Delete category
   deleteCategory() {
     this.categoryService.deleteCategory(this.selectedCategory.id)
       .subscribe({
@@ -245,7 +223,32 @@ export class CategoryListComponent implements OnInit {
         }
       });
   }
+
+  selectedCategoryEvent(event: any, data: any, index: any) {
+    this.selectedCategory = data;
+    this.selectedCategoryRowIndex = index;
+  }
+
+  onRowCategoryEditInit(category: any) {
+    this.clonedCategoryList[category?.id] = {...category};
+  }
+  onRowCategoryEditSave(category: any, index: number) {
+    category.companyId = this.selectedCompany.id;
+    if (!category.id.toString().indexOf(' ')) {
+      this.addCategory(category, index);
+    } else if (category.id.toString().indexOf(' ')) {
+      this.putCategory(category);
+    }
+  }
+  onRowCategoryEditCancel(category: any, index: number) {
+    this.categoryList[index] = this.clonedCategoryList[category?.id];
+    delete this.clonedCategoryList[category?.id];
+  }
   // --------------------------- Category ---------------------------
+
+
+
+
 
 
   // --------------------------- CategorySub - Table ---------------------------
@@ -258,13 +261,9 @@ export class CategoryListComponent implements OnInit {
           this.categoryList = [...this.categoryList];
         },
         complete: () => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Başarılı',
-            detail: `${categorySub.name} isimli alt kategori kaydedildi.`,
-            life: constants.TOAST_SUCCESS_LIFETIME
-          });
+          this.messageService.add({ severity: 'success', summary: 'Başarılı', detail: `${categorySub.name} isimli alt kategori kaydedildi.`,life: constants.TOAST_SUCCESS_LIFETIME });
           this.messageService.clear('c');
+
           //Remove temp item table
           const item = this.categoryList[this.selectedCategoryRowIndex].categorySubs.find(item => item.id === categorySub.id);
           if (item) {
@@ -273,46 +272,26 @@ export class CategoryListComponent implements OnInit {
           }
         },
         error: (e) => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Hata',
-            detail: `kayıt yapılamadı \n${e}`,
-            life: constants.TOAST_ERROR_LIFETIME
-          });
+          this.messageService.add({ severity: 'error', summary: 'Hata', detail: `kayıt yapılamadı \n${e}`, life: constants.TOAST_ERROR_LIFETIME });
           this.messageService.clear('c');
         }
       })
   }
-
   putCategorySub(categorySub: CategorySubModel) {
     this.categorySubService.putCategorySub(categorySub)
       .subscribe({
         next: (response) => {
-          console.log(response)
         },
         complete: () => {
-          console.log(categorySub)
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Başarılı',
-            detail: 'Kayıt güncellendi',
-            life: constants.TOAST_SUCCESS_LIFETIME
-          });
+          this.messageService.add({ severity: 'success', summary: 'Başarılı', detail: 'Kayıt güncellendi', life: constants.TOAST_SUCCESS_LIFETIME });
           this.messageService.clear('c');
         },
         error: (e) => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Hata',
-            detail: `Başarısız kayıt \n${e}`,
-            life: constants.TOAST_ERROR_LIFETIME
-          });
+          this.messageService.add({ severity: 'error', summary: 'Hata', detail: `Başarısız kayıt \n${e}`, life: constants.TOAST_ERROR_LIFETIME });
           this.messageService.clear('c');
         }
       })
   }
-
-
   deleteCategorySub() {
     this.categorySubService.deleteCategorySub(this.selectedCategorySub.id)
       .subscribe({
@@ -321,65 +300,39 @@ export class CategoryListComponent implements OnInit {
         },
         complete: () => {
           //CategorySub delete array
-          const subCategoryIndex = this.categoryList[0].categorySubs.findIndex(subCategory => subCategory.id === this.selectedCategorySub.id);
+          /*const subCategoryIndex = this.categoryList[0].categorySubs.findIndex(subCategory => subCategory.id === this.selectedCategorySub.id);
           if (subCategoryIndex > -1) {
             this.categoryList[0].categorySubs.splice(subCategoryIndex, 1);
           }
-          this.categoryList = Object.assign([], this.categoryList);
+          this.categoryList = Object.assign([], this.categoryList);*/
+
+          //Remove temp item table
+          const item = this.categoryList[this.selectedCategoryRowIndex].categorySubs.find(item => item.id === this.selectedCategorySub.id);
+          if (item) {
+            const itemIndex = this.categoryList[this.selectedCategoryRowIndex].categorySubs.indexOf(item);
+            this.categoryList[this.selectedCategoryRowIndex].categorySubs.splice(itemIndex, 1);
+          }
 
           //Popup remove
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Başarılı',
-            detail: `${this.selectedCategory.name} isimli alt kategori silindi`,
-            life: constants.TOAST_SUCCESS_LIFETIME
-          });
+          this.messageService.add({ severity: 'success', summary: 'Başarılı', detail: `${this.selectedCategory.name} isimli alt kategori silindi`, life: constants.TOAST_SUCCESS_LIFETIME });
           this.messageService.clear('c');
-          this.selectedCategorySub = null; //null yap secileni
+          this.selectedCategorySub = null; //null yap secileni*/
         },
         error: (e) => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Hata',
-            detail: `${this.selectedCategory.name} alt kategori silinemedi ${e}`,
-            life: constants.TOAST_ERROR_LIFETIME
-          });
+          this.messageService.add({ severity: 'error', summary: 'Hata', detail: `${this.selectedCategory.name} alt kategori silinemedi ${e}`, life: constants.TOAST_ERROR_LIFETIME });
           this.messageService.clear('c');
         }
       })
   }
-  // --------------------------- CategorySub ---------------------------
 
-
-  // --------------------------- Table Row ---------------------------
-  //#Edit
-  onRowCategoryEditInit(category: any) {
-    this.clonedCategoryList[category?.id] = {...category};
+  selectedCategorySubEvent(event: any, data: any, rowIndex: number) {
+    this.selectedCategorySub = data;
+    this.selectedCategorySubRowIndex = rowIndex;
   }
 
-  //#Save
-  onRowCategoryEditSave(category: any, index: number) {
-    category.companyId = this.selectedCompany.id;
-    if (!category.id.toString().indexOf(' ')) {
-      this.addCategory(category, index);
-    } else if (category.id.toString().indexOf(' ')) {
-      this.putCategory(category);
-    }
-  }
-
-  //#Cancel
-  onRowCategoryEditCancel(category: any, index: number) {
-    this.categoryList[index] = this.clonedCategoryList[category?.id];
-    delete this.clonedCategoryList[category?.id];
-  }
-
-
-  //#Edit
   onRowCategorySubEditInit(category: any) {
     this.clonedCategorySubList[category?.id] = {...category};
   }
-
-  //#Save
   onRowCategorySubEditSave(category: any, index: any) {
     category.companyId = this.selectedCompany.id;
     category.categoryId = this.selectedCategory.id;
@@ -390,28 +343,30 @@ export class CategoryListComponent implements OnInit {
       this.putCategorySub(category);
     }
   }
-
-  //#Cancel
   onRowCategorySubEditCancel(category: any, index: number) {
     this.categoryList[index] = this.clonedCategoryList[category?.id];
     delete this.clonedCategoryList[category?.id];
   }
+  // --------------------------- CategorySub ---------------------------
 
 
-  //#Pagination
+
+  // --------------------------- General Definition ---------------------------
+  onRowSelect(event: any) {
+    this.messageService.add({severity: 'info', summary: 'Şirket Seç', detail: event.data.name});
+    this.selectedCompany = event.data;
+    this.cloneSelectedCompany = event.data;
+
+    this.getCategoryList();
+  }
   public handlePagination(paginationData: any): void {
     this.page = paginationData.page + 1;
     this.pageSize = paginationData.rows;
     this.getCategoryList();
   }
-
-// --------------------------- Table Row ---------------------------
-
-
   onReject() {
     this.messageService.clear('c');
   }
-
   removeConfirm(selectedType: string) {
     this.messageService.clear();
     this.messageService.add({
@@ -423,13 +378,13 @@ export class CategoryListComponent implements OnInit {
       detail: 'Devam etmek için onaylayın'
     });
   }
-
   newRow() {
     return {
       id: ' ' + this.rowCounter++,
       name: ''
     };
   }
+  // --------------------------- General Definition ---------------------------
 }
 
 /*

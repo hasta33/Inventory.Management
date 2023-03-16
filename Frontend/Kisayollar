@@ -15,3 +15,11 @@ ng generate service [name]
 ng generate module [module-name] --routing
 
 
+------------ Npm Gui --------------
+https://stackoverflow.com/questions/17937960/how-to-list-npm-user-installed-packages
+// Once
+npm install -g npm-gui
+
+cd c:\your-prject-folder
+npm-gui localhost:9000
+------------ Npm Gui --------------

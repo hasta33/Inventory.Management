@@ -49,7 +49,6 @@ export class AppTopbarComponent {
         ]
       },
 
-
       {
         label:'Tanımlamalar',
         icon:'pi pi-fw pi-bookmark',
@@ -73,6 +72,17 @@ export class AppTopbarComponent {
                 label:'Kategori Listesi',
                 icon:'pi pi-fw pi-calendar-minus',
                 routerLink: ['/category/category-list']
+              }
+            ]
+          },
+          {
+            label:'Marka Tanımla',
+            icon:'pi pi-fw pi-calendar-times',
+            items:[
+              {
+                label:'Marka Listesi',
+                icon:'pi pi-fw pi-calendar-minus',
+                routerLink: ['/brand/brand-list']
               }
             ]
           }

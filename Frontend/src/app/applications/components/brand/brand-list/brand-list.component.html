@@ -1,0 +1,236 @@
+<p-toast></p-toast>
+
+<p-toast (onClose)="onReject()"
+         [baseZIndex]="5000"
+         key="c"
+         position="bottom-center">
+  <ng-template let-message pTemplate="message">
+    <div class="flex flex-column" style="flex: 1">
+      <div class="text-center">
+        <i class="pi pi-exclamation-triangle" style="font-size: 3rem"></i>
+        <h4>{{message.summary}}</h4>
+        <p *ngIf="message.data === 'brand'">{{selectedBrand.name}} isimli marka ve bu markaya bağlı alt modellerde silinecek !</p>
+        <p *ngIf="message.data === 'model'">{{selectedModel.name}} isimli model silinecek !</p>
+        <p>{{message.detail}}</p>
+      </div>
+      <div class="grid p-fluid">
+        <div class="col-6" *ngIf="message.data === 'brand'">
+          <button (click)="deleteBrand()" class="p-button-success" label="Sil" pButton type="button"></button>
+        </div>
+
+        <div class="col-6" *ngIf="message.data === 'model'">
+          <button (click)="deleteModel()" class="p-button-success" label="Sil" pButton type="button"></button>
+        </div>
+
+        <div class="col-6">
+          <button (click)="onReject()" class="p-button-secondary" label="İptal" pButton type="button"></button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-toast>
+
+
+<p-contextMenu #cmBrand [model]="brandContextMenu"></p-contextMenu>
+<p-contextMenu #cmModel [model]="modelContextMenu"></p-contextMenu>
+
+<p-overlayPanel #op
+                [showCloseIcon]="true"
+                [style]="{width: '450px'}">
+  <ng-template pTemplate="overlay">
+    <p-table #opPanel
+             (onRowSelect)="onRowSelect($event)"
+             [(selection)]="selectedCompany"
+             [paginator]="true"
+             [rows]="5"
+             [value]="companies"
+             responsiveLayout="scroll"
+             selectionMode="single">
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="id">Id<p-sortIcon field="id"></p-sortIcon></th>
+          <th pSortableColumn="name">Şirket<p-sortIcon field="name"></p-sortIcon></th>
+          <th pSortableColumn="companyId">Şirket Kodu<p-sortIcon field="companyId"></p-sortIcon></th>
+        </tr>
+      </ng-template>
+      <ng-template let-rowData
+                   pTemplate="body">
+        <tr [pSelectableRow]="rowData">
+          <td>{{rowData.id}}</td>
+          <td>{{rowData.name}}</td>
+          <td>{{rowData.businessCode}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </ng-template>
+</p-overlayPanel>
+
+
+<div id="id" style="height: calc(100vh - 149px)">
+  <p-table #dt
+           [(contextMenuSelection)]="selectedBrand"
+           [contextMenu]="cmBrand"
+           [filterDelay]="0"
+           [globalFilterFields]="['name', 'companyId']"
+           [loading]="loading"
+           [rowHover]="true"
+           [rows]="pageSize"
+           [scrollable]="true"
+           [tableStyle]="{'min-width': '50rem'}"
+           [value]="brandList"
+           dataKey="id"
+           editMode="row"
+           scrollHeight="flex"
+           styleClass="p-datatable-brand">
+
+    <ng-template pTemplate="caption">
+      <div class="table-header">
+        <p-button (click)="op.toggle($event)" [label]="selectedCompany ? selectedCompany.name : 'Şirket Seç'" icon="pi pi-search"></p-button>Marka-Model Listesi<span class="p-input-icon-left"><i class="pi pi-search"></i>
+        <input (input)="dt.filterGlobal($any($event.target).value, 'contains')" pInputText placeholder="Genel Arama" type="text"/>
+      </span>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="id" style="width:1%"></th>
+        <th pSortableColumn="id" style="width:5%">Id<p-sortIcon field="id"></p-sortIcon></th>
+        <th pSortableColumn="name" style="width:20%">Marka Adı<p-sortIcon field="name"></p-sortIcon></th>
+        <th style="text-align: center; width: 20%">
+          <button [newRow]="newRow()"
+                  [table]="dt"
+                  *ngIf="selectedCompany"
+                  autofocus
+                  class="p-button-rounded p-button-outlined"
+                  icon="pi pi-plus"
+                  pAddRow pButton pRipple type="button"></button>
+      </tr>
+    </ng-template>
+
+
+    <ng-template let-brands
+                 let-editing="editing"
+                 let-expanded="expanded"
+                 let-rowDataBrand
+                 let-rowIndex="rowIndex"
+                 pTemplate="body">
+      <tr [ngClass]="{
+                   'editRecord': rowDataBrand.id === rowDataBrand.id.toString().indexOf(' '),
+                   'notRecord': !rowDataBrand.id.toString().indexOf(' ')}"
+          [pContextMenuRow]="rowDataBrand"
+          [pEditableRow]="rowDataBrand">
+        <td>
+          <button (click)="selectedBrandEvent($event, rowDataBrand, rowIndex)"
+                  [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                  [pRowToggler]="brands"
+                  class="p-button-text p-button-rounded p-button-plain"
+                  pButton
+                  pRipple
+                  type="button"></button>
+        </td>
+        <td>{{rowDataBrand.id}}</td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input [(ngModel)]="rowDataBrand.name" [autofocus]="true" pAutoFocus pInputText type="text">
+            </ng-template>
+            <ng-template pTemplate="output">{{rowDataBrand.name}}</ng-template>
+          </p-cellEditor>
+        </td>
+
+        <td>
+          <div class="flex align-items-center justify-content-center gap-2">
+            <button (click)="onRowBrandEditInit(rowDataBrand)" *ngIf="!editing" class="p-button-rounded p-button-text" icon="pi pi-pencil" pButton pInitEditableRow pRipple type="button"></button>
+            <button (click)="onRowBrandEditSave(rowDataBrand, rowIndex)" *ngIf="editing" class="p-button-rounded p-button-text p-button-success mr-2" icon="pi pi-check" pButton pRipple pSaveEditableRow type="button"></button>
+            <button (click)="onRowBrandEditCancel(rowDataBrand, rowIndex)" *ngIf="editing" class="p-button-rounded p-button-text p-button-danger" icon="pi pi-times" pButton pCancelEditableRow pRipple type="button"></button>
+            <!-- <button class="p-button-rounded p-button-text p-button-secondary" icon="pi pi-list" pButton pRipple></button> -->
+          </div>
+        </td>
+
+      </tr>
+    </ng-template>
+
+    <ng-template let-brands pTemplate="rowexpansion">
+      <td colspan="7">
+        <div class="p-p-3">
+          <p-table #dtModel
+                   [(contextMenuSelection)]="selectedModel"
+                   [contextMenu]="cmModel"
+                   [rowHover]="true"
+                   [scrollable]="true"
+                   [value]="brands.models"
+                   dataKey="id"
+                   editMode="row"
+                   scrollHeight="flex"
+                   styleClass="p-datatable-model">
+
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Id</th>
+                <th pSortableColumn="name">Model Adı<p-sortIcon field="name"></p-sortIcon></th>
+                <th style="text-align: center; width: 20%">
+                  <button [newRow]="newRow()" [table]="dtModel" autofocus class="p-button-rounded p-button-outlined" icon="pi pi-plus" pAddRow pButton pRipple type="button">Model Ekle</button>
+                </th>
+              </tr>
+            </ng-template>
+
+
+            <ng-template let-models let-editing="editing" let-rowData let-rowIndexSub="rowIndex" pTemplate="body">
+              <tr
+                [pContextMenuRowIndex]="rowIndexSub"
+                (contextmenu)="selectedModelEvent($event, rowData, rowIndexSub)"
+                [ngClass]="{
+                  'editRecord': rowData.id === rowData.id.toString().indexOf(' '),
+                  'notRecord': !rowData.id.toString().indexOf(' ')}"
+                [pContextMenuRow]="brandList[0].models"
+                [pEditableRow]="rowData">
+                <td>{{models.id}}</td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input [(ngModel)]="rowData.name" [autofocus]="true" pAutoFocus pInputText type="text">
+                    </ng-template>
+                    <ng-template pTemplate="output">{{rowData.name}}</ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <div class="flex align-items-center justify-content-center gap-2">
+                    <button (click)="onRowModelEditInit(rowData)" *ngIf="!editing" class="p-button-rounded p-button-text" icon="pi pi-pencil" pButton pInitEditableRow pRipple type="button"></button>
+                    <button (click)="onRowModelEditSave(rowData, rowIndexSub)" *ngIf="editing" class="p-button-rounded p-button-text p-button-success mr-2" icon="pi pi-check" pButton pRipple pSaveEditableRow type="button"></button>
+                    <button (click)="onRowModelEditCancel(rowData, rowIndexSub)" *ngIf="editing" class="p-button-rounded p-button-text p-button-danger" icon="pi pi-times" pButton pCancelEditableRow pRipple type="button"></button>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="6">Model bulunamadı</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </td>
+    </ng-template>
+
+
+    <ng-template class="flex justify-content-end flex-wrap" let-ri="rowIndex" pTemplate="footer">
+      <tr>
+        <td colspan="9">
+          <p-paginator
+            (onPageChange)="handlePagination($event)"
+            [pageLinkSize]="10"
+            [rowsPerPageOptions]="['10', '20', '50', '100']"
+            [rows]="pageSize"
+            [showCurrentPageReport]="true"
+            [showPageLinks]="true"
+            [totalRecords]="totalRecords"
+            currentPageReportTemplate="{first}. sayfa {last} kayıt, Toplam: {totalRecords} kayıt"
+            styleClass="p-paginator"
+          ></p-paginator>
+        </td>
+      </tr>
+    </ng-template>
+
+  </p-table>
+</div>

@@ -20,6 +20,19 @@ export const constants = {
   PUT_CATEGORY_SUB_URL: `${environment.gatewayUrl}/api/services/inventory/categorySub`,
   DELETE_CATEGORY_SUB_URL: `${environment.gatewayUrl}/api/services/inventory/categorySub`,
 
+  //Brand
+  GET_BRAND_LIST_URL : `${environment.gatewayUrl}/api/services/inventory/brand`,
+  POST_BRAND_URL: `${environment.gatewayUrl}/api/services/inventory/brand`,
+  PUT_BRAND_URL: `${environment.gatewayUrl}/api/services/inventory/brand`,
+  DELETE_BRAND_URL: `${environment.gatewayUrl}/api/services/inventory/brand`,
+
+  //Model
+  POST_MODEL: `${environment.gatewayUrl}/api/services/inventory/model`,
+  PUT_MODEL_URL: `${environment.gatewayUrl}/api/services/inventory/model`,
+  DELETE_MODEL_URL: `${environment.gatewayUrl}/api/services/inventory/model`,
+
+
+
 
   TOAST_ERROR_LIFETIME:5000, //Toast timeout
   TOAST_SUCCESS_LIFETIME:3000,
