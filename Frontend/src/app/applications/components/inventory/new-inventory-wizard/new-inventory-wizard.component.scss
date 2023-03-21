@@ -27,7 +27,7 @@
     }
 
     .p-datatable-tbody > tr > td {
-      cursor: auto;
+      cursor:auto;
       text-align: left;
       padding: 0.1rem 0.1rem;
     }
@@ -40,9 +40,10 @@
       background: #f8f9fa;
     }
 
-    .p-component {
+    .p-component{
       box-sizing: border-box;
     }
+
 
 
     /*paginator*/
@@ -54,10 +55,8 @@
       justify-content: flex-end;
       flex-wrap: wrap;
       height: 46px;
-
       .p-dropdown {
         float: left;
-
         .p-dropdown-panel {
           ul {
             p-dropdownItem:last-child > li {
@@ -84,7 +83,6 @@
         float: right;
       }
     }
-
     /*paginator*/
   }
 
@@ -93,21 +91,58 @@
     display: none;
   }
 
-  /*Inventory Search Fields*/
-  /*.column-gap-4 {
-    column-gap: 0.5rem !important;
-  }
-  .row-gap-6 {
-    row-gap: 1rem !important;
-  }*/
-  .px-5 {
-    padding-left: 0.1rem !important;
-    padding-right: 0.1rem !important;
-  }
-  .py-3 {
-    padding-top: 0.1rem !important;
-    padding-bottom: 0.1rem !important;
+  /*Steps */
+
+  .ui-steps .ui-steps-item {
+    width: 25%;
   }
 
+  .ui-steps.steps-custom {
+    margin-bottom: 30px;
+  }
+
+  .ui-steps.steps-custom .ui-steps-item .ui-menuitem-link {
+    padding: 0 1em;
+    overflow: visible;
+  }
+
+  .ui-steps.steps-custom .ui-steps-item .ui-steps-number {
+    background-color: #0081c2;
+    color: #FFFFFF;
+    display: inline-block;
+    width: 36px;
+    border-radius: 50%;
+    margin-top: -14px;
+    margin-bottom: 10px;
+  }
+
+  .ui-steps.steps-custom .ui-steps-item .ui-steps-title {
+    color: #555555;
+  }
+
+  .p-card .p-card-footer {
+    padding: 0 0 0 0;
+  }
+  .card {
+    background: var(--surface-card);
+    border: 1px solid var(--surface-border);
+    padding: 0.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--card-shadow);
+    border-radius: 12px;
+  }
+  .h-4rem {
+    height: 2rem !important;
+  }
+  .w-10rem {
+    width: 6rem !important;
+  }
+
+  .p-card .p-card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
 }
 

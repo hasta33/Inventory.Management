@@ -19,8 +19,12 @@ namespace InventoryManagement.Repository.Repositories
                 .Include(x => x.Categories.Where(x => x.CompanyId == companyId))
                 .Include(x => x.Categories.Where(x => x.CompanyId == companyId))
                 .ThenInclude(x => x.CategorySubs)
+
                 .Include(x => x.Brands.Where(x => x.CompanyId == companyId))
                 .ThenInclude(x => x.Models)
+
+                .Include(x => x.Inventories.Where(x => x.CompanyId == companyId)) //sadece envanter kayıtlarını getir
+
                 .OrderByDescending(x => x.CreatedDate);
             int totalCount = query.Count();
 
@@ -37,6 +41,7 @@ namespace InventoryManagement.Repository.Repositories
                     Categories = x.Categories,
                     TotalCount = totalCount,
                     Brands = x.Brands,
+                    Inventories = x.Inventories,
                 }).ToListAsync();
 
             return response;

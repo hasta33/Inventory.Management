@@ -85,6 +85,17 @@ export class AppTopbarComponent {
                 routerLink: ['/brand/brand-list']
               }
             ]
+          },
+          {
+            label:'Envanter Kaydı',
+            icon:'pi pi-fw pi-plus',
+            items:[
+              {
+                label:'Yeni Envanter Kaydı',
+                icon:'pi pi-fw pi-plus',
+                routerLink: ['/inventory/new-inventory-wizard']
+              }
+            ]
           }
         ]
       },

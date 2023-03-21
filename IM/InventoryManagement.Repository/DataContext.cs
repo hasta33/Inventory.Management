@@ -27,6 +27,9 @@ namespace InventoryManagement.Repository
         public DbSet<Model> Models { get; set; }
 
 
+        public DbSet<Inventory> Inventories { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

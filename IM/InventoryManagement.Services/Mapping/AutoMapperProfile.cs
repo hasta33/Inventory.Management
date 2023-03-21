@@ -3,6 +3,7 @@ using InventoryManagement.Core.DTOs.Brand;
 using InventoryManagement.Core.DTOs.Category;
 using InventoryManagement.Core.DTOs.CategorySub;
 using InventoryManagement.Core.DTOs.Company;
+using InventoryManagement.Core.DTOs.Inventory;
 using InventoryManagement.Core.DTOs.Model;
 using InventoryManagement.Core.Models;
 
@@ -27,6 +28,7 @@ namespace InventoryManagement.Services.Mapping
             #endregion
 
 
+            #region CategoryCategorySub Relationship
             #region Category
             CreateMap<CategoryCreateDto, Category>();
             CreateMap<Category, CategoryDto>();
@@ -39,8 +41,9 @@ namespace InventoryManagement.Services.Mapping
             CreateMap<CategorySub, CategorySubDto>();
             CreateMap<CategorySubUpdateDto, CategorySub>();
             #endregion
+            #endregion
 
-
+            #region Brand-Model Relationship
             #region Brand
             CreateMap<BrandCreateDto, Brand>();
             CreateMap<Brand, BrandDto>();
@@ -52,6 +55,15 @@ namespace InventoryManagement.Services.Mapping
             CreateMap<Model, ModelDto>();
             CreateMap<ModelUpdateDto, Model>();
             #endregion
+            #endregion
+
+
+            #region Inventory
+            CreateMap<InventoryCreateDto, Inventory>();
+            CreateMap<Inventory, InventoryDto>();
+            CreateMap<InventoryUpdateDto, Inventory>();
+            #endregion
+
         }
     }
 }

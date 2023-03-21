@@ -1,1 +1,85 @@
-<p>inventory-list works!</p>
+<div class="grid">
+  <div class="col">
+    <div class="card mb-0" style="padding: 0.8rem">
+      <div class="flex justify-content-between mb-0">
+        <div>
+          <span class="block text-500 font-medium mb-1">
+            <p-dropdown id="companyId"
+                        inputId="selectedCompany"
+                        optionLabel="companyId"
+                        placeholder="Şirket seçin"
+                        appendTo="body"
+                        [filter]="true"
+                        filterBy="name">
+                </p-dropdown>
+            <p-dropdown id="categoryId"
+                        inputId="selectedCategory"
+                        optionLabel="categoryId"
+                        placeholder="Kategori seçin"
+                        [filter]="true"
+                        filterBy="name"
+                        [autoDisplayFirst]="false">
+                </p-dropdown>
+            <p-dropdown id="companySubId"
+                        inputId="selectedCompanySub"
+                        optionLabel="companySubId"
+                        placeholder="Alt kategori Seç"
+                        appendTo="body"
+                        [filter]="true"
+                        filterBy="name">
+                </p-dropdown>
+            <p-dropdown id="brandId"
+                        inputId="selectedBrand"
+                        optionLabel="brandId"
+                        placeholder="Marka seçin"
+                        appendTo="body"
+                        [filter]="true"
+                        filterBy="name">
+                </p-dropdown>
+            <p-dropdown id="modelId"
+                        inputId="selectedModel"
+                        optionLabel="modelId"
+                        placeholder="Model seçin"
+                        appendTo="body"
+                        [filter]="true"
+                        filterBy="name">
+                </p-dropdown>
+            <p-inputNumber id="barcodeName" inputId="withoutgrouping" mode="decimal" [maxlength]="15" [useGrouping]="false" [required]="true" placeholder="Barkod Numarası"> </p-inputNumber>
+            <input id="deviceName" type="text" pInputText placeholder="Cihaz adı">
+            <input id="responsibleUser" type="text" pInputText placeholder="Kullanıcı">
+            <p-dropdown id="status"
+                        appendTo="body"
+                        inputId="selectedStatus"
+                        optionLabel="statusId"
+                        placeholder="Durum"
+                        [filter]="true"
+                        filterBy="name"
+                        [autoDisplayFirst]="false">
+                </p-dropdown>
+          </span>
+          <!-- <div class="flex align-items-center justify-content-center bg-blue-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+            <i class="pi pi-shopping-cart text-blue-500 text-xl"></i>
+          </div> -->
+
+          <input id="serialNumber" type="text"  pInputText placeholder="Seri Numarası">
+          <input id="imei" type="text" pInputText placeholder="Imei">
+          <input id="mac" type="text" pInputText placeholder="Mac">
+        </div>
+        <div class="flex align-items-center justify-content-center " [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+          <!--<i class="pi pi-shopping-cart text-blue-500 text-xl"></i>-->
+          <button pButton pRipple type="button" icon="pi pi-search" class="p-button-rounded p-button-success p-button-outlined"></button>
+        </div>
+      </div>
+      <!-- <span class="text-green-500 font-medium">24 new </span>
+      <span class="text-500">since last visit</span> -->
+    </div>
+  </div>
+
+  <div class="col-12 xl:col-1">
+    <div class="card">
+      <button pButton pRipple type="button" icon="pi pi-bookmark" class="p-button-rounded p-button-secondary"></button>
+    </div>
+
+  </div>
+</div>
+

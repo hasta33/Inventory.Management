@@ -1,0 +1,357 @@
+<p-toast></p-toast>
+
+<p-dialog header="Header" [(visible)]="displayModal" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+          [draggable]="false" [resizable]="false">
+  <p class="m-0">Envanter Kayıt edildi</p>
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-check" (click)="displayModal=false" routerLink="../inventory-list" label="Envanter Listesi" class="p-button-text"></p-button>
+    <p-button icon="pi pi-times" (click)="displayModal=false" label="Yeni Envanter Kaydı" (onClick)="newInventoryReset()"></p-button>
+  </ng-template>
+</p-dialog>
+
+
+<p-steps [model]="stepItems" [(activeIndex)]="activeIndex" [readonly]="true"></p-steps>
+
+
+<ng-template [ngIf]="activeIndex == 0">
+  <p-table #dt
+           [value]="companyList"
+           styleClass="p-datatable-company"
+           dataKey="id"
+           [tableStyle]="{'min-width': '50rem'}"
+           [rowHover]="true"
+           [rows]="pageSize"
+           [loading]="loading"
+           [filterDelay]="0"
+           [globalFilterFields]="['name']"
+           [scrollable]="true"
+           scrollHeight="flex">
+
+    <ng-template pTemplate="caption">
+      <div class="table-header">Şirket Seç<span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="dt.filterGlobal( $any($event.target).value, 'contains')" placeholder="Genel Arama" />
+        </span>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width:5%" pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+        <th style="width:20%" pSortableColumn="name">Şirket Adı <p-sortIcon field="name"></p-sortIcon></th>
+        <th style="width:20%" pSortableColumn="description">Açıklama<p-sortIcon field="description"></p-sortIcon></th>
+        <th style="width:10%" pSortableColumn="businessCode">Şirket Kodu <p-sortIcon field="businessCode"></p-sortIcon></th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
+      <tr [pEditableRow]="rowData"
+          [pContextMenuRow]="rowData">
+        <td>{{rowData.id}}</td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="rowData.name" [autofocus]="true" >
+            </ng-template>
+            <ng-template pTemplate="output">{{rowData.name}}</ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="rowData.description" required>
+            </ng-template>
+            <ng-template pTemplate="output">{{rowData.description}}</ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="rowData.businessCode">
+            </ng-template>
+            <ng-template pTemplate="output">{{rowData.businessCode}}</ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <div class="flex align-items-center justify-content-center gap-2">
+            <p-button (onClick)="nextPage()" (mouseup)="companyOnRowSelected(rowData)">Seç</p-button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="footer" class="flex justify-content-end flex-wrap" let-ri="rowIndex">
+      <tr>
+        <td colspan="9">
+          <p-paginator
+            [rows]="pageSize"
+            (onPageChange)="handlePagination($event)"
+            styleClass="p-paginator"
+            [totalRecords]="totalRecordsCompany"
+
+            [showPageLinks]="true"
+            [pageLinkSize]="10"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="{first}. sayfa {last} kayıt, Toplam: {totalRecords} kayıt"
+            [rowsPerPageOptions]="['10', '20', '50', '100']"
+          ></p-paginator>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</ng-template>
+
+
+<ng-template [ngIf]="activeIndex == 1">
+  <div class="category-content">
+    <p-card>
+      <ng-template pTemplate="title">Kategori Seçimi</ng-template>
+      <ng-template pTemplate="subtitle">Lütfen Kategori ve alt kategori bilgisini seçin</ng-template>
+
+      <ng-template pTemplate="content">
+        <form [formGroup]="categoryForm" (ngSubmit)="onCategorySubmit(categoryForm)">
+          <div class="p-fluid formgrid grid field">
+            <div class="field col-12 md:col-6">
+              <p-dropdown id="name"
+                          inputId="selectedCategory"
+                          class="ng-invalid ng-dirty"
+                          optionLabel="name"
+                          formControlName="categoryName"
+                          placeholder="Kategori seçin"
+                          [filter]="true"
+                          filterBy="name"
+                          [autofocus]="true"
+                          [autoDisplayFirst]="false"
+                          [required]="true"
+                          [(ngModel)]="selectedCategory"
+                          [options]="categoryList"
+                          (onChange)="setDataCategory($event)">
+              </p-dropdown>
+              <p-message severity="error" text="Kategori alanı zorunludur" *ngIf="!categoryForm.controls['categoryName'].valid&&categoryForm.controls['categoryName'].dirty"></p-message>
+            </div>
+            <div class="field col-12 md:col-6">
+              <p-dropdown class="ng-invalid ng-dirty"
+                          inputId="selectedModel"
+                          formControlName="categoryModel"
+                          optionLabel="name"
+                          placeholder="Alt kategori seçin"
+                          [filter]="true"
+                          filterBy="name"
+                          [autoDisplayFirst]="false"
+                          [(ngModel)]="selectedCategorySubs"
+                          [options]="categorySubsList"
+                          (onChange)="setDataCategorySub($event)">
+              </p-dropdown>
+              <p-message severity="error" text="Model alanı zorunludur" *ngIf="!categoryForm.controls['categoryModel'].valid&&categoryForm.controls['categoryModel'].dirty"></p-message>
+            </div>
+          </div>
+        </form>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <div class="card">
+          <div class="flex justify-content-between flex-wrap card-container">
+            <p-button class="flex align-items-center justify-content-center w-10rem h-4rem font-bold text-white border-round m-2" label="Geri" (onClick)="prevPage()" icon="pi pi-angle-left"></p-button>
+            <p-button class="flex align-items-center justify-content-center w-10rem h-4rem font-bold text-white border-round m-2" label="İleri" [disabled]="!categoryForm.valid" (onClick)="nextPage()" icon="pi pi-angle-right" iconPos="right"></p-button>
+          </div>
+        </div>
+      </ng-template>
+    </p-card>
+  </div>
+</ng-template>
+
+
+<ng-template [ngIf]="activeIndex == 2">
+  <div class="brand-model-content">
+    <p-card>
+      <ng-template pTemplate="title">Marka Model Seçimi</ng-template>
+      <ng-template pTemplate="subtitle">Lütfen Marka ve model bilgisini seçin</ng-template>
+
+      <ng-template pTemplate="content">
+        <form [formGroup]="brandForm" (ngSubmit)="onBrandSubmit(brandForm)">
+          <div class="p-fluid formgrid grid">
+            <div class="field col-12 md:col-6">
+              <p-dropdown inputId="class"
+                          class="ng-invalid ng-dirty"
+                          optionLabel="name"
+                          placeholder="Marka seçin"
+                          formControlName="brandName"
+                          [filter]="true"
+                          filterBy="name"
+                          [autofocus]="true"
+                          [(ngModel)]="selectedBrand"
+                          [options]="brandList"
+                          (onChange)="setDataBrand($event)">
+              </p-dropdown>
+              <p-message severity="error" text="Marka alanı zorunludur" *ngIf="!brandForm.controls['brandName'].valid&&brandForm.controls['brandName'].dirty"></p-message>
+            </div>
+            <div class="field col-12 md:col-6">
+              <p-dropdown inputId="class"
+                          class="ng-invalid ng-dirty"
+                          optionLabel="name"
+                          placeholder="Model seçin"
+                          formControlName="modelName"
+                          [filter]="true"
+                          filterBy="name"
+                          [(ngModel)]="selectedModel"
+                          [options]="modelsList"
+                          (onChange)="setDataModel($event)">
+              </p-dropdown>
+              <p-message severity="error" text="Model alanı zorunludur" *ngIf="!brandForm.controls['modelName'].valid&&brandForm.controls['modelName'].dirty"></p-message>
+            </div>
+          </div>
+        </form>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <div class="card">
+          <div class="flex justify-content-between flex-wrap card-container">
+            <p-button class="flex align-items-center justify-content-center w-10rem h-4rem font-bold text-white border-round m-2" label="Geri" (onClick)="prevPage()" icon="pi pi-angle-left"></p-button>
+            <p-button class="flex align-items-center justify-content-center w-10rem h-4rem font-bold text-white border-round m-2" label="İleri" [disabled]="!brandForm.valid" (onClick)="nextPage()" icon="pi pi-angle-right" iconPos="right"></p-button>
+          </div>
+        </div>
+      </ng-template>
+    </p-card>
+  </div>
+</ng-template>
+
+
+<ng-template [ngIf]="activeIndex == 3">
+  <div class="detail-content">
+    <p-card>
+      <ng-template pTemplate="title" >Ürün Detayları</ng-template>
+
+      <ng-template pTemplate="content">
+        <form [formGroup]="detailForm" (ngSubmit)="onDetailSubmit(detailForm)">
+          <div class="p-fluid formgrid grid field">
+            <div class="field col">
+              <label for="deviceName">Cihaz Adı</label>
+              <input id="deviceName" class="ng-invalid ng-dirty" type="text" pInputText autofocus formControlName="deviceName" [required]="true" placeholder="Cihaz adı">
+              <p-message severity="error" text="Cihaz adı alanı zorunludur" *ngIf="!detailForm.controls['deviceName'].valid&&detailForm.controls['deviceName'].dirty"></p-message>
+            </div>
+          </div>
+
+          <div class="p-fluid formgrid grid field">
+            <div class="field col">
+              <label for="barcodeName">Barkod Numarası</label>
+              <p-inputNumber id="barcodeName" inputId="withoutgrouping" mode="decimal" [minlength]="1" [maxlength]="15" [useGrouping]="false" class="ng-invalid ng-dirty" formControlName="barcodeName" [required]="true" placeholder="Barkod Numarası"> </p-inputNumber>
+              <p-message severity="error" text="Barkod alanı zorunludur" *ngIf="!detailForm.controls['barcodeName'].valid&&detailForm.controls['barcodeName'].dirty"></p-message>
+            </div>
+
+            <div class="field col">
+              <label>Seri Numarası</label>
+              <input id="serialNumber" class="ng-invalid ng-dirty" type="text" formControlName="serialNumber" pInputText [required]="true" placeholder="Seri numarası">
+              <p-message severity="error" text="Seri numarası zorunludur" *ngIf="!detailForm.controls['serialNumber'].valid&&detailForm.controls['serialNumber'].dirty"></p-message>
+            </div>
+
+            <div class="field col">
+              <label>Imei</label>
+              <p-inputNumber id="imei" inputId="withoutgrouping" mode="decimal" [minlength]="1" [maxlength]="30" [useGrouping]="false" class="ng-invalid ng-dirty" formControlName="imei" [required]="true" placeholder="Imei"> </p-inputNumber>
+            </div>
+            <div class="field col">
+              <label for="mac">Mac</label>
+              <input id="mac" type="text" pInputText formControlName="mac" placeholder="Mac adresi">
+            </div>
+          </div>
+
+          <div class="p-fluid grid formgrid">
+            <div class="field col-12 md:col-4">
+              <label>Envanter Tarihi</label>
+              <p-calendar inputId="basic" formControlName="inventoryDate" dateFormat="dd.mm.yy" [showIcon]="true" [ngModel]="defaultDate"></p-calendar>
+            </div>
+
+            <div class="field col-12 md:col-4">
+              <label>Fatura Tarihi</label>
+              <p-calendar inputId="basic" formControlName="invoiceDate" dateFormat="dd.mm.yy" [showIcon]="true" [ngModel]="defaultDate"></p-calendar>
+            </div>
+          </div>
+
+        </form>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <div class="card">
+          <div class="flex justify-content-between flex-wrap card-container">
+            <p-button class="flex align-items-center justify-content-center w-10rem h-4rem font-bold text-white border-round m-2" label="Geri" (onClick)="prevPage()" icon="pi pi-angle-left"></p-button>
+            <p-button class="flex align-items-center justify-content-center w-10rem h-4rem font-bold text-white border-round m-2" label="İleri" [disabled]="!detailForm.valid" (onClick)="nextPage()" icon="pi pi-angle-right" iconPos="right"></p-button>
+          </div>
+        </div>
+      </ng-template>
+
+    </p-card>
+  </div>
+</ng-template>
+
+
+<ng-template [ngIf]="activeIndex == 4">
+  <div class="approve-content">
+   <p-card>
+     <ng-template pTemplate="title">Envanter Kayıt Onayı</ng-template>
+     <ng-template pTemplate="subtitle">Lütfen bilgileri onayladıktan sonra kayıt edin.</ng-template>
+
+     <ng-template pTemplate="content">
+
+       <div class="card">
+         <h5>Depo Bilgileri</h5>
+         <div class="formgrid grid">
+           <div class="field col">
+             <label>Seçili şirket : {{selectedCompany.name}}</label>
+           </div>
+         </div>
+       </div>
+
+       <div class="card">
+         <h5>Ürün Bilgileri</h5>
+         <div class="formgrid grid">
+           <div class="field col">
+             <label>Kategori : {{selectedCategory.name}}</label>
+           </div>
+           <div class="field col">
+             <label>Alt Kategori : {{selectedCategorySub.name}}</label>
+           </div>
+           <div class="field col">
+             <label>Marka : {{selectedBrand.name}}</label>
+           </div>
+           <div class="field col">
+             <label>Model : {{selectedModel.name}}</label>
+           </div>
+
+         </div>
+
+         <div class="formgrid grid">
+           <div class="field col">
+             <label>Barkod : {{this.detailForm.get('barcodeName').value}}</label>
+           </div>
+
+           <div class="field col-12 md:col-4">
+             <label>Seri No : {{this.detailForm.get('serialNumber').value}}</label>
+           </div>
+
+           <div class="field col-12 md:col-4">
+             <label>İmei : {{this.detailForm.get('imei').value}}</label>
+           </div>
+
+           <div class="field col-12 md:col-4">
+             <label>Envanter Tarihi : {{this.detailForm.get('inventoryDate').value | date: 'dd/MM/yyyy'}}</label>
+           </div>
+
+           <div class="field col-12 md:col-4">
+             <label>Fatura Tarihi : {{this.detailForm.get('invoiceDate').value | date: 'dd/MM/yyyy'}}</label>
+           </div>
+
+         </div>
+       </div>
+
+     </ng-template>
+
+     <ng-template pTemplate="footer">
+       <div class="card">
+         <div class="flex justify-content-between flex-wrap card-container">
+           <p-button class="flex align-items-center justify-content-center w-10rem h-4rem font-bold text-white border-round m-2" label="Geri" (onClick)="prevPage()" icon="pi pi-angle-left"></p-button>
+           <p-button class="flex align-items-center justify-content-center w-10rem h-4rem font-bold text-white border-round m-2" label="Onayla" [disabled]="!brandForm.valid" (onClick)="postInventory($event)" icon="pi pi-check" iconPos="right"></p-button>
+         </div>
+       </div>
+     </ng-template>
+   </p-card>
+  </div>
+</ng-template>

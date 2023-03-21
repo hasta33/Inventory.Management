@@ -33,6 +33,12 @@ export const constants = {
 
 
 
+  GET_INVENTORY_LIST_URL : `${environment.gatewayUrl}/api/services/inventory/inventory`,
+  POST_INVENTORY_URL: `${environment.gatewayUrl}/api/services/inventory/inventory`,
+  PUT_INVENTORY_URL: `${environment.gatewayUrl}/api/services/inventory/inventory`,
+  DELETE_INVENTORY_URL: `${environment.gatewayUrl}/api/services/inventory/inventory`,
+
+
 
   TOAST_ERROR_LIFETIME:5000, //Toast timeout
   TOAST_SUCCESS_LIFETIME:3000,

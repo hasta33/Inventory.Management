@@ -1,5 +1,6 @@
 ﻿using InventoryManagement.Core.DTOs.Brand;
 using InventoryManagement.Core.DTOs.Category;
+using InventoryManagement.Core.DTOs.Inventory;
 
 namespace InventoryManagement.Core.DTOs.Company
 {
@@ -11,5 +12,6 @@ namespace InventoryManagement.Core.DTOs.Company
 
         public List<CategoryDto>? Categories { get; set; }
         public List<BrandDto>? Brands { get; set; }
+        public List<InventoryDto>? Inventories { get; set; }
     }
 }

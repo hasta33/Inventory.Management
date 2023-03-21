@@ -17,7 +17,7 @@ namespace InventoryManagement.Repository.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.3")
+                .HasAnnotation("ProductVersion", "7.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -150,6 +150,84 @@ namespace InventoryManagement.Repository.Migrations
                     b.ToTable("Company", (string)null);
                 });
 
+            modelBuilder.Entity("InventoryManagement.Core.Models.Inventory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Barcode")
+                        .HasMaxLength(64)
+                        .HasColumnType("int");
+
+                    b.Property<int>("BrandId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BusinessCode")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategorySubId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Imei")
+                        .HasMaxLength(250)
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("InventoryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("InvoiceDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Mac")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<int>("ModelId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("Responsible")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("SerialNumber")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("Inventory", (string)null);
+                });
+
             modelBuilder.Entity("InventoryManagement.Core.Models.Model", b =>
                 {
                     b.Property<int>("Id")
@@ -215,6 +293,17 @@ namespace InventoryManagement.Repository.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("InventoryManagement.Core.Models.Inventory", b =>
+                {
+                    b.HasOne("InventoryManagement.Core.Models.Company", "Company")
+                        .WithMany("Inventories")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
             modelBuilder.Entity("InventoryManagement.Core.Models.Model", b =>
                 {
                     b.HasOne("InventoryManagement.Core.Models.Brand", "Brand")
@@ -241,6 +330,8 @@ namespace InventoryManagement.Repository.Migrations
                     b.Navigation("Brands");
 
                     b.Navigation("Categories");
+
+                    b.Navigation("Inventories");
                 });
 #pragma warning restore 612, 618
         }
