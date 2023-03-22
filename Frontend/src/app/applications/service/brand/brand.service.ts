@@ -18,6 +18,11 @@ export class BrandService {
       .get<{data: BrandModel[]}>(constants.GET_BRAND_LIST_URL+`/${companyId}/${page}/${pageSize}`)
       .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError))
   }
+  getBrandAllList() {
+    return this.httpClient
+      .get<{data: BrandModel[]}>(constants.GET_BRAND_LIST_URL)
+      .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError))
+  }
 
   postBrand(data: any): Observable<BrandModel> {
     return this.httpClient

@@ -11,6 +11,13 @@ namespace InventoryManagement.Repository.Repositories
 
         }
 
+        public async Task<List<Brand>> GetBrandAllList()
+        {
+            return await _context.Brands.Include(x => x.Models)
+                .OrderByDescending(x => x.CreatedDate)
+                .ToListAsync();
+        }
+
         public async Task<List<Brand>> GetBrandList(int companyId, int page, int pageSize)
         {
             IQueryable<Brand> query;
@@ -32,7 +39,7 @@ namespace InventoryManagement.Repository.Repositories
                     Name = x.Name,
                     TotalCount = totalCount,
                     UpdatedDate = x.UpdatedDate,
-                    Models= x.Models
+                    Models = x.Models
                 }).ToListAsync();
 
             return response;

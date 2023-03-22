@@ -31,6 +31,12 @@ namespace InventoryManagement.API.Controllers
         }
 
 
+        [HttpGet]
+        public async Task<IActionResult> GetBrandAllList()
+        {
+            return CreateActionResult(await _service.GetBrandAllList());
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] BrandCreateDto dto)
         {

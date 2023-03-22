@@ -6,5 +6,6 @@ namespace InventoryManagement.Core.Repositories
     {
         Task<List<Brand>> GetBrandList(int companyId, int page, int pageSize);
         Task<List<Brand>> GetBrandList(int companyId);
+        Task<List<Brand>> GetBrandAllList();
     }
 }

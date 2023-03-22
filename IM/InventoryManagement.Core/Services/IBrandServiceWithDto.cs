@@ -8,7 +8,7 @@ namespace InventoryManagement.Core.Services
     {
         Task<CustomResponseDto<List<BrandDto>>> GetBrandList(int companyId, int page, int pageSize);
         Task<CustomResponseDto<List<BrandDto>>> GetBrandList(int companyId);
-
+        Task<CustomResponseDto<List<BrandDto>>> GetBrandAllList();
 
         Task<CustomResponseDto<NoContent>> UpdateAsync(BrandUpdateDto dto);
         Task<CustomResponseDto<BrandDto>> AddAsync(BrandCreateDto dto);

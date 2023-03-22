@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {catchError, Observable, retry, throwError} from "rxjs";
-import {InventoryModel} from "../models/inventory/inventory";
+import {InventoryListParameters, InventoryModel} from "../models/inventory/inventory";
 import {constants} from "../constants/constants";
 
 @Injectable({
@@ -11,11 +11,27 @@ export class InventoryService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getInventoryLis(companyId: number, page: number, pageSize: number) {
+  getInventoryList(companyId: number, page: number, pageSize: number) {
     return this.httpClient
       .get<{data: InventoryModel[]}>(constants.GET_INVENTORY_LIST_URL+`/${companyId}/${page}/${pageSize}`)
       .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
   }
+
+  /*getInventoryAllList(page: number, pageSize: number, params: any) {
+    return this.httpClient
+      .get<{data: InventoryModel[]}>(constants.GET_INVENTORY_LIST_URL+`/${page}/${pageSize}?${params}` )
+      .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
+  }*/
+  getInventoryAllList(page: number, pageSize: number, parameters?: InventoryListParameters) {
+    const resourceUrl = `/${page}/${pageSize}${buildQueryParameters(parameters)}`
+    console.log(parameters)
+    console.log(resourceUrl)
+
+    return this.httpClient
+      .get<{data: InventoryModel[]}>(constants.GET_INVENTORY_LIST_URL + resourceUrl)
+      .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
+  }
+
 
   postInventory(data: any): Observable<InventoryModel> {
     return this.httpClient
@@ -48,4 +64,17 @@ export class InventoryService {
       return errorMessage;
     });
   }
+}
+
+function buildQueryParameters<T extends Record<string, string | boolean | number>>(queryParameters?: T): string {
+  if (!queryParameters) return '';
+
+  const params = Object
+    .entries(queryParameters)
+    .filter(([, value]) => value != undefined)
+    .map(([param, value]) => {
+      return `${encodeURIComponent(param)}=${encodeURIComponent(String(value))}`;
+    });
+
+  return params.length ? `?${params.join('&')}` : '';
 }

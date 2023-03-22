@@ -274,6 +274,25 @@
       },
       "UpstreamHttpMethod": [ "GET", "DELETE" ]
     },
+    {
+      "DownstreamPathTemplate": "/api/brand",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/brand",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "GET" ]
+    },
 
     /*
     Brand POST - https://localhost:2001/api/services/inventory/brand

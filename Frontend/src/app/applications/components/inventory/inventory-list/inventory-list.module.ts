@@ -11,6 +11,9 @@ import {DropdownModule} from "primeng/dropdown";
 import {InputNumberModule} from "primeng/inputnumber";
 import {FormsModule} from "@angular/forms";
 import {RippleModule} from "primeng/ripple";
+import {OverlayPanelModule} from "primeng/overlaypanel";
+import {MessageModule} from "primeng/message";
+import {PaginatorModule} from "primeng/paginator";
 
 
 @NgModule({
@@ -27,7 +30,10 @@ import {RippleModule} from "primeng/ripple";
     DropdownModule,
     InputNumberModule,
     FormsModule,
-    RippleModule
+    RippleModule,
+    OverlayPanelModule,
+    MessageModule,
+    PaginatorModule
   ]
 })
 export class InventoryListModule { }

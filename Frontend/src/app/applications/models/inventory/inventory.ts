@@ -20,3 +20,11 @@ export class InventoryModel {
   updatedDate: Date | undefined;
 
 }
+
+
+export type InventoryListParameters = {
+  categoryId?: string;
+  categorySubId?: string;
+  brandId?: string;
+  modelId?: string;
+}

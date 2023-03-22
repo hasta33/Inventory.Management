@@ -19,6 +19,11 @@ export class CategoryService {
       .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
   }
 
+  getCategoryAllList() {
+    return this.httpClient
+      .get<{data: CategoryModel[]}>(constants.GET_CATEGORY_ALL_LIST_URL)
+      .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
+  }
 
 
   postCategory(data: any): Observable<CategoryModel> {

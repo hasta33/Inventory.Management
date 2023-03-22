@@ -28,6 +28,13 @@ namespace InventoryManagement.Services.Services
             return CustomResponseDto<BrandDto>.Success(StatusCodes.Status200OK, newDto);
         }
 
+        public async Task<CustomResponseDto<List<BrandDto>>> GetBrandAllList()
+        {
+            var brand = await _brandRepository.GetBrandAllList();
+            var brandDto = _mapper.Map<List<BrandDto>>(brand);
+            return CustomResponseDto<List<BrandDto>>.Success(StatusCodes.Status200OK, brandDto);
+        }
+
         public async Task<CustomResponseDto<List<BrandDto>>> GetBrandList(int companyId, int page, int pageSize)
         {
             var brand = await _brandRepository.GetBrandList(companyId, page, pageSize);

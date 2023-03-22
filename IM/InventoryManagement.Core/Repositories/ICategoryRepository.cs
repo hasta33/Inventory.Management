@@ -6,5 +6,6 @@ namespace InventoryManagement.Core.Repositories
     {
         Task<List<Category>> GetCategoryList(int companyId, int page, int pageSize);
         Task<List<Category>> GetCategoryList(int companyId);
+        Task<List<Category>> GetCategoryAllList();
     }
 }

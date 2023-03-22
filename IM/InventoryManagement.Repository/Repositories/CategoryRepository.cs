@@ -11,6 +11,13 @@ namespace InventoryManagement.Repository.Repositories
 
         }
 
+        public async Task<List<Category>> GetCategoryAllList()
+        {
+            return await _context.Categories.Include(x => x.CategorySubs)  //kategoriye ait alt kategorileri listeleme
+                .OrderByDescending(x => x.CreatedDate)
+                .ToListAsync();
+        }
+
         public async Task<List<Category>> GetCategoryList(int companyId)
         {
             return await _context.Categories

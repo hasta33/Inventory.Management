@@ -1,3 +1,4 @@
+
 <div class="grid">
   <div class="col">
     <div class="card mb-0" style="padding: 0.8rem">
@@ -6,43 +7,61 @@
           <span class="block text-500 font-medium mb-1">
             <p-dropdown id="companyId"
                         inputId="selectedCompany"
-                        optionLabel="companyId"
+                        optionLabel="name"
                         placeholder="Şirket seçin"
                         appendTo="body"
                         [filter]="true"
-                        filterBy="name">
+                        filterBy="name"
+                        [(ngModel)]="selectedCompany"
+                        [options]="companies"
+                        [showClear]="true"
+                        (onChange)="onRowCompanySelect($event)">
                 </p-dropdown>
             <p-dropdown id="categoryId"
                         inputId="selectedCategory"
-                        optionLabel="categoryId"
+                        optionLabel="name"
                         placeholder="Kategori seçin"
                         [filter]="true"
                         filterBy="name"
-                        [autoDisplayFirst]="false">
+                        [autoDisplayFirst]="false"
+                        [(ngModel)]="selectedCategory"
+                        [options]="categoryList"
+                        [showClear]="true"
+                        (onChange)="setDataCategory($event)">
                 </p-dropdown>
-            <p-dropdown id="companySubId"
+            <p-dropdown id="categorySubId"
                         inputId="selectedCompanySub"
-                        optionLabel="companySubId"
+                        optionLabel="name"
                         placeholder="Alt kategori Seç"
                         appendTo="body"
                         [filter]="true"
-                        filterBy="name">
+                        filterBy="name"
+                        [showClear]="true"
+                        [(ngModel)]="selectedCategorySubs"
+                        [options]="categorySubsList" (onChange)="setDataCategorySub($event)">
                 </p-dropdown>
             <p-dropdown id="brandId"
                         inputId="selectedBrand"
-                        optionLabel="brandId"
+                        optionLabel="name"
                         placeholder="Marka seçin"
                         appendTo="body"
                         [filter]="true"
-                        filterBy="name">
+                        filterBy="name"
+                        [showClear]="true"
+                        [(ngModel)]="selectedBrand"
+                        [options]="brandList"
+                        (onChange)="setDataBrand($event)">
                 </p-dropdown>
             <p-dropdown id="modelId"
                         inputId="selectedModel"
-                        optionLabel="modelId"
+                        optionLabel="name"
                         placeholder="Model seçin"
                         appendTo="body"
                         [filter]="true"
-                        filterBy="name">
+                        filterBy="name"
+                        [showClear]="true"
+                        [(ngModel)]="selectedModel"
+                        [options]="modelsList" (onChange)="setDataModel($event)">
                 </p-dropdown>
             <p-inputNumber id="barcodeName" inputId="withoutgrouping" mode="decimal" [maxlength]="15" [useGrouping]="false" [required]="true" placeholder="Barkod Numarası"> </p-inputNumber>
             <input id="deviceName" type="text" pInputText placeholder="Cihaz adı">
@@ -67,7 +86,7 @@
         </div>
         <div class="flex align-items-center justify-content-center " [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
           <!--<i class="pi pi-shopping-cart text-blue-500 text-xl"></i>-->
-          <button pButton pRipple type="button" icon="pi pi-search" class="p-button-rounded p-button-success p-button-outlined"></button>
+          <button pButton pRipple type="button" icon="pi pi-search" class="p-button-rounded p-button-success p-button-outlined" (click)="searchInventory()"></button>
         </div>
       </div>
       <!-- <span class="text-green-500 font-medium">24 new </span>
@@ -75,11 +94,102 @@
     </div>
   </div>
 
-  <div class="col-12 xl:col-1">
+  <!--<div class="col-12 xl:col-1">
     <div class="card">
       <button pButton pRipple type="button" icon="pi pi-bookmark" class="p-button-rounded p-button-secondary"></button>
     </div>
 
-  </div>
+  </div> -->
+</div>
+
+
+
+<div id="id" style="height: calc(100vh - 149px)">
+  <p-table #dt
+           [filterDelay]="0"
+           [globalFilterFields]="['name','description','companyId']"
+           [loading]="loading"
+           [rowHover]="true"
+           [rows]="pageSize"
+           [scrollable]="true"
+           [tableStyle]="{'min-width': '50rem'}"
+           dataKey="id"
+           editMode="row"
+           scrollHeight="flex"
+           styleClass="p-datatable-company">
+
+    <ng-template pTemplate="caption">
+      <div class="table-header">Envanter Listesi<span class="p-input-icon-left"><i class="pi pi-search"></i>
+        <input (input)="dt.filterGlobal($any($event.target).value, 'contains')" pInputText placeholder="Genel Arama" type="text"/>
+      </span>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="id" style="width:1%"></th>
+        <th pSortableColumn="id" style="width:5%">Id<p-sortIcon field="id"></p-sortIcon></th>
+        <th pSortableColumn="name" style="width:20%">Kategori Adı<p-sortIcon field="name"></p-sortIcon></th>
+
+      </tr>
+    </ng-template>
+
+    <ng-template let-categories
+                 let-editing="editing"
+                 let-expanded="expanded"
+                 let-rowDataCategory
+                 let-rowIndex="rowIndex"
+                 pTemplate="body">
+      <tr [ngClass]="{
+          'editRecord': rowDataCategory.id === rowDataCategory.id.toString().indexOf(' '),
+          'notRecord': !rowDataCategory.id.toString().indexOf(' ')}"
+          [pContextMenuRow]="rowDataCategory"
+          [pEditableRow]="rowDataCategory">
+        <td>
+          <button
+                  [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                  [pRowToggler]="categories"
+                  class="p-button-text p-button-rounded p-button-plain"
+                  pButton
+                  pRipple
+                  type="button"></button>
+        </td>
+        <td>{{rowDataCategory.id}}</td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input [(ngModel)]="rowDataCategory.name" pInputText type="text">
+            </ng-template>
+            <ng-template pTemplate="output">{{rowDataCategory.name}}</ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <div class="flex align-items-center justify-content-center gap-2">
+            <!-- <button (click)="onRowCategoryEditInit(rowDataCategory)" *ngIf="!editing" class="p-button-rounded p-button-text" icon="pi pi-pencil" pButton pInitEditableRow pRipple type="button"></button>-->
+             <!-- <button (click)="onRowCategoryEditSave(rowDataCategory, rowIndex)" *ngIf="editing" class="p-button-rounded p-button-text p-button-success mr-2" icon="pi pi-check" pButton pRipple pSaveEditableRow type="button"></button>-->
+              <!-- <button (click)="onRowCategoryEditCancel(rowDataCategory, rowIndex)" *ngIf="editing" class="p-button-rounded p-button-text p-button-danger" icon="pi pi-times" pButton pCancelEditableRow pRipple type="button"></button>-->
+               <!-- <button class="p-button-rounded p-button-text p-button-secondary" icon="pi pi-list" pButton pRipple></button> -->
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template class="flex justify-content-end flex-wrap" let-ri="rowIndex" pTemplate="footer">
+      <tr>
+        <td colspan="9">
+          <p-paginator
+            [pageLinkSize]="10"
+            [rowsPerPageOptions]="['10', '20', '50', '100']"
+            [rows]="pageSize"
+            [showCurrentPageReport]="true"
+            [showPageLinks]="true"
+            [totalRecords]="totalRecords"
+            currentPageReportTemplate="{first}. sayfa {last} kayıt, Toplam: {totalRecords} kayıt"
+            styleClass="p-paginator"
+          ></p-paginator>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>
 

@@ -33,6 +33,11 @@ namespace InventoryManagement.API.Controllers
             return CreateActionResult(await _service.GetCategoryList(companyId));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetCategoryAllList()
+        {
+            return CreateActionResult(await _service.GetCategoryAllList());
+        }
 
         [HttpPost]
         //[Authorize(Roles = "SuperAdminRole", Policy = "company#create")]

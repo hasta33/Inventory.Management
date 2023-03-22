@@ -9,6 +9,7 @@ export const constants = {
   DELETE_COMPANY_URL: `${environment.gatewayUrl}/api/services/inventory/company`,
 
   //Category
+  GET_CATEGORY_ALL_LIST_URL : `${environment.gatewayUrl}/api/services/inventory/category`,
   GET_CATEGORY_LIST_URL : `${environment.gatewayUrl}/api/services/inventory/category`,
   POST_CATEGORY_URL: `${environment.gatewayUrl}/api/services/inventory/category`,
   PUT_CATEGORY_URL: `${environment.gatewayUrl}/api/services/inventory/category`,
@@ -21,6 +22,7 @@ export const constants = {
   DELETE_CATEGORY_SUB_URL: `${environment.gatewayUrl}/api/services/inventory/categorySub`,
 
   //Brand
+  GET_BRAND_ALL_LIST_URL : `${environment.gatewayUrl}/api/services/inventory/brand`,
   GET_BRAND_LIST_URL : `${environment.gatewayUrl}/api/services/inventory/brand`,
   POST_BRAND_URL: `${environment.gatewayUrl}/api/services/inventory/brand`,
   PUT_BRAND_URL: `${environment.gatewayUrl}/api/services/inventory/brand`,
