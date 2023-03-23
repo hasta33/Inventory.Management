@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {InventoryService} from "../../../service/inventory.service";
-import {InventoryListParameters, InventoryModel} from "../../../models/inventory/inventory";
-import {MessageService, PrimeNGConfig} from "primeng/api";
+import {InventoryModel} from "../../../models/inventory/inventory";
+import {MenuItem, MessageService, PrimeNGConfig} from "primeng/api";
 import {CompanyService} from "../../../service/company/company.service";
 import {CompanyModel} from "../../../models/company/company";
 import {constants} from "../../../constants/constants";
@@ -9,7 +9,6 @@ import {CategoryService} from "../../../service/category/category.service";
 import {CategoryModel} from "../../../models/category/category";
 import {BrandService} from "../../../service/brand/brand.service";
 import {BrandModel} from "../../../models/brand/brand";
-import {HttpParams} from "@angular/common/http";
 
 @Component({
   selector: 'app-inventory-list',
@@ -41,9 +40,17 @@ export class InventoryListComponent implements OnInit {
   modelsList: any;
   selectedModel: any;
 
-  //Query Params
-  parameters: InventoryListParameters[] = [];
+  //#contextMenu
+  contextMenu: MenuItem[] = [];
 
+  //query params
+  selectedBarcode: any;
+  selectedSerialNumber: any;
+  selectedName: any;
+  selectedMac: any;
+  selectedImei: any;
+  selectedResponsible: any;
+  selectedStatus: any;
 
   constructor(
     private inventoryService: InventoryService,
@@ -56,9 +63,16 @@ export class InventoryListComponent implements OnInit {
   ngOnInit() {
     this.primengConfig.ripple = true;
 
+    this.contextMenu = [
+      { label: 'Yenile', icon: 'pi pi-fw pi-refresh', command: () => this.getCompanyAllList() },
+      { label: 'Şirketi sil', icon: 'pi pi-fw pi-times', command: () => this.getCompanyAllList() }
+    ];
+
     this.getCompanyAllList();
     this.getCategoryAllList();
     this.getBrandAllList();
+
+    this.searchInventory();
   }
 
   getCompanyAllList() {
@@ -129,58 +143,41 @@ export class InventoryListComponent implements OnInit {
     this.selectedModel = event?.value;
   }
 
-
   searchInventory(){
-    /*const params = new HttpParams({
-      fromObject: {
+    this.inventoryService
+      .getInventoryAllList(this.page, this.pageSize, {
         companyId: this.selectedCompany?.id,
         categoryId: this.selectedCategory?.id,
-        categorySubId: this.selectedCategorySub?.id,
+        categorySubId:this.selectedCategorySub?.id,
         brandId: this.selectedBrand?.id,
         modelId: this.selectedModel?.id,
-      }
-    });
-    const paramsKeysAux = params.keys();
-    paramsKeysAux.forEach((key) => {
-      const value = params.get(key);
-      if (value === null || value === undefined || value === '') {
-        params['map'].delete(key);
-      }
-    });*/
-    //console.log('query params', this.queryParams.keys().map(x => ({ [x]: this.queryParams.get(x) })));
-    //console.log(params)
-    //console.log(paramsKeysAux)
+        name: this?.selectedName,
+        barcode: this?.selectedBarcode,
+        serialNumber: this?.selectedSerialNumber,
+        mac: this?.selectedMac,
+        imei: this?.selectedImei,
+        responsibleUser: this?.selectedResponsible,
+        status: this?.selectedStatus
+      })
+      .subscribe({
+        next: (data) => {
+          this.inventoryList = data?.data;
+          this.totalRecords = data.data[0]?.totalCount;
+        },
+        error: (error) => {
+          this.messageService.add({severity:'error', summary: 'Hata', detail: `Envanter listesi alınamadı \n${error}`, life: constants.TOAST_ERROR_LIFETIME});
+          this.messageService.clear('c');
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+        }
+      })
+  }
 
-    //this.parameters.push(this.selectedCategory?.id);
-    //console.log(this.parameters)
-
-    /*const params = new HttpParams({
-      fromObject: {
-        companyId: this.selectedCompany?.id,
-        categoryId: this.selectedCategory?.id,
-        categorySubId: this.selectedCategorySub?.id,
-        brandId: this.selectedBrand?.id,
-        modelId: this.selectedModel?.id,
-      }
-    });*/
-
-    this.parameters.push({ categoryId: this.selectedCategory?.id, categorySubId: this.selectedCategorySub?.id});
-    console.log(this.parameters[0])
-
-    /*this.parameters = this.parameters.filter(function (element: any) {
-      return element ! == undefined;
-    })*/
-    this.inventoryService.getInventoryAllList(this.page, this.pageSize, this.parameters[0]).subscribe({
-      next: (data) => {
-        console.log(data)
-      },
-      complete: () => {
-
-      },
-      error: (e) => {
-
-      }
-    });
+  //InventoryDetail
+  onDetailInventory(event: any) {
+    console.log(event)
   }
 }
 

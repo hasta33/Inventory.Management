@@ -1,174 +1,188 @@
-
-<div class="grid">
-  <div class="col">
-    <div class="card mb-0" style="padding: 0.8rem">
-      <div class="flex justify-content-between mb-0">
-        <div>
-          <span class="block text-500 font-medium mb-1">
-            <p-dropdown id="companyId"
-                        inputId="selectedCompany"
-                        optionLabel="name"
-                        placeholder="Şirket seçin"
-                        appendTo="body"
-                        [filter]="true"
-                        filterBy="name"
-                        [(ngModel)]="selectedCompany"
-                        [options]="companies"
-                        [showClear]="true"
-                        (onChange)="onRowCompanySelect($event)">
-                </p-dropdown>
-            <p-dropdown id="categoryId"
-                        inputId="selectedCategory"
-                        optionLabel="name"
-                        placeholder="Kategori seçin"
-                        [filter]="true"
-                        filterBy="name"
-                        [autoDisplayFirst]="false"
-                        [(ngModel)]="selectedCategory"
-                        [options]="categoryList"
-                        [showClear]="true"
-                        (onChange)="setDataCategory($event)">
-                </p-dropdown>
-            <p-dropdown id="categorySubId"
-                        inputId="selectedCompanySub"
-                        optionLabel="name"
-                        placeholder="Alt kategori Seç"
-                        appendTo="body"
-                        [filter]="true"
-                        filterBy="name"
-                        [showClear]="true"
-                        [(ngModel)]="selectedCategorySubs"
-                        [options]="categorySubsList" (onChange)="setDataCategorySub($event)">
-                </p-dropdown>
-            <p-dropdown id="brandId"
-                        inputId="selectedBrand"
-                        optionLabel="name"
-                        placeholder="Marka seçin"
-                        appendTo="body"
-                        [filter]="true"
-                        filterBy="name"
-                        [showClear]="true"
-                        [(ngModel)]="selectedBrand"
-                        [options]="brandList"
-                        (onChange)="setDataBrand($event)">
-                </p-dropdown>
-            <p-dropdown id="modelId"
-                        inputId="selectedModel"
-                        optionLabel="name"
-                        placeholder="Model seçin"
-                        appendTo="body"
-                        [filter]="true"
-                        filterBy="name"
-                        [showClear]="true"
-                        [(ngModel)]="selectedModel"
-                        [options]="modelsList" (onChange)="setDataModel($event)">
-                </p-dropdown>
-            <p-inputNumber id="barcodeName" inputId="withoutgrouping" mode="decimal" [maxlength]="15" [useGrouping]="false" [required]="true" placeholder="Barkod Numarası"> </p-inputNumber>
-            <input id="deviceName" type="text" pInputText placeholder="Cihaz adı">
-            <input id="responsibleUser" type="text" pInputText placeholder="Kullanıcı">
-            <p-dropdown id="status"
-                        appendTo="body"
-                        inputId="selectedStatus"
-                        optionLabel="statusId"
-                        placeholder="Durum"
-                        [filter]="true"
-                        filterBy="name"
-                        [autoDisplayFirst]="false">
-                </p-dropdown>
-          </span>
-          <!-- <div class="flex align-items-center justify-content-center bg-blue-100 border-round" [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-            <i class="pi pi-shopping-cart text-blue-500 text-xl"></i>
-          </div> -->
-
-          <input id="serialNumber" type="text"  pInputText placeholder="Seri Numarası">
-          <input id="imei" type="text" pInputText placeholder="Imei">
-          <input id="mac" type="text" pInputText placeholder="Mac">
-        </div>
-        <div class="flex align-items-center justify-content-center " [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-          <!--<i class="pi pi-shopping-cart text-blue-500 text-xl"></i>-->
-          <button pButton pRipple type="button" icon="pi pi-search" class="p-button-rounded p-button-success p-button-outlined" (click)="searchInventory()"></button>
-        </div>
-      </div>
-      <!-- <span class="text-green-500 font-medium">24 new </span>
-      <span class="text-500">since last visit</span> -->
-    </div>
-  </div>
-
-  <!--<div class="col-12 xl:col-1">
-    <div class="card">
-      <button pButton pRipple type="button" icon="pi pi-bookmark" class="p-button-rounded p-button-secondary"></button>
-    </div>
-
-  </div> -->
-</div>
-
+<p-toast></p-toast>
+<p-contextMenu #cm [model]="contextMenu"></p-contextMenu>
 
 
 <div id="id" style="height: calc(100vh - 149px)">
   <p-table #dt
-           [filterDelay]="0"
-           [globalFilterFields]="['name','description','companyId']"
-           [loading]="loading"
+           [value]="inventoryList"
+           styleClass="p-datatable-inventory"
+           dataKey="id"
+           [tableStyle]="{'min-width': '50rem'}"
            [rowHover]="true"
            [rows]="pageSize"
+           [loading]="loading"
+           [filterDelay]="0"
+           [globalFilterFields]="['name','description','businessCode']"
            [scrollable]="true"
-           [tableStyle]="{'min-width': '50rem'}"
-           dataKey="id"
-           editMode="row"
            scrollHeight="flex"
-           styleClass="p-datatable-company">
+           [contextMenu]="cm"
+           [(contextMenuSelection)]="selectedCompany">
 
     <ng-template pTemplate="caption">
-      <div class="table-header">Envanter Listesi<span class="p-input-icon-left"><i class="pi pi-search"></i>
-        <input (input)="dt.filterGlobal($any($event.target).value, 'contains')" pInputText placeholder="Genel Arama" type="text"/>
-      </span>
+      <div class="grid">
+        <div class="col">
+          <div class="card mb-0" style="padding: 0.3rem">
+            <div class="flex justify-content-between mb-0">
+              <div>
+                <div class="flex flex-wrap flex-column md:flex-row card-container indigo-container">
+                  <div class="flex align-items-start justify-content-start m-0">
+                    <p-dropdown id="companyId"
+                                inputId="selectedCompany"
+                                optionLabel="name"
+                                placeholder="Şirket"
+                                appendTo="body"
+                                [filter]="true"
+                                filterBy="name"
+                                [style]="{'width':'160px'}"
+                                [(ngModel)]="selectedCompany"
+                                [options]="companies"
+                                [showClear]="true"
+                                (onChange)="onRowCompanySelect($event)">
+                    </p-dropdown>
+                  </div>
+                  <div class="flex align-items-start justify-content-start m-0">
+                    <p-dropdown id="categoryId"
+                                inputId="selectedCategory"
+                                optionLabel="name"
+                                placeholder="Kategori"
+                                [filter]="true"
+                                filterBy="name"
+                                [style]="{'width':'160px'}"
+                                [autoDisplayFirst]="false"
+                                [(ngModel)]="selectedCategory"
+                                [options]="categoryList"
+                                [showClear]="true"
+                                (onChange)="setDataCategory($event)">
+                    </p-dropdown>
+                  </div>
+                  <div class="flex align-items-start justify-content-start m-0">
+                    <p-dropdown id="brandId"
+                                inputId="selectedBrand"
+                                optionLabel="name"
+                                placeholder="Marka"
+                                appendTo="body"
+                                [filter]="true"
+                                filterBy="name"
+                                [style]="{'width':'160px'}"
+                                [showClear]="true"
+                                [(ngModel)]="selectedBrand"
+                                [options]="brandList"
+                                (onChange)="setDataBrand($event)">
+                    </p-dropdown>
+                  </div>
+                  <div class="flex align-items-start justify-content-start m-0">
+                    <p-inputNumber id="barcodeName"
+                                   inputId="withoutgrouping"
+                                   mode="decimal"
+                                   [(ngModel)]="selectedBarcode"
+                                   [maxlength]="15"
+                                   [useGrouping]="false"
+                                   placeholder="Barkod">
+                    </p-inputNumber>
+                  </div>
+                  <div class="flex align-items-start justify-content-start m-0">
+                    <input id="deviceName" type="text" [style]="{'width':'199px'}" pInputText [(ngModel)]="selectedName" placeholder="Cihaz adı">
+                  </div>
+                  <div class="flex align-items-start justify-content-start m-0">
+                    <input id="responsible" type="text" [style]="{'width':'199px'}" pInputText [(ngModel)]="selectedResponsible" placeholder="Kullanıcı">
+                  </div>
+                </div>
+              </div>
+              <div class="flex align-items-center justify-content-center " [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                <button pButton pRipple type="button" icon="pi pi-search" class="p-button-rounded p-button-success p-button-outlined" (click)="searchInventory()"></button>
+              </div>
+            </div>
+            <div>
+              <div class="flex flex-wrap flex-column md:flex-row card-container indigo-container">
+                <div class="flex align-items-start justify-content-start m-0">
+                  <p-dropdown id="status"
+                              appendTo="body"
+                              inputId="selectedStatus"
+                              optionLabel="statusId"
+                              placeholder="Durum"
+                              [filter]="true"
+                              filterBy="name"
+                              [style]="{'width':'160px'}"
+                              [(ngModel)]="selectedStatus"
+                              [autoDisplayFirst]="false">
+                  </p-dropdown>
+                </div>
+                <div class="flex align-items-start justify-content-start m-0">
+                  <p-dropdown id="categorySubId"
+                              inputId="selectedCompanySub"
+                              optionLabel="name"
+                              placeholder="Alt kategori"
+                              appendTo="body"
+                              [filter]="true"
+                              filterBy="name"
+                              [style]="{'width':'160px'}"
+                              [showClear]="true"
+                              [(ngModel)]="selectedCategorySubs"
+                              [options]="categorySubsList"
+                              (onChange)="setDataCategorySub($event)">
+                  </p-dropdown>
+                </div>
+                <div class="flex align-items-start justify-content-start m-0">
+                  <p-dropdown id="modelId"
+                              inputId="selectedModel"
+                              optionLabel="name"
+                              placeholder="Model"
+                              appendTo="body"
+                              [filter]="true"
+                              filterBy="name"
+                              [style]="{'width':'160px'}"
+                              [showClear]="true"
+                              [(ngModel)]="selectedModel"
+                              [options]="modelsList"
+                              (onChange)="setDataModel($event)">
+                  </p-dropdown>
+                </div>
+                <div class="flex align-items-start justify-content-start m-0">
+                  <input id="serialNumber" type="text" [style]="{'width':'199px'}" pInputText [(ngModel)]="selectedSerialNumber" placeholder="Seri Numarası">
+                </div>
+                <div class="flex align-items-start justify-content-start m-0">
+                  <input id="imei" type="text" [style]="{'width':'199px'}" pInputText [(ngModel)]="selectedImei" placeholder="Imei">
+                </div>
+                <div class="flex align-items-start justify-content-start m-0">
+                  <input id="mac" type="text" [style]="{'width':'199px'}" pInputText [(ngModel)]="selectedMac" placeholder="Mac">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </ng-template>
 
     <ng-template pTemplate="header">
       <tr>
         <th pSortableColumn="id" style="width:1%"></th>
-        <th pSortableColumn="id" style="width:5%">Id<p-sortIcon field="id"></p-sortIcon></th>
-        <th pSortableColumn="name" style="width:20%">Kategori Adı<p-sortIcon field="name"></p-sortIcon></th>
-
+        <th pSortableColumn="id" style="width:5%">Id</th>
+        <th pSortableColumn="name" style="width:10%">Barkod Numarası<p-sortIcon field="name"></p-sortIcon></th>
+        <th pSortableColumn="name" style="width:20%">Cihaz Adı<p-sortIcon field="name"></p-sortIcon></th>
+        <th pSortableColumn="name" style="width:20%">Kullanıcı<p-sortIcon field="name"></p-sortIcon></th>
+        <th pSortableColumn="name" style="width:20%">Seri Numarası<p-sortIcon field="name"></p-sortIcon></th>
+        <th pSortableColumn="name" style="width:20%">Imei<p-sortIcon field="name"></p-sortIcon></th>
+        <th pSortableColumn="name" style="width:20%">Mac<p-sortIcon field="name"></p-sortIcon></th>
+        <th pSortableColumn="name" style="width:20%">Durum<p-sortIcon field="name"></p-sortIcon></th>
+        <th style="text-align: center; width: 50%"></th>
       </tr>
     </ng-template>
 
-    <ng-template let-categories
-                 let-editing="editing"
-                 let-expanded="expanded"
-                 let-rowDataCategory
-                 let-rowIndex="rowIndex"
-                 pTemplate="body">
-      <tr [ngClass]="{
-          'editRecord': rowDataCategory.id === rowDataCategory.id.toString().indexOf(' '),
-          'notRecord': !rowDataCategory.id.toString().indexOf(' ')}"
-          [pContextMenuRow]="rowDataCategory"
-          [pEditableRow]="rowDataCategory">
-        <td>
-          <button
-                  [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-                  [pRowToggler]="categories"
-                  class="p-button-text p-button-rounded p-button-plain"
-                  pButton
-                  pRipple
-                  type="button"></button>
-        </td>
-        <td>{{rowDataCategory.id}}</td>
-        <td>
-          <p-cellEditor>
-            <ng-template pTemplate="input">
-              <input [(ngModel)]="rowDataCategory.name" pInputText type="text">
-            </ng-template>
-            <ng-template pTemplate="output">{{rowDataCategory.name}}</ng-template>
-          </p-cellEditor>
-        </td>
+    <ng-template let-inventories let-rowDataInventory let-rowIndex="rowIndex" pTemplate="body">
+      <tr [pContextMenuRow]="rowDataInventory">
+        <td></td>
+        <td>{{rowDataInventory.id}}</td>
+        <td>{{rowDataInventory.barcode}}</td>
+        <td>{{rowDataInventory.name}}</td>
+        <td>{{rowDataInventory.responsible}}</td>
+        <td>{{rowDataInventory.serialNumber}}</td>
+        <td>{{rowDataInventory.imei}}</td>
+        <td>{{rowDataInventory.mac}}</td>
+        <td>{{rowDataInventory.status}}</td>
         <td>
           <div class="flex align-items-center justify-content-center gap-2">
-            <!-- <button (click)="onRowCategoryEditInit(rowDataCategory)" *ngIf="!editing" class="p-button-rounded p-button-text" icon="pi pi-pencil" pButton pInitEditableRow pRipple type="button"></button>-->
-             <!-- <button (click)="onRowCategoryEditSave(rowDataCategory, rowIndex)" *ngIf="editing" class="p-button-rounded p-button-text p-button-success mr-2" icon="pi pi-check" pButton pRipple pSaveEditableRow type="button"></button>-->
-              <!-- <button (click)="onRowCategoryEditCancel(rowDataCategory, rowIndex)" *ngIf="editing" class="p-button-rounded p-button-text p-button-danger" icon="pi pi-times" pButton pCancelEditableRow pRipple type="button"></button>-->
-               <!-- <button class="p-button-rounded p-button-text p-button-secondary" icon="pi pi-list" pButton pRipple></button> -->
+            <button (click)="onDetailInventory(rowDataInventory)" class="p-button-rounded p-button-text" icon="pi pi-book" pButton pRipple type="button"></button>
+            <!-- <button class="p-button-rounded p-button-text p-button-secondary" icon="pi pi-list" pButton pRipple></button> -->
           </div>
         </td>
       </tr>
@@ -190,6 +204,7 @@
         </td>
       </tr>
     </ng-template>
+
   </p-table>
 </div>
 

@@ -22,11 +22,19 @@ export class InventoryService {
       .get<{data: InventoryModel[]}>(constants.GET_INVENTORY_LIST_URL+`/${page}/${pageSize}?${params}` )
       .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
   }*/
-  getInventoryAllList(page: number, pageSize: number, parameters?: InventoryListParameters) {
-    const resourceUrl = `/${page}/${pageSize}${buildQueryParameters(parameters)}`
+  /*getInventoryAllList(page: number, pageSize: number, parameters?: any) {
+    //const resourceUrl = `/${page}/${pageSize}${buildQueryParameters(parameters)}`
+    const resourceUrl = `/${page}/${pageSize}?${parameters}`
     console.log(parameters)
     console.log(resourceUrl)
 
+    return this.httpClient
+      .get<{data: InventoryModel[]}>(constants.GET_INVENTORY_LIST_URL + resourceUrl)
+      .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
+  }*/
+  getInventoryAllList(page: number, pageSize: number, parameters?: InventoryListParameters) {
+    const resourceUrl = `/${page}/${pageSize}${buildQueryParameters(parameters)}`
+    console.log(resourceUrl)
     return this.httpClient
       .get<{data: InventoryModel[]}>(constants.GET_INVENTORY_LIST_URL + resourceUrl)
       .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
@@ -51,7 +59,6 @@ export class InventoryService {
       .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
   }
 
-
   private handleError(error: any) {
     let errorMessage = '';
     if (error.errorMessage instanceof ErrorEvent) {
@@ -66,6 +73,25 @@ export class InventoryService {
   }
 }
 
+function buildQueryParameters<T extends Record<string, string | boolean | number | (string | boolean | number)[]>>(queryParameters?: T): string {
+  if (!queryParameters) return '';
+  const params = Object
+    .entries(queryParameters)
+    .filter(([, value]) => value != null)
+    .flatMap(([param, value]) => {
+      if (Array.isArray(value)) {
+        return value
+          .filter(v => v != null || v!= undefined || v!= '')
+          .map(v => `${encodeURIComponent(param)}=${encodeURIComponent(String(v))}`)
+      }
+      return [`${encodeURIComponent(param)}=${encodeURIComponent(String(value))}`];
+    });
+  console.log(queryParameters)
+  console.log(params)
+  return params.length ? `?${params.join('&')}` : '';
+}
+
+/*
 function buildQueryParameters<T extends Record<string, string | boolean | number>>(queryParameters?: T): string {
   if (!queryParameters) return '';
 
@@ -78,3 +104,4 @@ function buildQueryParameters<T extends Record<string, string | boolean | number
 
   return params.length ? `?${params.join('&')}` : '';
 }
+*/

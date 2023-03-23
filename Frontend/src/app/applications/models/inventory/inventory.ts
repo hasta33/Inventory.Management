@@ -12,19 +12,27 @@ export class InventoryModel {
   mac: string | any;
   status: string | any;
   responsible: string | any;
+  totalCount: number | any;
 
   inventoryDate: Date | undefined;
   invoiceDate: Date | undefined;
 
   createdDate: Date | undefined;
   updatedDate: Date | undefined;
-
 }
 
 
 export type InventoryListParameters = {
-  categoryId?: string;
-  categorySubId?: string;
-  brandId?: string;
-  modelId?: string;
+  companyId?: number;
+  categoryId?: number;
+  categorySubId?: number;
+  brandId?: number;
+  modelId?: number;
+  name?: number;
+  barcode?: number;
+  serialNumber?: string;
+  mac?: string;
+  imei?: number;
+  responsibleUser?: string;
+  status?: string;
 }

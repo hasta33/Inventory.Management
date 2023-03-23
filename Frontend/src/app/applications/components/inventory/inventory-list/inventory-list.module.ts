@@ -14,6 +14,8 @@ import {RippleModule} from "primeng/ripple";
 import {OverlayPanelModule} from "primeng/overlaypanel";
 import {MessageModule} from "primeng/message";
 import {PaginatorModule} from "primeng/paginator";
+import {ToastModule} from "primeng/toast";
+import {ContextMenuModule} from "primeng/contextmenu";
 
 
 @NgModule({
@@ -33,7 +35,9 @@ import {PaginatorModule} from "primeng/paginator";
     RippleModule,
     OverlayPanelModule,
     MessageModule,
-    PaginatorModule
+    PaginatorModule,
+    ToastModule,
+    ContextMenuModule
   ]
 })
 export class InventoryListModule { }
