@@ -4,6 +4,7 @@ using InventoryManagement.Core.DTOs.Category;
 using InventoryManagement.Core.DTOs.CategorySub;
 using InventoryManagement.Core.DTOs.Company;
 using InventoryManagement.Core.DTOs.Inventory;
+using InventoryManagement.Core.DTOs.InventoryMovement;
 using InventoryManagement.Core.DTOs.Model;
 using InventoryManagement.Core.Models;
 
@@ -62,6 +63,12 @@ namespace InventoryManagement.Services.Mapping
             CreateMap<InventoryCreateDto, Inventory>();
             CreateMap<Inventory, InventoryDto>();
             CreateMap<InventoryUpdateDto, Inventory>();
+            #endregion
+
+            #region InventoryMovement
+            CreateMap<InventoryMovementCreateDto, InventoryMovementDto>();
+            CreateMap<InventoryMovementCreateDto, InventoryMovement>();
+            CreateMap<InventoryMovement, InventoryMovementDto>();
             #endregion
 
         }

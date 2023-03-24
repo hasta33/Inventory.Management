@@ -16,28 +16,32 @@ import {MessageModule} from "primeng/message";
 import {PaginatorModule} from "primeng/paginator";
 import {ToastModule} from "primeng/toast";
 import {ContextMenuModule} from "primeng/contextmenu";
+import {DialogModule} from "primeng/dialog";
+import {TabViewModule} from "primeng/tabview";
 
 
 @NgModule({
   declarations: [
     InventoryListComponent
   ],
-  imports: [
-    CommonModule,
-    InventoryListRoutingModule,
-    TableModule,
-    ButtonModule,
-    InputTextModule,
-    CardModule,
-    DropdownModule,
-    InputNumberModule,
-    FormsModule,
-    RippleModule,
-    OverlayPanelModule,
-    MessageModule,
-    PaginatorModule,
-    ToastModule,
-    ContextMenuModule
-  ]
+    imports: [
+        CommonModule,
+        InventoryListRoutingModule,
+        TableModule,
+        ButtonModule,
+        InputTextModule,
+        CardModule,
+        DropdownModule,
+        InputNumberModule,
+        FormsModule,
+        RippleModule,
+        OverlayPanelModule,
+        MessageModule,
+        PaginatorModule,
+        ToastModule,
+        ContextMenuModule,
+        DialogModule,
+        TabViewModule
+    ]
 })
 export class InventoryListModule { }

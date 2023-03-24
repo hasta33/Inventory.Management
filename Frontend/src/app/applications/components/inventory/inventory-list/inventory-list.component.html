@@ -2,6 +2,89 @@
 <p-contextMenu #cm [model]="contextMenu"></p-contextMenu>
 
 
+
+
+<ng-template [ngIf]="inventoryDetail == true">
+  <p-dialog header="Header" [(visible)]="inventoryDetail" [style]="{ width: '100vw', height: '100vh' }">
+    <p-tabView>
+      <p-tabPanel header="Envanter Bilgileri">
+        <div class="field grid">
+          <label class="col-fixed" style="width:100px">Barkod</label>
+          <div class="col">
+            <label class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow.barcode}}</label>
+          </div>
+        </div>
+
+        <div class="field grid">
+          <label class="col-fixed" style="width:100px">Cihaz Adı</label>
+          <div class="col">
+            <label class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow.name}}</label>
+          </div>
+        </div>
+
+        <div class="field grid">
+          <label class="col-fixed" style="width:100px">Seri Numarası</label>
+          <div class="col">
+            <label class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow.serialNumber}}</label>
+          </div>
+        </div>
+
+        <div class="field grid">
+          <label class="col-fixed" style="width:100px">Imei</label>
+          <div class="col">
+            <label class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow.imei}}</label>
+          </div>
+        </div>
+
+        <div class="field grid">
+          <label class="col-fixed" style="width:100px">Mac</label>
+          <div class="col">
+            <label class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow.mac}}</label>
+          </div>
+        </div>
+
+        <div class="field grid">
+          <label class="col-fixed" style="width:100px">Kayıt Tarihi</label>
+          <div class="col">
+            <label  class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow.inventoryDate | date:"dd.mm.yyyy HH:mm:ss"}}</label>
+          </div>
+        </div>
+
+        <div class="field grid">
+          <label class="col-fixed" style="width:100px">Fatura Tarihi</label>
+          <div class="col">
+            <label class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow.invoiceDate | date:"dd.mm.yyyy HH:mm:ss"}}</label>
+          </div>
+        </div>
+
+        <div class="field grid">
+          <label class="col-fixed" style="width:100px">Son Güncelleme</label>
+          <div class="col">
+            <label class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow.updatedDate | date:"dd.mm.yyyy HH:mm:ss"}}</label>
+          </div>
+        </div>
+
+      </p-tabPanel>
+      <p-tabPanel header="Cihaz Hareketleri">
+        <p>
+          Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
+          ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
+        </p>
+      </p-tabPanel>
+      <p-tabPanel header="Header III">
+        <p>
+          At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa
+          qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
+        </p>
+      </p-tabPanel>
+    </p-tabView>
+
+
+
+  </p-dialog>
+
+</ng-template>
+
 <div id="id" style="height: calc(100vh - 149px)">
   <p-table #dt
            [value]="inventoryList"
@@ -16,138 +99,140 @@
            [scrollable]="true"
            scrollHeight="flex"
            [contextMenu]="cm"
-           [(contextMenuSelection)]="selectedCompany">
+           [(contextMenuSelection)]="selectedRow">
 
     <ng-template pTemplate="caption">
       <div class="grid">
         <div class="col">
           <div class="card mb-0" style="padding: 0.3rem">
-            <div class="flex justify-content-between mb-0">
+            <form (keydown)="keyDownFunction($event)">
+              <div class="flex justify-content-between mb-0">
+                <div>
+                  <div class="flex flex-wrap flex-column md:flex-row card-container indigo-container">
+                    <div class="flex align-items-start justify-content-start m-0">
+                      <p-dropdown id="companyId"
+                                  inputId="selectedCompany"
+                                  optionLabel="name"
+                                  placeholder="Şirket"
+                                  appendTo="body"
+                                  [filter]="true"
+                                  filterBy="name"
+                                  [style]="{'width':'160px'}"
+                                  [(ngModel)]="selectedCompany"
+                                  [options]="companies"
+                                  [showClear]="true"
+                                  (onChange)="onRowCompanySelect($event)">
+                      </p-dropdown>
+                    </div>
+                    <div class="flex align-items-start justify-content-start m-0">
+                      <p-dropdown id="categoryId"
+                                  inputId="selectedCategory"
+                                  optionLabel="name"
+                                  placeholder="Kategori"
+                                  [filter]="true"
+                                  filterBy="name"
+                                  [style]="{'width':'160px'}"
+                                  [autoDisplayFirst]="false"
+                                  [(ngModel)]="selectedCategory"
+                                  [options]="categoryList"
+                                  [showClear]="true"
+                                  (onChange)="setDataCategory($event)">
+                      </p-dropdown>
+                    </div>
+                    <div class="flex align-items-start justify-content-start m-0">
+                      <p-dropdown id="brandId"
+                                  inputId="selectedBrand"
+                                  optionLabel="name"
+                                  placeholder="Marka"
+                                  appendTo="body"
+                                  [filter]="true"
+                                  filterBy="name"
+                                  [style]="{'width':'160px'}"
+                                  [showClear]="true"
+                                  [(ngModel)]="selectedBrand"
+                                  [options]="brandList"
+                                  (onChange)="setDataBrand($event)">
+                      </p-dropdown>
+                    </div>
+                    <div class="flex align-items-start justify-content-start m-0">
+                      <p-inputNumber id="barcodeName"
+                                     inputId="withoutgrouping"
+                                     mode="decimal"
+                                     [(ngModel)]="selectedBarcode"
+                                     [maxlength]="15"
+                                     [useGrouping]="false"
+                                     placeholder="Barkod">
+                      </p-inputNumber>
+                    </div>
+                    <div class="flex align-items-start justify-content-start m-0">
+                      <input id="deviceName" type="text" [style]="{'width':'199px'}" pInputText [(ngModel)]="selectedName" placeholder="Cihaz adı">
+                    </div>
+                    <div class="flex align-items-start justify-content-start m-0">
+                      <input id="responsible" type="text" [style]="{'width':'199px'}" pInputText [(ngModel)]="selectedResponsible" placeholder="Kullanıcı">
+                    </div>
+                  </div>
+                </div>
+                <div class="flex align-items-center justify-content-center " [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                  <button pButton pRipple type="button" icon="pi pi-search" class="p-button-rounded p-button-success p-button-outlined" (click)="searchInventory()"></button>
+                </div>
+              </div>
               <div>
                 <div class="flex flex-wrap flex-column md:flex-row card-container indigo-container">
                   <div class="flex align-items-start justify-content-start m-0">
-                    <p-dropdown id="companyId"
-                                inputId="selectedCompany"
-                                optionLabel="name"
-                                placeholder="Şirket"
+                    <p-dropdown id="status"
                                 appendTo="body"
+                                inputId="selectedStatus"
+                                optionLabel="statusId"
+                                placeholder="Durum"
                                 [filter]="true"
                                 filterBy="name"
                                 [style]="{'width':'160px'}"
-                                [(ngModel)]="selectedCompany"
-                                [options]="companies"
-                                [showClear]="true"
-                                (onChange)="onRowCompanySelect($event)">
+                                [(ngModel)]="selectedStatus"
+                                [autoDisplayFirst]="false">
                     </p-dropdown>
                   </div>
                   <div class="flex align-items-start justify-content-start m-0">
-                    <p-dropdown id="categoryId"
-                                inputId="selectedCategory"
+                    <p-dropdown id="categorySubId"
+                                inputId="selectedCompanySub"
                                 optionLabel="name"
-                                placeholder="Kategori"
-                                [filter]="true"
-                                filterBy="name"
-                                [style]="{'width':'160px'}"
-                                [autoDisplayFirst]="false"
-                                [(ngModel)]="selectedCategory"
-                                [options]="categoryList"
-                                [showClear]="true"
-                                (onChange)="setDataCategory($event)">
-                    </p-dropdown>
-                  </div>
-                  <div class="flex align-items-start justify-content-start m-0">
-                    <p-dropdown id="brandId"
-                                inputId="selectedBrand"
-                                optionLabel="name"
-                                placeholder="Marka"
+                                placeholder="Alt kategori"
                                 appendTo="body"
                                 [filter]="true"
                                 filterBy="name"
                                 [style]="{'width':'160px'}"
                                 [showClear]="true"
-                                [(ngModel)]="selectedBrand"
-                                [options]="brandList"
-                                (onChange)="setDataBrand($event)">
+                                [(ngModel)]="selectedCategorySubs"
+                                [options]="categorySubsList"
+                                (onChange)="setDataCategorySub($event)">
                     </p-dropdown>
                   </div>
                   <div class="flex align-items-start justify-content-start m-0">
-                    <p-inputNumber id="barcodeName"
-                                   inputId="withoutgrouping"
-                                   mode="decimal"
-                                   [(ngModel)]="selectedBarcode"
-                                   [maxlength]="15"
-                                   [useGrouping]="false"
-                                   placeholder="Barkod">
-                    </p-inputNumber>
+                    <p-dropdown id="modelId"
+                                inputId="selectedModel"
+                                optionLabel="name"
+                                placeholder="Model"
+                                appendTo="body"
+                                [filter]="true"
+                                filterBy="name"
+                                [style]="{'width':'160px'}"
+                                [showClear]="true"
+                                [(ngModel)]="selectedModel"
+                                [options]="modelsList"
+                                (onChange)="setDataModel($event)">
+                    </p-dropdown>
                   </div>
                   <div class="flex align-items-start justify-content-start m-0">
-                    <input id="deviceName" type="text" [style]="{'width':'199px'}" pInputText [(ngModel)]="selectedName" placeholder="Cihaz adı">
+                    <input id="serialNumber" type="text" [style]="{'width':'199px'}" pInputText [(ngModel)]="selectedSerialNumber" placeholder="Seri Numarası">
                   </div>
                   <div class="flex align-items-start justify-content-start m-0">
-                    <input id="responsible" type="text" [style]="{'width':'199px'}" pInputText [(ngModel)]="selectedResponsible" placeholder="Kullanıcı">
+                    <input id="imei" type="text" [style]="{'width':'199px'}" pInputText [(ngModel)]="selectedImei" placeholder="Imei">
+                  </div>
+                  <div class="flex align-items-start justify-content-start m-0">
+                    <input id="mac" type="text" [style]="{'width':'199px'}" pInputText [(ngModel)]="selectedMac" placeholder="Mac">
                   </div>
                 </div>
               </div>
-              <div class="flex align-items-center justify-content-center " [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                <button pButton pRipple type="button" icon="pi pi-search" class="p-button-rounded p-button-success p-button-outlined" (click)="searchInventory()"></button>
-              </div>
-            </div>
-            <div>
-              <div class="flex flex-wrap flex-column md:flex-row card-container indigo-container">
-                <div class="flex align-items-start justify-content-start m-0">
-                  <p-dropdown id="status"
-                              appendTo="body"
-                              inputId="selectedStatus"
-                              optionLabel="statusId"
-                              placeholder="Durum"
-                              [filter]="true"
-                              filterBy="name"
-                              [style]="{'width':'160px'}"
-                              [(ngModel)]="selectedStatus"
-                              [autoDisplayFirst]="false">
-                  </p-dropdown>
-                </div>
-                <div class="flex align-items-start justify-content-start m-0">
-                  <p-dropdown id="categorySubId"
-                              inputId="selectedCompanySub"
-                              optionLabel="name"
-                              placeholder="Alt kategori"
-                              appendTo="body"
-                              [filter]="true"
-                              filterBy="name"
-                              [style]="{'width':'160px'}"
-                              [showClear]="true"
-                              [(ngModel)]="selectedCategorySubs"
-                              [options]="categorySubsList"
-                              (onChange)="setDataCategorySub($event)">
-                  </p-dropdown>
-                </div>
-                <div class="flex align-items-start justify-content-start m-0">
-                  <p-dropdown id="modelId"
-                              inputId="selectedModel"
-                              optionLabel="name"
-                              placeholder="Model"
-                              appendTo="body"
-                              [filter]="true"
-                              filterBy="name"
-                              [style]="{'width':'160px'}"
-                              [showClear]="true"
-                              [(ngModel)]="selectedModel"
-                              [options]="modelsList"
-                              (onChange)="setDataModel($event)">
-                  </p-dropdown>
-                </div>
-                <div class="flex align-items-start justify-content-start m-0">
-                  <input id="serialNumber" type="text" [style]="{'width':'199px'}" pInputText [(ngModel)]="selectedSerialNumber" placeholder="Seri Numarası">
-                </div>
-                <div class="flex align-items-start justify-content-start m-0">
-                  <input id="imei" type="text" [style]="{'width':'199px'}" pInputText [(ngModel)]="selectedImei" placeholder="Imei">
-                </div>
-                <div class="flex align-items-start justify-content-start m-0">
-                  <input id="mac" type="text" [style]="{'width':'199px'}" pInputText [(ngModel)]="selectedMac" placeholder="Mac">
-                </div>
-              </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>
@@ -155,7 +240,7 @@
 
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="id" style="width:1%"></th>
+        <th style="text-align: center; width:1%"></th>
         <th pSortableColumn="id" style="width:5%">Id</th>
         <th pSortableColumn="name" style="width:10%">Barkod Numarası<p-sortIcon field="name"></p-sortIcon></th>
         <th pSortableColumn="name" style="width:20%">Cihaz Adı<p-sortIcon field="name"></p-sortIcon></th>
@@ -169,7 +254,7 @@
     </ng-template>
 
     <ng-template let-inventories let-rowDataInventory let-rowIndex="rowIndex" pTemplate="body">
-      <tr [pContextMenuRow]="rowDataInventory">
+      <tr [pContextMenuRow]="rowDataInventory" (mouseup)="keyDownFunction(rowDataInventory)">
         <td></td>
         <td>{{rowDataInventory.id}}</td>
         <td>{{rowDataInventory.barcode}}</td>

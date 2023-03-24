@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {InventoryService} from "../../../service/inventory.service";
+import {InventoryService} from "../../../service/inventory/inventory.service";
 import {InventoryModel} from "../../../models/inventory/inventory";
 import {MenuItem, MessageService, PrimeNGConfig} from "primeng/api";
 import {CompanyService} from "../../../service/company/company.service";
@@ -9,6 +9,7 @@ import {CategoryService} from "../../../service/category/category.service";
 import {CategoryModel} from "../../../models/category/category";
 import {BrandService} from "../../../service/brand/brand.service";
 import {BrandModel} from "../../../models/brand/brand";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-inventory-list',
@@ -52,7 +53,12 @@ export class InventoryListComponent implements OnInit {
   selectedResponsible: any;
   selectedStatus: any;
 
+  //Table row
+  selectedRow: any;
+  inventoryDetail: boolean = false;
+
   constructor(
+    private router: Router,
     private inventoryService: InventoryService,
     private primengConfig: PrimeNGConfig,
     private messageService: MessageService,
@@ -64,8 +70,15 @@ export class InventoryListComponent implements OnInit {
     this.primengConfig.ripple = true;
 
     this.contextMenu = [
-      { label: 'Yenile', icon: 'pi pi-fw pi-refresh', command: () => this.getCompanyAllList() },
-      { label: 'Şirketi sil', icon: 'pi pi-fw pi-times', command: () => this.getCompanyAllList() }
+      { label: 'Yenile', icon: 'pi pi-fw pi-refresh',  },
+      { label: 'Detaylara Git', icon: 'pi pi-fw pi-angle-right', command: () => this.inventoryDetail = true  },
+      { label: 'İşlemler', icon: 'pi pi-fw pi-info',
+        items: [
+          { label: 'Zimmetle', icon: 'pi pi-fw pi-user-plus',  },
+          { label: 'Zimmet Teslim Al', icon: 'pi pi-fw pi-refresh',  },
+          { label: 'Servise Gönder', icon: 'pi pi-fw pi-cog',  },
+          { label: 'Transfer Et', icon: 'pi pi-fw pi-car',  },
+        ] }
     ];
 
     this.getCompanyAllList();
@@ -79,7 +92,6 @@ export class InventoryListComponent implements OnInit {
     this.companyService.getCompanyAllList(this.page, this.pageSize).subscribe({
       next: (data) => {
         this.companies = data?.data;
-        //this.totalRecords = data?.data[0].totalCount;
       },
       error: (e) => {
         this.messageService.add({ severity: 'error', summary: 'Hata', detail: `Şirket listesi alınamadı \n${e}`, life: constants.TOAST_ERROR_LIFETIME });
@@ -173,6 +185,12 @@ export class InventoryListComponent implements OnInit {
           this.loading = false;
         }
       })
+  }
+  keyDownFunction(event: any) {
+    console.log(event)
+    if (event.keyCode === 13) {
+      this.searchInventory();
+    }
   }
 
   //InventoryDetail

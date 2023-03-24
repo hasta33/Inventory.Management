@@ -28,6 +28,7 @@ namespace InventoryManagement.Repository
 
 
         public DbSet<Inventory> Inventories { get; set; }
+        public DbSet<InventoryMovement> InventoryMovements { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

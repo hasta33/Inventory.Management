@@ -9,7 +9,7 @@ import {BrandModel} from "../../../models/brand/brand";
 import {BrandService} from "../../../service/brand/brand.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {InventoryModel} from "../../../models/inventory/inventory";
-import {InventoryService} from "../../../service/inventory.service";
+import {InventoryService} from "../../../service/inventory/inventory.service";
 import {Router} from "@angular/router";
 
 @Component({

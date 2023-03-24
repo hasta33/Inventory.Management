@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {catchError, Observable, retry, throwError} from "rxjs";
-import {InventoryListParameters, InventoryModel} from "../models/inventory/inventory";
-import {constants} from "../constants/constants";
+import {InventoryListParameters, InventoryModel} from "../../models/inventory/inventory";
+import {constants} from "../../constants/constants";
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +34,6 @@ export class InventoryService {
   }*/
   getInventoryAllList(page: number, pageSize: number, parameters?: InventoryListParameters) {
     const resourceUrl = `/${page}/${pageSize}${buildQueryParameters(parameters)}`
-    console.log(resourceUrl)
     return this.httpClient
       .get<{data: InventoryModel[]}>(constants.GET_INVENTORY_LIST_URL + resourceUrl)
       .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
@@ -86,8 +85,6 @@ function buildQueryParameters<T extends Record<string, string | boolean | number
       }
       return [`${encodeURIComponent(param)}=${encodeURIComponent(String(value))}`];
     });
-  console.log(queryParameters)
-  console.log(params)
   return params.length ? `?${params.join('&')}` : '';
 }
 

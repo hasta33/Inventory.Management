@@ -41,6 +41,9 @@ export const constants = {
   DELETE_INVENTORY_URL: `${environment.gatewayUrl}/api/services/inventory/inventory`,
 
 
+  //Inventory Movement
+  GET_INVENTORY_MOVEMENT_URL : `${environment.gatewayUrl}/api/services/inventory/inventorymovement`,
+
 
   TOAST_ERROR_LIFETIME:5000, //Toast timeout
   TOAST_SUCCESS_LIFETIME:3000,

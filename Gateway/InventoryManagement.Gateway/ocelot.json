@@ -452,16 +452,33 @@
         "Limit": 10
       },
       "UpstreamHttpMethod": [ "PUT", "POST" ]
-    }
+    },
     // --------------------------------------- Inventory -------------------------------------
 
 
 
 
-
-
-
-
+    // --------------------------------------- InventoryMovement -------------------------------------
+    {
+      "DownstreamPathTemplate": "/api/inventorymovement/{everythings}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/inventorymovement/{everythings}",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "GET" ]
+    }
+    // --------------------------------------- InventoryMovement -------------------------------------
 
   ]
 }
