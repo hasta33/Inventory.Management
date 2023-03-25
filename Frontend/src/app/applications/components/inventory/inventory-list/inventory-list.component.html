@@ -5,7 +5,7 @@
 
 
 <ng-template [ngIf]="inventoryDetail == true">
-  <p-dialog header="Header" [(visible)]="inventoryDetail" [style]="{ width: '100vw', height: '100vh' }">
+  <p-dialog header="{{selectedRow.barcode + ' ' +selectedRow.name}}" [(visible)]="inventoryDetail" [style]="{ width: '100vw', height: '100vh' }">
     <p-tabView>
       <p-tabPanel header="Envanter Bilgileri">
         <div class="field grid">
@@ -65,6 +65,11 @@
         </div>
 
       </p-tabPanel>
+
+      <p-tabPanel header="Zimmet">
+        <p>Zimmet işlemleri        </p>
+      </p-tabPanel>
+
       <p-tabPanel header="Cihaz Hareketleri">
         <p>
           Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim

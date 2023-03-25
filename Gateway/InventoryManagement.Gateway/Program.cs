@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +35,9 @@ builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange
 #endregion
 
 
-
+ServicePointManager
+    .ServerCertificateValidationCallback +=
+    (sender, cert, chain, sslPolicyErrors) => true;
 
 var app = builder.Build();
 
