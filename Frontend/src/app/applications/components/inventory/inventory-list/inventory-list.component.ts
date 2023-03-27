@@ -10,6 +10,7 @@ import {CategoryModel} from "../../../models/category/category";
 import {BrandService} from "../../../service/brand/brand.service";
 import {BrandModel} from "../../../models/brand/brand";
 import {Router} from "@angular/router";
+import {PersonelListModel} from "../../../models/personel-list/personel-list";
 
 @Component({
   selector: 'app-inventory-list',
@@ -56,6 +57,9 @@ export class InventoryListComponent implements OnInit {
   //Table row
   selectedRow: any;
   inventoryDetail: boolean = false;
+
+  //personel List
+  personelList: PersonelListModel[] = [];
 
   constructor(
     private router: Router,
@@ -146,7 +150,7 @@ export class InventoryListComponent implements OnInit {
         this.messageService.clear('c');
         this.loading = false;
       }
-    })
+    });
   }
   setDataBrand(event:any) {
     this.modelsList = event.value?.models;
@@ -197,6 +201,28 @@ export class InventoryListComponent implements OnInit {
   onDetailInventory(event: any) {
     console.log(event)
   }
+
+
+  //getPersonelList
+  getPersonelList(username: string) {
+    this.inventoryService.getPersonelList(username).subscribe({
+      next: (data) => {
+        console.log(data);
+      },
+      complete: () => {
+        this.loading = false;
+      },
+      error: (e) => {
+        this.messageService.add({ severity: 'error', summary: 'Hata', detail: `Personel listesi alınamadı \n${e}`, life: constants.TOAST_ERROR_LIFETIME });
+        this.messageService.clear('c');
+        this.loading = false;
+      }
+    });
+  }
+
+
+
+
 }
 
 

@@ -1,6 +1,11 @@
 import {environment} from "../../../environments/environment";
 
 export const constants = {
+  //Keycloak Address
+  GET_PERSONEL_LIST : `${environment.gatewayUrl}/admin/realms/EneryaInventoryApiRealm`,
+
+
+
   //Company
   //GET_COMPANY_ONLY_NAME_AND_BUSINESS_CODE : `${environment.gatewayUrl}/api/services/inventory/company`, //GetCompanyOnlyNameAndBusinessCode
   GET_COMPANY_LIST_URL : `${environment.gatewayUrl}/api/services/inventory/company`, //{page}/{pageSize}

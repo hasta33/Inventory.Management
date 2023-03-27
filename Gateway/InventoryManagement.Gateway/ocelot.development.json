@@ -1,0 +1,517 @@
+{
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:2001"
+    //"ServiceDiscoveryProvider": {
+    //  "Host": "consul",
+    //  "Port": 8500,
+    //  "Type": "Consul"
+    //}
+  },
+
+  "Routes": [
+
+    // ------------------------------------ Keycloak -------------------------------------------
+    // keycloak için ocelot çalışmıyor daha sonra kontrol edilecek ve gateway üzerinden çalışması sağlanacak
+    //Keycloak - Get Access Token
+    {
+      "DownstreamPathTemplate": "/realms/EneryaInventoryApiRealm/protocol/openid-connect/token",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "host.docker.internal",
+          "Port": 2011
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/keycloak",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+
+    // /admin/realms/EneryaInventoryApiRealm/users?username=test&first=5&max=10
+    ////Keycloak get users - Body alanında access_token ile gönderilmelidir. http://localhost:2011/admin/realms/EneryaInventoryApiRealm/users
+    {
+      "DownstreamPathTemplate": "/admin/realms/EneryaInventoryApiRealm/{everythings}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2011
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/keycloak/liste/{everythings}",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 300,
+        "Limit": 100
+      },
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+
+    // ------------------------------------ Keycloak -------------------------------------------
+
+
+
+
+
+    // ------------------------------------ Company -------------------------------------------
+    // Company DELETE - https://localhost:2001/api/services/inventory/company/idNumber
+    // Company GET (GetCompanyListWithSubTables) - https://localhost:2001/api/services/inventory/company/{companyId}/{page}/{pageSize}
+    // Company GET (GetCompanyAllList) - https://localhost:2001/api/services/inventory/company/{page}/{pageSize}
+    {
+      "DownstreamPathTemplate": "/api/company/{everythings}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/company/{everythings}",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "GET", "DELETE" ]
+    },
+
+    /*
+    Company POST - https://localhost:2001/api/services/inventory/company
+    {
+      "name": "string",
+      "description": "string",
+      "businessCode": 0
+    }
+
+    Company PUT - https://localhost:2001/api/services/inventory/company
+    {
+      "id": 0,
+      "name": "string",
+      "description": "string",
+      "businessCode": 0
+    }
+    */
+    {
+      "DownstreamPathTemplate": "/api/company",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/company",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "PUT", "POST" ]
+    },
+    // ------------------------------------ Company -------------------------------------------
+
+
+
+
+
+
+
+    // ------------------------------------ Category -------------------------------------------
+
+    // Category - GetCategoryList {categoryId}
+    /*
+    */
+    {
+      "DownstreamPathTemplate": "/api/category",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/category",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+
+
+    // ------------------------------------ Category -------------------------------------------
+    /*
+    Category GET (GetCategoryList) - https://localhost:2001/api/services/inventory/category/{companyId}/{page}/{pageSize}
+    Category DELETE - https://localhost:2001/api/services/inventory/category/{categoryId}
+    */
+    {
+      "DownstreamPathTemplate": "/api/category/{everythings}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/category/{everythings}",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "GET", "DELETE" ]
+    },
+
+
+    /*
+    Category POST - https://localhost:2001/api/services/inventory/category
+    {
+      "name": "string",
+      "companyId": 1
+    }
+
+    Category PUT - https://localhost:2001/api/services/inventory/category
+    {
+      "id": 7,
+      "name": "asdasdsad",
+      "companyId": 1
+    }
+    */
+    {
+      "DownstreamPathTemplate": "/api/category",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/category",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "PUT", "POST" ]
+    },
+    // ------------------------------------ Category -------------------------------------------
+
+
+
+
+
+    // ------------------------------------ CategorySub ----------------------------------------
+    /*
+    CategorySub POST - https://localhost:2001/api/services/inventory/category
+    {
+      "name": "string",
+      "categoryId": 0
+    }
+
+    CategorySub PUT - https://localhost:2001/api/services/inventory/category
+    {
+      "id": 0,
+      "name": "string",
+      "categoryId": 0
+    }
+    */
+    {
+      "DownstreamPathTemplate": "/api/categorySub",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/categorySub",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "PUT", "POST" ]
+    },
+
+    //CategorySub DELETE - https://localhost:2001/api/services/inventory/categorySub/idNumber
+    {
+      "DownstreamPathTemplate": "/api/categorySub/{everythings}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/categorySub/{everythings}",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "DELETE" ]
+    },
+    // --------------------------------------- CategorySub -------------------------------------
+
+
+
+
+    // --------------------------------------- Brand -------------------------------------
+    /*
+    Brand GET (GetCategoryList) - https://localhost:2001/api/services/inventory/brand/{companyId}/{page}/{pageSize}
+    Brand DELETE - https://localhost:2001/api/services/inventory/brand/{brandId}
+    */
+    {
+      "DownstreamPathTemplate": "/api/brand/{everythings}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/brand/{everythings}",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "GET", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/brand",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/brand",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+
+    /*
+    Brand POST - https://localhost:2001/api/services/inventory/brand
+    {
+      "name": "string",
+      "companyId": 1
+    }
+
+    Brand PUT - https://localhost:2001/api/services/inventory/brand
+    {
+      "id": 7,
+      "name": "asdasdsad",
+      "companyId": 1
+    }
+    */
+    {
+      "DownstreamPathTemplate": "/api/brand",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/brand",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "PUT", "POST" ]
+    },
+    // --------------------------------------- Brand -------------------------------------
+
+
+
+
+    // --------------------------------------- Model -------------------------------------
+
+    /*
+    Model POST - https://localhost:2001/api/services/inventory/model
+    {
+      "name": "string",
+      "brandId": 1
+    }
+
+    Model PUT - https://localhost:2001/api/services/inventory/model
+    {
+      "id": 0,
+      "name": "string",
+      "brandId": 0
+    }
+    */
+    {
+      "DownstreamPathTemplate": "/api/model",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/model",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "PUT", "POST" ]
+    },
+
+    //Model DELETE - https://localhost:2001/api/services/inventory/model/idNumber
+    {
+      "DownstreamPathTemplate": "/api/model/{everythings}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/model/{everythings}",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "DELETE" ]
+    },
+    // --------------------------------------- Model -------------------------------------
+
+
+
+
+
+
+    // --------------------------------------- Inventory -------------------------------------
+    /*
+    Inventory GET (GetInventoryList) - https://localhost:2001/api/services/inventory/inventory/{page}/{pageSize}
+    Inventory DELETE - https://localhost:2001/api/services/inventory/inventory/{id}
+    */
+    {
+      "DownstreamPathTemplate": "/api/inventory/{everythings}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/inventory/{everythings}",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "GET", "DELETE" ]
+    },
+
+    /*
+    Inventory POST - https://localhost:2001/api/services/inventory/inventory
+    {
+      "name": "string",
+      "companyId": 1
+    }
+
+    Inventory PUT - https://localhost:2001/api/services/inventory/inventory
+    {
+      "id": 7,
+      "name": "asdasdsad",
+      "companyId": 1
+    }
+    */
+    {
+      "DownstreamPathTemplate": "/api/inventory",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/inventory",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "PUT", "POST" ]
+    },
+    // --------------------------------------- Inventory -------------------------------------
+
+
+
+
+    // --------------------------------------- InventoryMovement -------------------------------------
+    {
+      "DownstreamPathTemplate": "/api/inventorymovement/{everythings}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/inventorymovement/{everythings}",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "GET" ]
+    }
+    // --------------------------------------- InventoryMovement -------------------------------------
+
+  ]
+}
+
+
+
+
