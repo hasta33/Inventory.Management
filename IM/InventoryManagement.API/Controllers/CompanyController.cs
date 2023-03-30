@@ -29,7 +29,8 @@ namespace InventoryManagement.API.Controllers
         
 
         [HttpGet("{companyId}/{page}/{pageSize}")]
-        [Authorize(Roles = "CompanyRole", Policy = "company#get")]
+        //[Authorize(Roles = "CompanyRole", Policy = "company#get")]
+        [Authorize(Policy = "company#get")]
         public async Task<IActionResult> GetCompanyListWithSubTables(int companyId, int page, int pageSize)
         {
             return CreateActionResult(await _service.GetCompanyListWithSubTables(companyId, page, pageSize));

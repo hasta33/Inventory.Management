@@ -35,34 +35,18 @@ export class LoginComponent implements OnInit{
       this.service.ProceedLogin(this.Login.value)
         .subscribe({
           next: (response: any) => {
+            console.log(response)
             localStorage.setItem('access_token', response.access_token)
             localStorage.setItem('refresh_token', response.refresh_token)
             this.route.navigate(['']);
           },
-          complete: () => {
-            this.service.GetTokenPermissions().subscribe({
-              next: (token: any) => {
-                console.log('permission token alındı')
-                localStorage.setItem('access_permission_token', token.access_token)
-                localStorage.setItem('refresh_permission_token', token.refresh_token)
-              },
-              complete: () => {
-
-              },
-              error: (e) => {
-                console.log('permission token alınamadı')
-                this.messageService.add({ severity: 'error', summary: 'Hata', detail: `Kullanıcı adı veya şifre hatalı \n${e.error.error_description}`, life: constants.TOAST_ERROR_LIFETIME });
-                this.messageService.clear('c');
-              }
-            });
-          },
+          complete: () => { },
           error: (e) => {
+            console.log(e)
             this.messageService.add({ severity: 'error', summary: 'Hata', detail: `Kullanıcı adı veya şifre hatalı \n${e.error.error_description}`, life: constants.TOAST_ERROR_LIFETIME });
             this.messageService.clear('c');
-            return;
           }
         });
-
     }
   }
 }

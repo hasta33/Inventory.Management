@@ -8,7 +8,6 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {RippleModule} from "primeng/ripple";
 import {TokenInterceptorService} from "./applications/service/interceptors/token-interceptor/token-interceptor.service";
-import {RequestInterceptorService} from "./applications/service/interceptors/request/request-interceptor.service";
 
 
 @NgModule({
@@ -25,8 +24,7 @@ import {RequestInterceptorService} from "./applications/service/interceptors/req
     RippleModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true},
-    { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptorService, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true}
   ],
   exports: [],
   bootstrap: [AppComponent]

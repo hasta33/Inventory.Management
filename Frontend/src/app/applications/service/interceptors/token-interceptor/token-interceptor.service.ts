@@ -5,9 +5,9 @@ import {
   HttpEvent,
   HttpHandler,
   HttpInterceptor, HttpParams,
-  HttpRequest
+  HttpRequest, HttpResponse
 } from "@angular/common/http";
-import {catchError, Observable, switchMap, throwError} from "rxjs";
+import {catchError, finalize, Observable, switchMap, throwError} from "rxjs";
 import {AuthService} from "../../auth/auth.service";
 import {constants} from "../../../constants/constants";
 import {environment} from "../../../../../environments/environment";
@@ -15,18 +15,37 @@ import {environment} from "../../../../../environments/environment";
 @Injectable({
   providedIn: 'root'
 })
+
 export class TokenInterceptorService implements HttpInterceptor{
 
   constructor(private inject:Injector, private service: AuthService, private httpClient: HttpClient) {}
-  /*intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let authservice=this.inject.get(AuthService);
     let jwtToken = request.clone({
       setHeaders: {
-        //Authorization: 'bearer '+authservice.GetAccessToken()
         Authorization: 'bearer '+localStorage.getItem('access_token')
       }
     });
-    console.log('interceptor içine girdi')
+    console.log('interceptor içine girdi');
+
+    return next.handle(jwtToken).pipe(
+      finalize(() => {
+        console.log('işlem tamamlandı')
+      })
+    );
+  }
+
+
+  /*
+    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    let authservice=this.inject.get(AuthService);
+    let jwtToken = request.clone({
+      setHeaders: {
+        Authorization: 'bearer '+localStorage.getItem('access_token')
+      }
+    });
+    console.log('interceptor içine girdi');
+
     return next.handle(jwtToken);
   }
   AddTokenHeader(request: HttpRequest<any>, token:any) {
@@ -34,21 +53,21 @@ export class TokenInterceptorService implements HttpInterceptor{
   }*/
 
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  /*intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let authService = this.inject.get(AuthService);
     let authReq = request;
-    authReq = this.AddTokenHeader(request, localStorage.getItem('access_token'))//authService.GetAccessToken());
+    authReq = this.AddTokenHeader(request, authService.GetAccessToken());
     return next.handle(authReq).pipe(
       catchError(errorData => {
         console.log(errorData)
         console.log('token interceptor alanına girdi')
-       /* if (errorData.status === 401) {
+        if (errorData.status === 401) {
           // need to implement logout
           //authservice.logout();
           // refresh token logic
           console.log('401 geldi refresh token alınması gerekiyor')
             return this.handleRefrehToken(request, next);
-        }*/
+        }
         return throwError(errorData);
       })
     );
@@ -70,6 +89,9 @@ export class TokenInterceptorService implements HttpInterceptor{
   AddTokenHeader(request: HttpRequest<any>, token: any) {
     return request.clone({ headers: request.headers.set('Authorization', 'bearer ' + token) });
   }
+*/
+
+
 
 }
 
