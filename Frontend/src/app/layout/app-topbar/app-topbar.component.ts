@@ -8,9 +8,25 @@ import {MenuItem} from "primeng/api";
 })
 export class AppTopbarComponent {
 
+
   menuItems: MenuItem[] | any ;
+  userMenu: MenuItem[] | any;
 
   ngOnInit() {
+    this.userMenu = [
+      {
+        label:'Kullanıcı adı',
+        icon:'pi pi-fw pi-box',
+        items:[
+          {
+            label:'Kullanıcı Profili',
+            icon:'pi pi-fw pi-book',
+            routerLink: ['/inventory/inventory-list']
+          },
+
+        ]
+      },
+    ];
     this.menuItems = [
       {
         label:'Envanter',
@@ -48,7 +64,6 @@ export class AppTopbarComponent {
           }
         ]
       },
-
       {
         label:'Tanımlamalar',
         icon:'pi pi-fw pi-bookmark',
@@ -99,9 +114,17 @@ export class AppTopbarComponent {
           }
         ]
       },
+
       {
-        label:'Quit',
-        icon:'pi pi-fw pi-power-off'
+        label:'Oturumu Kapat',
+        icon:'my-margin-left pi pi-fw pi-sign-out',
+        style: {'position': 'absolute', 'right': '2px'},
+        command: () => {
+          localStorage.removeItem('access_token')
+          localStorage.removeItem('refresh_token')
+          localStorage.clear();
+        },
+        routerLink: ['/auth/login']
       }
     ];
   }

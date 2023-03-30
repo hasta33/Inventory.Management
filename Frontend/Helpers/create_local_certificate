@@ -1,0 +1,31 @@
+Local ssl sertifikası oluşturma
+https://digitaldrummerj.me/angular-local-ssl/
+https://stackoverflow.com/questions/39210467/get-angular-cli-to-ng-serve-over-https
+
+
+1. certificate.config adında bir dosya oluşturulup içerisine aşağıdaki kodlar yapıştırılır.
+
+[req]
+default_bits = 2048
+prompt = no
+default_md = sha256
+x509_extensions = v3_req
+distinguished_name = dn
+
+[dn]
+C = US
+ST = AZ
+L = Phoenix
+O = My Organization
+OU = My Organization Unit
+emailAddress = email@domain.com
+CN = localhost
+
+[v3_req]
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = localhost
+
+2. ardından cmd ile aşağıdaki komutu çalıştır
+openssl req -new -x509 -newkey rsa:2048 -sha256 -nodes -keyout localhost.key -days 3560 -out localhost.crt -config certificate.config

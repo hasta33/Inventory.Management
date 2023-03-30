@@ -4,9 +4,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {AppLayoutModule} from "./layout/app-layout.module";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {RippleModule} from "primeng/ripple";
+import {TokenInterceptorService} from "./applications/service/interceptors/token-interceptor/token-interceptor.service";
+import {RequestInterceptorService} from "./applications/service/interceptors/request/request-interceptor.service";
 
 
 @NgModule({
@@ -22,7 +24,10 @@ import {RippleModule} from "primeng/ripple";
     BrowserAnimationsModule,
     RippleModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptorService, multi: true},
+  ],
   exports: [],
   bootstrap: [AppComponent]
 })

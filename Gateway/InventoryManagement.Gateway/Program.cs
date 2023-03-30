@@ -22,7 +22,7 @@ builder.Services.AddCors(options =>
 });
 #endregion
 
-builder.Configuration.AddJsonFile("ocelot.development.json", optional: false, reloadOnChange: true);
+builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
 
 
 

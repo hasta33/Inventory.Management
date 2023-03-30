@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {CompanyModel} from "../../models/company/company";
 import {catchError, Observable, retry, throwError} from "rxjs";
 import {constants} from "../../constants/constants";
+import {environment} from "../../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,16 @@ export class CompanyService {
 
   //#GetCompanyAllList {page}/{pageSize}
   getCompanyAllList(page: number, pageSize: number) {
+    /*const headers = new HttpHeaders({
+      'Authorization': `Bearer ${localStorage.getItem('access_permission_token')}`
+    })*/
+
+    let header = new HttpHeaders().set('Authorization', 'bearer '+ localStorage.getItem('access_permission_token'));
+
     return this.httpClient
-      .get<{data: CompanyModel[]}>(constants.GET_COMPANY_LIST_URL+`/${page}/${pageSize}/`)
+      //.get<{data: CompanyModel[]}>(constants.GET_COMPANY_LIST_URL+`/${page}/${pageSize}/`)
+      .get<{data: CompanyModel[]}>(constants.GET_COMPANY_LIST_URL+`/${page}/${pageSize}`, { headers: header } )
+      //, {headers: HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')}
       .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
   }
 
@@ -47,6 +56,7 @@ export class CompanyService {
   }
 
   private handleError(error: any) {
+    console.log(error.message)
     let errorMessage = '';
     if (error.errorMessage instanceof ErrorEvent) {
       errorMessage = error.error.errorMessage;

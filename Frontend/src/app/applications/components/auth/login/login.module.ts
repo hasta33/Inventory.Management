@@ -7,7 +7,9 @@ import {PasswordModule} from "primeng/password"; //sonradan eklendi
 import {CheckboxModule} from "primeng/checkbox"; //sonradan eklendi
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {RippleModule} from "primeng/ripple";
+import {ToastModule} from "primeng/toast";
 
 
 @NgModule({
@@ -21,7 +23,10 @@ import { FormsModule } from '@angular/forms';
     CheckboxModule,
     InputTextModule,
     FormsModule,
-    PasswordModule
+    PasswordModule,
+    ReactiveFormsModule,
+    RippleModule,
+    ToastModule
   ]
 })
 export class LoginModule { }

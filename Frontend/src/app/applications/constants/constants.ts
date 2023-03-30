@@ -2,7 +2,8 @@ import {environment} from "../../../environments/environment";
 
 export const constants = {
   //Keycloak Address
-  GET_PERSONEL_LIST : `${environment.gatewayUrl}/admin/realms/EneryaInventoryApiRealm`,
+  GET_PERSONEL_LIST : `${environment.gatewayUrl}/api/services/inventory/keycloak/user/`,
+  GET_TOKEN: `${environment.gatewayUrl}/api/services/inventory/keycloak/token`,
 
 
 
