@@ -1,6 +1,8 @@
 ﻿using InventoryManagement.Core.DTOs.Brand;
 using InventoryManagement.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace InventoryManagement.API.Controllers
 {
@@ -18,6 +20,7 @@ namespace InventoryManagement.API.Controllers
 
 
         [HttpGet("{companyId}/{page}/{pageSize}")]
+        [Authorize(Roles = "BrandRole", Policy = "brand#get")]
         public async Task<IActionResult> GetBrandList(int companyId, int page, int pageSize)
         {
             return CreateActionResult(await _service.GetBrandList(companyId, page, pageSize));
@@ -25,6 +28,7 @@ namespace InventoryManagement.API.Controllers
 
 
         [HttpGet("{companyId}")]
+        [Authorize(Roles = "BrandRole", Policy = "brand#get")]
         public async Task<IActionResult> GetBrandList(int companyId)
         {
             return CreateActionResult(await _service.GetBrandList(companyId));
@@ -32,12 +36,15 @@ namespace InventoryManagement.API.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "BrandRole", Policy = "brand#get")]
         public async Task<IActionResult> GetBrandAllList()
         {
             return CreateActionResult(await _service.GetBrandAllList());
         }
 
+
         [HttpPost]
+        [Authorize(Roles = "BrandRole", Policy = "brand#create")]
         public async Task<IActionResult> AddAsync([FromBody] BrandCreateDto dto)
         {
             return CreateActionResult(await _service.AddAsync(dto));
@@ -45,6 +52,7 @@ namespace InventoryManagement.API.Controllers
 
 
         [HttpPut]
+        [Authorize(Roles = "BrandRole", Policy = "brand#update")]
         public async Task<IActionResult> UpdateAsync([FromBody] BrandUpdateDto dto)
         {
             return CreateActionResult(await _service.UpdateAsync(dto));
@@ -52,6 +60,7 @@ namespace InventoryManagement.API.Controllers
 
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "BrandRole", Policy = "brand#delete")]
         public async Task<IActionResult> RemoveAsync(int id)
         {
             return CreateActionResult(await _service.RemoveAsync(id));

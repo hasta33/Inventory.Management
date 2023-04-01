@@ -15,7 +15,7 @@ builder.Services.AddOcelot();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
-        builder => builder.WithOrigins("https://localhost:4200", "http://localhost:4200") //"https://localhost:4200", "http://localhost:4200"
+        builder => builder.WithOrigins("https://localhost:4200", "http://localhost:4200")
         .AllowAnyMethod()
         .AllowAnyHeader()
         .WithMethods("Get", "Post", "Put", "Delete", "Options"));

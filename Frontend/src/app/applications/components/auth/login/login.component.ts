@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit{
               private route: Router,
               private messageService: MessageService ) { }
 
-  Login = new FormGroup({
+  loginGroup = new FormGroup({
     username: new FormControl("", Validators.required),
     password: new FormControl("", Validators.required)
   })
@@ -30,19 +30,18 @@ export class LoginComponent implements OnInit{
   ngOnInit(): void {
   }
 
-  ProceedLogin() {
-    if (this.Login.valid) {
-      this.service.ProceedLogin(this.Login.value)
+  Login() {
+    if (this.loginGroup.valid) {
+      this.service.Login(this.loginGroup.value)
         .subscribe({
           next: (response: any) => {
-            console.log(response)
-            localStorage.setItem('access_token', response.access_token)
-            localStorage.setItem('refresh_token', response.refresh_token)
+            window.sessionStorage.setItem('access_token', response.access_token);
+            window.sessionStorage.setItem('refresh_token', response.refresh_token);
             this.route.navigate(['']);
           },
           complete: () => { },
           error: (e) => {
-            console.log(e)
+            //console.log(e)
             this.messageService.add({ severity: 'error', summary: 'Hata', detail: `Kullanıcı adı veya şifre hatalı \n${e.error.error_description}`, life: constants.TOAST_ERROR_LIFETIME });
             this.messageService.clear('c');
           }
@@ -50,15 +49,3 @@ export class LoginComponent implements OnInit{
     }
   }
 }
-
-
-//console.log(this.Login.value);
-/*this.service.ProceedLogin(this.Login.value).subscribe(result => {
-  console.log(result)
-  if(result!=null){
-    //this.responseData = result;
-    localStorage.setItem('access_token', result.access_token)
-    localStorage.setItem('refresh_token', result.refresh_token)
-    this.route.navigate([''])
-  }
-});*/

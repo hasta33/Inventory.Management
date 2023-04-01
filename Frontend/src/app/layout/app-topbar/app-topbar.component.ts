@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {MenuItem} from "primeng/api";
+import {AuthService} from "../../applications/service/auth/auth.service";
 
 @Component({
   selector: 'app-app-topbar',
@@ -8,6 +9,7 @@ import {MenuItem} from "primeng/api";
 })
 export class AppTopbarComponent {
 
+  constructor(private authService: AuthService) { }
 
   menuItems: MenuItem[] | any ;
   userMenu: MenuItem[] | any;
@@ -114,17 +116,13 @@ export class AppTopbarComponent {
           }
         ]
       },
-
       {
         label:'Oturumu Kapat',
         icon:'my-margin-left pi pi-fw pi-sign-out',
         style: {'position': 'absolute', 'right': '2px'},
         command: () => {
-          localStorage.removeItem('access_token')
-          localStorage.removeItem('refresh_token')
-          localStorage.clear();
+          this.authService.logout();
         },
-        routerLink: ['/auth/login']
       }
     ];
   }

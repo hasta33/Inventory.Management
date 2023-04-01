@@ -5,6 +5,10 @@ export const constants = {
   GET_PERSONEL_LIST : `${environment.gatewayUrl}/api/services/inventory/keycloak/user/`,
   GET_TOKEN: `${environment.gatewayUrl}/api/services/inventory/keycloak/token`,
 
+  //access_token: "access_token",
+  //refresh_token: "refresh_token",
+  //access_permission_token: "access_permission_token",
+  //refresh_permission_token: "refresh_permission_token",
 
 
   //Company

@@ -23,10 +23,11 @@
         "EnableRateLimiting": true,
         "Period": "1m",
         "PeriodTimespan": 30,
-        "Limit": 10
+        "Limit": 100 //bunu daha sonra 10 yapacağız
       },
       "UpstreamHttpMethod": [ "POST" ]
     },
+
 
     // /admin/realms/EneryaInventoryApiRealm/users?username=test&first=5&max=10
     ////Keycloak get users - Body alanında access_token ile gönderilmelidir. http://localhost:2011/admin/realms/EneryaInventoryApiRealm/users
@@ -75,7 +76,7 @@
         "EnableRateLimiting": true,
         "Period": "1m",
         "PeriodTimespan": 30,
-        "Limit": 10
+        "Limit": 100 //Daha sonra 10 yapılacak
       },
       "UpstreamHttpMethod": [ "GET", "DELETE" ]
     },

@@ -141,8 +141,11 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("company#delete", builder => builder.AddRequirements(new RptRequirement("company", "delete")));
     #endregion
 
-    #region Category Permissions
-
+    #region Brand Permissions
+    options.AddPolicy("brand#get", builder => builder.AddRequirements(new RptRequirement("brand", "get")));
+    options.AddPolicy("brand#create", builder => builder.AddRequirements(new RptRequirement("brand", "create")));
+    options.AddPolicy("brand#update", builder => builder.AddRequirements(new RptRequirement("brand", "update")));
+    options.AddPolicy("brand#delete", builder => builder.AddRequirements(new RptRequirement("brand", "delete")));
     #endregion
 });
 
