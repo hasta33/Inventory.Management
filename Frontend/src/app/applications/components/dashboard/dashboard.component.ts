@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from "../../service/auth/auth.service";
-import {constants} from "../../constants/constants";
 import {MessageService} from "primeng/api";
-import {timer} from 'rxjs';
+import {AuthService} from "../../service/auth/auth.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -12,27 +10,34 @@ import {timer} from 'rxjs';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(private authService: AuthService, private messageService: MessageService) {}
+  constructor(private authService: AuthService) {
+  }
 
   ngOnInit() {
-    //timer(1000).subscribe(() => {
-    //  this.fonk();
-    //})
+    //this.getTokenPermissions();
   }
-/*
-  fonk() {
-    this.authService.GetTokenPermissions().subscribe({
-      next: (token: any) => {
-        window.sessionStorage.setItem('access_permission_token', token.access_token)
-        window.sessionStorage.setItem('refresh_permission_token', token.access_token)
-      },
-      complete: () => {
 
+
+  /*getTokenPermissions() {
+    this.authService.GetTokenPermissions().subscribe({
+      next:(response:any) => {
+        //console.log(response)
+        console.log('Auth Service: Dashboard')
+        window.sessionStorage.setItem('access_permission_token', response.access_token)
+        window.sessionStorage.setItem('refresh_permission_token', response.access_token);
       },
-      error: (e) => {
-        this.messageService.add({ severity: 'error', summary: 'Hata', detail: `Kullanıcı adı veya şifre hatalı \n${e.error.error_description}`, life: constants.TOAST_ERROR_LIFETIME });
-        this.messageService.clear('c');
+      complete: () => { },
+      error: (err) => {
+        console.log(err)
+        //authService.logout();
       }
     });
   }*/
+
+
+
+
+
+
+
 }

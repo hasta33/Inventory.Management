@@ -6,13 +6,13 @@ import {Observable} from "rxjs";
 @Injectable({
   providedIn: 'root'
 })
-export class RoleGuard implements CanActivate {
+export class RoleGuard {
   constructor(private service: AuthService, private route: Router) {
   }
 
   canActivate() {
     if(this.service.HaveAccess())
-    return true;
+      return true;
     else {
       this.route.navigate(['']);
       return false;
@@ -34,11 +34,12 @@ export class RoleGuard implements CanActivate {
           return false;
         }
       });
-
       return true;
     } else {
       this.route.navigate(['login']);
       return false;
     }
   }*/
+
+
 }

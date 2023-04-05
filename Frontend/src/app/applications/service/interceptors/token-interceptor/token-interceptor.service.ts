@@ -28,10 +28,11 @@ export class TokenInterceptorService implements HttpInterceptor{
     }
 
     if (request.headers.has('Login')) {
+      console.log('login istegi yapılıyor')
       request = this.AddTokenHeader(request, window.sessionStorage.getItem('access_token'))
       return next.handle(request).pipe(
         switchMap(() => {
-          timer(1000).subscribe(() => {
+          /*timer(1000).subscribe(() => {
             authService.GetTokenPermissions().subscribe({
               next:(response:any) => {
                 console.log(response)
@@ -44,7 +45,7 @@ export class TokenInterceptorService implements HttpInterceptor{
                 //authService.logout();
               }
             });
-          })
+          })*/
           return next.handle(request);
         }),
         catchError(errorData => {
@@ -55,20 +56,24 @@ export class TokenInterceptorService implements HttpInterceptor{
         })
       )
     } else if (request.headers.has('Permission')) {
+      console.log('Permission istegi yapılıyor')
       return next.handle(request).pipe(
         switchMap(e => {
           return next.handle(request);
         }),
         catchError(errorData => {
           if (errorData.status === 401) {
+            console.log(errorData)
             return this.handleRefreshToken(request, next);
           }
           return throwError(errorData)
         })
       );
     } else {
+      console.log('normal sayfa istegi yapılıyor')
       return next.handle(request).pipe(
         catchError((err) => {
+          console.log(err)
           if (err instanceof HttpErrorResponse) {
             if (err.status === 401) {
               //authService.logout();
@@ -78,8 +83,8 @@ export class TokenInterceptorService implements HttpInterceptor{
           }
           return throwError(err);
         })
-        )
-      }
+      )
+    }
   }
 
   handleRefreshToken(request: HttpRequest<any>, next: HttpHandler) {
@@ -87,6 +92,7 @@ export class TokenInterceptorService implements HttpInterceptor{
     return authService.GenerateRefreshToken().pipe(
       switchMap((data: any) => {
         authService.SaveTokens(data);
+        console.log('handleRefresh token alanına girdi')
         return next.handle(this.AddTokenHeader(request,data.jwtToken))
       }),
       catchError(errorData=>{

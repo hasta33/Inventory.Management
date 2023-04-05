@@ -13,6 +13,7 @@ export class AuthService {
               private router: Router) { }
 
   Login(UserCredentials: any): Observable<any> {
+    console.log('Auth Service: Login')
     const body = new HttpParams()
       .set('username', UserCredentials.username)
       .set('password', UserCredentials.password)
@@ -31,7 +32,7 @@ export class AuthService {
   }
 
   GetTokenPermissions() {
-    console.log('auth token permission')
+    console.log('Auth Service: Get Token Permissions')
     const body = new HttpParams()
       .set('grant_type', `${environment.keycloak_permissions_grant_type}`)
       .set('claim_token', `${window.sessionStorage.getItem('access_token')}`)
@@ -49,23 +50,29 @@ export class AuthService {
   }
 
   IsLoggedIn(){
+    console.log('Auth Service: IsLogged')
     return window.sessionStorage.getItem('access_token')!=null;
   }
 
+
   HaveAccess(){
-    const loginToken = window.sessionStorage.getItem('access_token') || '';
+    console.log('Auth Service: HaveAccess')
+    const loginToken = window.sessionStorage.getItem('access_permission_token') || '';
     const _extractedToken=loginToken.split('.')[1];
     const _atobData=atob(_extractedToken);
     const _finalData=JSON.parse(_atobData);
-    if(_finalData.role=='admin'){
-      return true
-    } else {
-      //alert('you not having access');
-      return false
-    }
+
+    //_finalData.resource_access.api_inventory.roles=='CompanyRole'
+      if(_finalData.role=='admin'){
+        return true
+      } else {
+        //alert('you not having access');
+        return false
+      }
   }
 
   GenerateRefreshToken() {
+    console.log('Auth Service: Generate Refresh Token')
     //console.log('generate refresh token alanına girdi')
     const input = new HttpParams()
       .set('client_id', `${environment.keycloak_client_id}`)
@@ -80,14 +87,17 @@ export class AuthService {
   }
 
   SaveTokens(tokenData: any) {
+    console.log('Auth Service: SaveTokens')
     window.sessionStorage.setItem('access_token', tokenData.jwtToken);
     window.sessionStorage.setItem('refresh_token', tokenData.refreshToken);
   }
 
   logout() {
+    console.log('Auth Service: Logout')
     //alert('Your session expired')
     //console.log('token süresi bitti')
     window.sessionStorage.clear();
     this.router.navigateByUrl('/login');
   }
+
 }

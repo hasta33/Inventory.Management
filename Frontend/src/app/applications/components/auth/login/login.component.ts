@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {constants} from "../../../constants/constants";
 import {MessageService} from "primeng/api";
+import {timer} from "rxjs";
 
 @Component({
   selector: 'app-login',
@@ -38,6 +39,24 @@ export class LoginComponent implements OnInit{
             window.sessionStorage.setItem('access_token', response.access_token);
             window.sessionStorage.setItem('refresh_token', response.refresh_token);
             this.route.navigate(['']);
+
+            if (!window.sessionStorage.getItem('access_permission_token')) {
+             // console.log('token yok')
+              timer(1000).subscribe(() => {
+                this.service.GetTokenPermissions().subscribe({
+                  next:(response:any) => {
+                    //console.log(response)
+                    window.sessionStorage.setItem('access_permission_token', response.access_token)
+                    window.sessionStorage.setItem('refresh_permission_token', response.access_token)
+                  },
+                  complete: () => { },
+                  error: (err) => {
+                    console.log(err)
+                    //authService.logout();
+                  }
+                });
+              })
+            }
           },
           complete: () => { },
           error: (e) => {

@@ -12,7 +12,6 @@ namespace InventoryManagement.API.Controllers
     public class CompanyController : CustomBaseController
     {
         private readonly ICompanyServiceWithDto _service;
-
         public CompanyController(ICompanyServiceWithDto service)
         {
             _service = service;
@@ -29,22 +28,11 @@ namespace InventoryManagement.API.Controllers
         
 
         [HttpGet("{companyId}/{page}/{pageSize}")]
-        //[Authorize(Roles = "CompanyRole", Policy = "company#get")]
-        [Authorize(Policy = "company#get")]
+        [Authorize(Roles = "CompanyRole", Policy = "company#get")]
         public async Task<IActionResult> GetCompanyListWithSubTables(int companyId, int page, int pageSize)
         {
             return CreateActionResult(await _service.GetCompanyListWithSubTables(companyId, page, pageSize));
         }
-
-
-
-        ////BU ALAN ŞİMDİLİK KULLANILMADI, FRONTEND TARAFINDA KULLANILACAK
-        //[HttpGet("{businessCode}")]
-        ////[Authorize(Roles = "SuperAdminRole", Policy = "company#get")]
-        //public async Task<IActionResult> GetCompanyWithCategoryListAsync(int businessCode)
-        //{
-        //    return CreateActionResult(await _service.GetCompanyWithCategoryListAsync(businessCode));
-        //}
 
 
 
@@ -72,6 +60,16 @@ namespace InventoryManagement.API.Controllers
         {
             return CreateActionResult(await _service.RemoveAsync(id));
         }
+
+
+        ////BU ALAN ŞİMDİLİK KULLANILMADI, FRONTEND TARAFINDA KULLANILACAK
+        //[HttpGet("{businessCode}")]
+        ////[Authorize(Roles = "SuperAdminRole", Policy = "company#get")]
+        //public async Task<IActionResult> GetCompanyWithCategoryListAsync(int businessCode)
+        //{
+        //    return CreateActionResult(await _service.GetCompanyWithCategoryListAsync(businessCode));
+        //}
+
 
 
 

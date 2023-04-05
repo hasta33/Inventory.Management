@@ -9,7 +9,7 @@ import {AuthService} from "../../applications/service/auth/auth.service";
 })
 export class AppTopbarComponent {
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, ) { }
 
   menuItems: MenuItem[] | any ;
   userMenu: MenuItem[] | any;

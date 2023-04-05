@@ -14,7 +14,7 @@ export class CompanyListComponent implements OnInit {
   constructor(
     private companyService: CompanyService,
     private messageService: MessageService,
-    private primengConfig: PrimeNGConfig) { }
+    private primengConfig: PrimeNGConfig ) { }
 
   //#table
   companyList: CompanyModel[] = [];
@@ -30,7 +30,6 @@ export class CompanyListComponent implements OnInit {
 
   clonedCompanyList: { [s: string]: CompanyModel } = {};
   rowCounter: number = 0;
-
 
   ngOnInit() {
     this.primengConfig.ripple = true;
@@ -50,6 +49,7 @@ export class CompanyListComponent implements OnInit {
       {label: 'Yenile', icon: 'pi pi-fw pi-refresh', command: () => this.getCompanyAllList()},
       {label: 'Şirketi sil', icon: 'pi pi-fw pi-times', command: () => this.showConfirm(this.selectedCompany)}
     ];
+
   }
 
 

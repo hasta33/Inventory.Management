@@ -5,7 +5,7 @@
 
   "Routes": [
 
-    // ------------------------------------ Keycloak -------------------------------------------
+    //------------------------------------ Keycloak -------------------------------------------
     // keycloak için ocelot çalışmıyor daha sonra kontrol edilecek ve gateway üzerinden çalışması sağlanacak
     //Keycloak - Get Access Token
     {
@@ -23,14 +23,12 @@
         "EnableRateLimiting": true,
         "Period": "1m",
         "PeriodTimespan": 30,
-        "Limit": 100 //bunu daha sonra 10 yapacağız
+        "Limit": 1000 //10 yapılacak
       },
       "UpstreamHttpMethod": [ "POST" ]
     },
-
-
     // /admin/realms/EneryaInventoryApiRealm/users?username=test&first=5&max=10
-    ////Keycloak get users - Body alanında access_token ile gönderilmelidir. http://localhost:2011/admin/realms/EneryaInventoryApiRealm/users
+    //Keycloak get users - Body alanında access_token ile gönderilmelidir. http://localhost:2011/admin/realms/EneryaInventoryApiRealm/users
     {
       "DownstreamPathTemplate": "/admin/realms/EneryaInventoryApiRealm/{everythings}",
       "DownstreamScheme": "http",
@@ -46,18 +44,17 @@
         "EnableRateLimiting": true,
         "Period": "1m",
         "PeriodTimespan": 300,
-        "Limit": 100
+        "Limit": 10000 //10 yapılacak
       },
       "UpstreamHttpMethod": [ "GET" ]
     },
-
-    // ------------------------------------ Keycloak -------------------------------------------
-
+    //------------------------------------ Keycloak -------------------------------------------
 
 
 
 
-    // ------------------------------------ Company -------------------------------------------
+
+    //------------------------------------ Company -------------------------------------------
     // Company DELETE - https://localhost:2001/api/services/inventory/company/idNumber
     // Company GET (GetCompanyListWithSubTables) - https://localhost:2001/api/services/inventory/company/{companyId}/{page}/{pageSize}
     // Company GET (GetCompanyAllList) - https://localhost:2001/api/services/inventory/company/{page}/{pageSize}
@@ -76,7 +73,7 @@
         "EnableRateLimiting": true,
         "Period": "1m",
         "PeriodTimespan": 30,
-        "Limit": 100 //Daha sonra 10 yapılacak
+        "Limit": 10
       },
       "UpstreamHttpMethod": [ "GET", "DELETE" ]
     },
@@ -116,7 +113,7 @@
       },
       "UpstreamHttpMethod": [ "PUT", "POST" ]
     },
-    // ------------------------------------ Company -------------------------------------------
+    //------------------------------------ Company -------------------------------------------
 
 
 
@@ -124,11 +121,8 @@
 
 
 
-    // ------------------------------------ Category -------------------------------------------
-
+    //------------------------------------ Category -------------------------------------------
     // Category - GetCategoryList {categoryId}
-    /*
-    */
     {
       "DownstreamPathTemplate": "/api/category",
       "DownstreamScheme": "https",
@@ -149,8 +143,6 @@
       "UpstreamHttpMethod": [ "GET" ]
     },
 
-
-    // ------------------------------------ Category -------------------------------------------
     /*
     Category GET (GetCategoryList) - https://localhost:2001/api/services/inventory/category/{companyId}/{page}/{pageSize}
     Category DELETE - https://localhost:2001/api/services/inventory/category/{categoryId}
@@ -174,8 +166,6 @@
       },
       "UpstreamHttpMethod": [ "GET", "DELETE" ]
     },
-
-
     /*
     Category POST - https://localhost:2001/api/services/inventory/category
     {
@@ -209,20 +199,19 @@
       },
       "UpstreamHttpMethod": [ "PUT", "POST" ]
     },
-    // ------------------------------------ Category -------------------------------------------
+    //------------------------------------ Category -------------------------------------------
 
 
 
 
 
-    // ------------------------------------ CategorySub ----------------------------------------
+    //------------------------------------ CategorySub ----------------------------------------
     /*
     CategorySub POST - https://localhost:2001/api/services/inventory/category
     {
       "name": "string",
       "categoryId": 0
     }
-
     CategorySub PUT - https://localhost:2001/api/services/inventory/category
     {
       "id": 0,
@@ -249,7 +238,6 @@
       },
       "UpstreamHttpMethod": [ "PUT", "POST" ]
     },
-
     //CategorySub DELETE - https://localhost:2001/api/services/inventory/categorySub/idNumber
     {
       "DownstreamPathTemplate": "/api/categorySub/{everythings}",
@@ -270,12 +258,14 @@
       },
       "UpstreamHttpMethod": [ "DELETE" ]
     },
-    // --------------------------------------- CategorySub -------------------------------------
+    //--------------------------------------- CategorySub -------------------------------------
 
 
 
 
-    // --------------------------------------- Brand -------------------------------------
+
+
+    //--------------------------------------- Brand -------------------------------------
     /*
     Brand GET (GetCategoryList) - https://localhost:2001/api/services/inventory/brand/{companyId}/{page}/{pageSize}
     Brand DELETE - https://localhost:2001/api/services/inventory/brand/{brandId}
@@ -352,13 +342,12 @@
       },
       "UpstreamHttpMethod": [ "PUT", "POST" ]
     },
-    // --------------------------------------- Brand -------------------------------------
+    //--------------------------------------- Brand -------------------------------------
 
 
 
 
-    // --------------------------------------- Model -------------------------------------
-
+    //--------------------------------------- Model -------------------------------------
     /*
     Model POST - https://localhost:2001/api/services/inventory/model
     {
@@ -413,14 +402,14 @@
       },
       "UpstreamHttpMethod": [ "DELETE" ]
     },
-    // --------------------------------------- Model -------------------------------------
+    //--------------------------------------- Model -------------------------------------
 
 
 
 
 
 
-    // --------------------------------------- Inventory -------------------------------------
+    //--------------------------------------- Inventory -------------------------------------
     /*
     Inventory GET (GetInventoryList) - https://localhost:2001/api/services/inventory/inventory/{page}/{pageSize}
     Inventory DELETE - https://localhost:2001/api/services/inventory/inventory/{id}
@@ -478,12 +467,12 @@
       },
       "UpstreamHttpMethod": [ "PUT", "POST" ]
     },
-    // --------------------------------------- Inventory -------------------------------------
+    //--------------------------------------- Inventory -------------------------------------
 
 
 
 
-    // --------------------------------------- InventoryMovement -------------------------------------
+    //--------------------------------------- InventoryMovement -------------------------------------
     {
       "DownstreamPathTemplate": "/api/inventorymovement/{everythings}",
       "DownstreamScheme": "https",
@@ -503,7 +492,7 @@
       },
       "UpstreamHttpMethod": [ "GET" ]
     }
-    // --------------------------------------- InventoryMovement -------------------------------------
+    //--------------------------------------- InventoryMovement -------------------------------------
 
   ]
 }

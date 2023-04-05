@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { CompanyListRoutingModule } from './company-list-routing.module';
 import { CompanyListComponent } from './company-list.component';
 import {TableModule} from "primeng/table";
@@ -11,9 +10,9 @@ import {ToastModule} from "primeng/toast";
 import {PaginatorModule} from "primeng/paginator";
 import {ContextMenuModule} from "primeng/contextmenu";
 import {RippleModule} from "primeng/ripple";
-//import { AddRowDirective } from '../../../directive/add-row.directive';
 import {AutoFocusModule} from 'primeng/autofocus';
 import {SharedModule} from "../../../directive/shared.module";
+import {DialogModule} from "primeng/dialog";
 
 @NgModule({
     declarations: [
@@ -23,19 +22,20 @@ import {SharedModule} from "../../../directive/shared.module";
     /*exports: [
         AddRowDirective
     ],*/
-    imports: [
-        CommonModule,
-        CompanyListRoutingModule,
-        TableModule,
-        InputTextModule,
-        ButtonModule,
-        FormsModule,
-        ToastModule,
-        PaginatorModule,
-        ContextMenuModule,
-        RippleModule,
-        AutoFocusModule,
-        SharedModule
-    ]
+  imports: [
+    CommonModule,
+    CompanyListRoutingModule,
+    TableModule,
+    InputTextModule,
+    ButtonModule,
+    FormsModule,
+    ToastModule,
+    PaginatorModule,
+    ContextMenuModule,
+    RippleModule,
+    AutoFocusModule,
+    SharedModule,
+    DialogModule
+  ]
 })
 export class CompanyListModule { }
