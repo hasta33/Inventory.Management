@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { AccessRoutingModule } from './access-routing.module';
 import { AccessComponent } from './access.component';
+import {ButtonModule} from "primeng/button";
+import {RippleModule} from "primeng/ripple";
 
 
 @NgModule({
@@ -11,7 +13,9 @@ import { AccessComponent } from './access.component';
   ],
   imports: [
     CommonModule,
-    AccessRoutingModule
+    AccessRoutingModule,
+    ButtonModule,
+    RippleModule
   ]
 })
 export class AccessModule { }

@@ -8,7 +8,6 @@ import {AuthService} from "../service/auth/auth.service";
 export class RoleGuard {
   constructor(private service: AuthService, private route: Router) {
   }
-  private el: HTMLDivElement | undefined;
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     if(!this.service.IsLoggedIn()) {

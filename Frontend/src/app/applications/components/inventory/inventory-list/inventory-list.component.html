@@ -100,7 +100,6 @@
            [rows]="pageSize"
            [loading]="loading"
            [filterDelay]="0"
-           [globalFilterFields]="['name','description','businessCode']"
            [scrollable]="true"
            scrollHeight="flex"
            [contextMenu]="cm"
@@ -160,7 +159,7 @@
                       </p-dropdown>
                     </div>
                     <div class="flex align-items-start justify-content-start m-0">
-                      <p-inputNumber id="barcodeName"
+                      <p-inputNumber id="barcode"
                                      inputId="withoutgrouping"
                                      mode="decimal"
                                      [(ngModel)]="selectedBarcode"

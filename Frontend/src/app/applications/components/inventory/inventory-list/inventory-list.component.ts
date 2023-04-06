@@ -191,7 +191,7 @@ export class InventoryListComponent implements OnInit {
       })
   }
   keyDownFunction(event: any) {
-    console.log(event)
+    //console.log(event)
     if (event.keyCode === 13) {
       this.searchInventory();
     }
@@ -199,7 +199,8 @@ export class InventoryListComponent implements OnInit {
 
   //InventoryDetail
   onDetailInventory(event: any) {
-    console.log(event)
+    console.log(event);
+    this.inventoryDetail = true;
   }
 
 

@@ -8,7 +8,7 @@ import {
 } from "@angular/common/http";
 import {catchError, Observable, switchMap, throwError} from "rxjs";
 import {AuthService} from "../../auth/auth.service";
-import {timer} from 'rxjs';
+import {ActivatedRouteSnapshot, Router, RouterStateSnapshot} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ import {timer} from 'rxjs';
 
 export class TokenInterceptorService implements HttpInterceptor{
 
-  constructor(private inject:Injector) {}
+  constructor(private inject:Injector, private route: Router) {}
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let authService = this.inject.get(AuthService);
 
@@ -28,7 +28,7 @@ export class TokenInterceptorService implements HttpInterceptor{
     }
 
     if (request.headers.has('Login')) {
-      console.log('login istegi yapılıyor')
+      //console.log('login istegi yapılıyor')
       request = this.AddTokenHeader(request, window.sessionStorage.getItem('access_token'))
       return next.handle(request).pipe(
         switchMap(() => {
@@ -56,7 +56,7 @@ export class TokenInterceptorService implements HttpInterceptor{
         })
       )
     } else if (request.headers.has('Permission')) {
-      console.log('Permission istegi yapılıyor')
+      //console.log('Permission istegi yapılıyor')
       return next.handle(request).pipe(
         switchMap(e => {
           return next.handle(request);
@@ -70,7 +70,7 @@ export class TokenInterceptorService implements HttpInterceptor{
         })
       );
     } else {
-      console.log('normal sayfa istegi yapılıyor')
+      //console.log('normal sayfa istegi yapılıyor')
       return next.handle(request).pipe(
         catchError((err) => {
           //console.log(err)
@@ -80,6 +80,8 @@ export class TokenInterceptorService implements HttpInterceptor{
               // redirect user to the logout page
               //console.log('TokenInterceptor: bu alan 401 geldi tekrar aktif edilecek')
               return this.handleRefreshToken(request, next);
+            } else if (err.status === 403) {
+              this.route.navigate(['auth/access']);
             }
           }
           return throwError(err);
@@ -93,7 +95,7 @@ export class TokenInterceptorService implements HttpInterceptor{
     return authService.GenerateRefreshToken().pipe(
       switchMap((data: any) => {
         authService.SaveTokens(data);
-        console.log('handleRefresh token alanına girdi')
+        //console.log('handleRefresh token alanına girdi')
         return next.handle(this.AddTokenHeader(request,data.jwtToken))
       }),
       catchError(errorData=>{
