@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
+import {ActivatedRouteSnapshot, Router, RouterStateSnapshot} from '@angular/router';
 import {AuthService} from "../service/auth/auth.service";
-import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -9,37 +8,27 @@ import {Observable} from "rxjs";
 export class RoleGuard {
   constructor(private service: AuthService, private route: Router) {
   }
+  private el: HTMLDivElement | undefined;
 
-  canActivate() {
-    if(this.service.HaveAccess())
-      return true;
-    else {
-      this.route.navigate(['']);
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    if(!this.service.IsLoggedIn()) {
+      this.route.navigate(['auth/login'])
       return false;
     }
+
+    const roles  = route.data['roles'];//make sure you are getting the roles here
+    if(!roles?.length){
+      return true; //no role applied on route so just return true
+    }
+    const userRoles = this.service.getRoles();
+    let isAuthorised=!!userRoles?.length && roles.some((r: any)=>userRoles.includes(r))
+    if (isAuthorised) {
+      // authorized so return true
+      //console.log('RoleGuard: user authorized')
+      return true;
+    }
+    //console.log('RoleGuard: login değil');
+    this.route.navigate(['auth/access'], { queryParams: { returnUrl: state.url } });
+    return false;
   }
-
-  /*canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (this.service.IsLoggedIn()) {
-      this.currentrole = this.service.GetRolebyToken(this.service.GetToken());
-      this.service.HaveAccess(this.currentrole, route.url[0].path).subscribe(result => {
-        this.respdata = result;
-        if (this.respdata.result == 'pass') {
-          return true;
-        } else {
-          this.route.navigate(['']);
-          alert('unauthorized access');
-          return false;
-        }
-      });
-      return true;
-    } else {
-      this.route.navigate(['login']);
-      return false;
-    }
-  }*/
-
-
 }

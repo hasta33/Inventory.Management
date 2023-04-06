@@ -73,11 +73,12 @@ export class TokenInterceptorService implements HttpInterceptor{
       console.log('normal sayfa istegi yapılıyor')
       return next.handle(request).pipe(
         catchError((err) => {
-          console.log(err)
+          //console.log(err)
           if (err instanceof HttpErrorResponse) {
             if (err.status === 401) {
-              //authService.logout();
+              authService.logout();
               // redirect user to the logout page
+              //console.log('TokenInterceptor: bu alan 401 geldi tekrar aktif edilecek')
               return this.handleRefreshToken(request, next);
             }
           }

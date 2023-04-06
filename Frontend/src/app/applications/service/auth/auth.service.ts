@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {constants} from "../../constants/constants";
 import {Observable} from "rxjs";
@@ -99,5 +99,18 @@ export class AuthService {
     window.sessionStorage.clear();
     this.router.navigateByUrl('/login');
   }
+
+
+  //Bu alan test alanı
+  getRoles() {
+    const loginToken = window.sessionStorage.getItem('access_permission_token') || '';
+    const _extractedToken=loginToken.split('.')[1];
+    const _atobData=atob(_extractedToken);
+    const _finalData=JSON.parse(_atobData);
+    return _finalData.resource_access.api_inventory.roles;
+  }
+  //
+
+
 
 }

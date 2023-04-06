@@ -18,7 +18,7 @@ namespace InventoryManagement.API.Controllers
 
 
         [HttpGet("{companyId}/{page}/{pageSize}")]
-        //[Authorize(Roles = "SuperAdminRole", Policy = "company#get")]
+        [Authorize(Roles = "CategoryRole", Policy = "category#get")]
         public async Task<IActionResult> GetCategoryList(int companyId, int page, int pageSize)
         {
             return CreateActionResult( await _service.GetCategoryList(companyId, page, pageSize));
@@ -27,27 +27,28 @@ namespace InventoryManagement.API.Controllers
 
        
         [HttpGet("{companyId}")]
-       // [Authorize(Roles = "SuperAdminRole", Policy = "company#get")]
+        [Authorize(Roles = "CategoryRole", Policy = "category#get")]
         public async Task<IActionResult> GetCategoryList(int companyId)
         {
             return CreateActionResult(await _service.GetCategoryList(companyId));
         }
 
         [HttpGet]
+        [Authorize(Roles = "CategoryRole", Policy = "category#get")]
         public async Task<IActionResult> GetCategoryAllList()
         {
             return CreateActionResult(await _service.GetCategoryAllList());
         }
 
         [HttpPost]
-        //[Authorize(Roles = "SuperAdminRole", Policy = "company#create")]
+        [Authorize(Roles = "CategoryRole", Policy = "category#create")]
         public async Task<IActionResult> AddAsync([FromBody] CategoryCreateDto dto)
         {
             return CreateActionResult(await _service.AddAsync(dto));
         }
 
         [HttpPut]
-        //[Authorize(Roles = "SuperAdminRole", Policy = "company#update")]
+        [Authorize(Roles = "CategoryRole", Policy = "category#update")]
         public async Task<IActionResult> UpdateAsync([FromBody] CategoryUpdateDto dto)
         {
             return CreateActionResult(await _service.UpdateAsync(dto));
@@ -56,7 +57,7 @@ namespace InventoryManagement.API.Controllers
 
 
         [HttpDelete("{id}")]
-        //[Authorize(Roles = "SuperAdminRole", Policy = "company#delete")]
+        [Authorize(Roles = "CategoryRole", Policy = "category#delete")]
         public async Task<IActionResult> RemoveAsync(int id)
         {
             return CreateActionResult(await _service.RemoveAsync(id));

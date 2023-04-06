@@ -147,6 +147,22 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("brand#update", builder => builder.AddRequirements(new RptRequirement("brand", "update")));
     options.AddPolicy("brand#delete", builder => builder.AddRequirements(new RptRequirement("brand", "delete")));
     #endregion
+
+    #region Inventory Permissions
+    options.AddPolicy("inventory#get", builder => builder.AddRequirements(new RptRequirement("inventory", "get")));
+    options.AddPolicy("inventory#create", builder => builder.AddRequirements(new RptRequirement("inventory", "create")));
+    options.AddPolicy("inventory#update", builder => builder.AddRequirements(new RptRequirement("inventory", "update")));
+    options.AddPolicy("inventory#delete", builder => builder.AddRequirements(new RptRequirement("inventory", "delete")));
+    #endregion
+
+    #region Category Permissions
+    options.AddPolicy("category#get", builder => builder.AddRequirements(new RptRequirement("category", "get")));
+    options.AddPolicy("category#create", builder => builder.AddRequirements(new RptRequirement("category", "create")));
+    options.AddPolicy("category#update", builder => builder.AddRequirements(new RptRequirement("category", "update")));
+    options.AddPolicy("category#delete", builder => builder.AddRequirements(new RptRequirement("category", "delete")));
+    #endregion
+
+
 });
 
 builder.Services.AddHttpClient<KeycloakServiceTest>(client =>

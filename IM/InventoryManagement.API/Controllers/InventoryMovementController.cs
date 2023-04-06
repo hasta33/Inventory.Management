@@ -1,5 +1,4 @@
-﻿using InventoryManagement.Core.DTOs.Category;
-using InventoryManagement.Core.DTOs.InventoryMovement;
+﻿using InventoryManagement.Core.DTOs.InventoryMovement;
 using InventoryManagement.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
