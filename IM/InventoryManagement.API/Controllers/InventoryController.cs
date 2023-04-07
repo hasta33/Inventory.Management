@@ -1,5 +1,6 @@
 ﻿using InventoryManagement.Core.DTOs;
 using InventoryManagement.Core.DTOs.Inventory;
+using InventoryManagement.Core.DTOs.InventoryMovement;
 using InventoryManagement.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,12 @@ namespace InventoryManagement.API.Controllers
     public class InventoryController : CustomBaseController
     {
         private readonly IInventoryServiceWithDto _service;
+        //private readonly IInventoryMovementServiceWithDto _movementService;
 
         public InventoryController(IInventoryServiceWithDto service)
         {
             _service = service;
+            //_movementService = movementService;
         }
 
 
@@ -32,8 +35,15 @@ namespace InventoryManagement.API.Controllers
         [Authorize(Roles = "InventoryRole", Policy = "inventory#create")]
         public async Task<IActionResult> AddAsync([FromBody] InventoryCreateDto dto)
         {
+            //var movement = new InventoryMovementCreateDto()
+            //{
+            //    Company = dto.CompanyId.ToString(),
+
+            //};
             return CreateActionResult(await _service.AddAsync(dto));
         }
+
+
 
         [HttpPut]
         [Authorize(Roles = "InventoryRole", Policy = "inventory#update")]
@@ -41,6 +51,8 @@ namespace InventoryManagement.API.Controllers
         {
             return CreateActionResult(await _service.UpdateAsync(dto));
         }
+
+
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "InventoryRole", Policy = "inventory#delete")]

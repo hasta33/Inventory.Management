@@ -11,10 +11,16 @@ namespace InventoryManagement.Repository.Configurations
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).UseIdentityColumn();
             builder.Property(x => x.InventoryId).IsRequired();
+            builder.Property(x => x.Perpetrator).HasMaxLength(250);
             builder.Property(x => x.Process).HasMaxLength(250);
             builder.Property(x => x.Company).HasMaxLength(250);
-            builder.Property(x => x.ResponsibleUser).HasMaxLength(250);
             builder.Property(x => x.Description).HasMaxLength(250);
+            builder.Property(x => x.EmbezzledUser).HasMaxLength(250);
+
+            //builder.Property(x => x.Process).HasMaxLength(250);
+            //builder.Property(x => x.Company).HasMaxLength(250);
+            //builder.Property(x => x.ResponsibleUser).HasMaxLength(250);
+            //builder.Property(x => x.Description).HasMaxLength(250);
 
             builder.ToTable(nameof(InventoryMovement));
 

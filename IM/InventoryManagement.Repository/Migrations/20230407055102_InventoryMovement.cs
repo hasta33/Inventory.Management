@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace InventoryManagement.Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class InventoryMovements : Migration
+    public partial class InventoryMovement : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,10 +18,11 @@ namespace InventoryManagement.Repository.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     InventoryId = table.Column<int>(type: "int", nullable: false),
+                    Perpetrator = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     Process = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     Company = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    ResponsibleUser = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    EmbezzledUser = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     BusinessCode = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)

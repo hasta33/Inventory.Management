@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {catchError, Observable, retry, throwError} from "rxjs";
 import {InventoryListParameters, InventoryModel} from "../../models/inventory/inventory";
 import {constants} from "../../constants/constants";
-import {PersonelListModel} from "../../models/personel-list/personel-list";
+import {PersonalListModel} from "../../models/personal-list/personal-list";
 
 @Injectable({
   providedIn: 'root'
@@ -59,9 +59,9 @@ export class InventoryService {
       .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
   }
 
-  getPersonelList(username: string) { //</users?username=test&first=5&max=10
+  getPersonalList(username: string) { //</users?username=test&first=5&max=10
     return this.httpClient
-      .get<{data: PersonelListModel}>(constants.GET_PERSONEL_LIST + `users?${username}&first=5&max=10`)
+      .get<{data: PersonalListModel}>(constants.GET_PERSONEL_LIST + `users?${username}&first=5&max=5`)
       .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
   }
 

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {InventoryService} from "../../../service/inventory/inventory.service";
 import {InventoryModel} from "../../../models/inventory/inventory";
 import {MenuItem, MessageService, PrimeNGConfig} from "primeng/api";
@@ -10,15 +10,18 @@ import {CategoryModel} from "../../../models/category/category";
 import {BrandService} from "../../../service/brand/brand.service";
 import {BrandModel} from "../../../models/brand/brand";
 import {Router} from "@angular/router";
-import {PersonelListModel} from "../../../models/personel-list/personel-list";
+import {DialogService, DynamicDialogRef} from "primeng/dynamicdialog";
+import {EmbezzledComponent} from "../embezzled/embezzled.component";
+import {InventoryMovementModel} from "../../../models/inventory/inventory-movement";
 
 @Component({
   selector: 'app-inventory-list',
   templateUrl: './inventory-list.component.html',
   styleUrls: ['./inventory-list.component.scss'],
-  providers: [MessageService]
+  providers: [MessageService, DialogService],
 })
-export class InventoryListComponent implements OnInit {
+
+export class InventoryListComponent implements OnInit, OnDestroy {
   inventoryList: InventoryModel[] = [];
   page: number = 1;
   pageSize: number = 100;
@@ -59,12 +62,17 @@ export class InventoryListComponent implements OnInit {
   inventoryDetail: boolean = false;
 
   //personel List
-  personelList: PersonelListModel[] = [];
+  //personelList: PersonelListModel[] = [];
+
+  //Zimmet dialog
+  embezzledRef: DynamicDialogRef | undefined;
+
 
   constructor(
     private router: Router,
-    private inventoryService: InventoryService,
     private primengConfig: PrimeNGConfig,
+    private dialogService: DialogService,
+    private inventoryService: InventoryService,
     private messageService: MessageService,
     private companyService: CompanyService,
     private categoryService: CategoryService,
@@ -78,7 +86,7 @@ export class InventoryListComponent implements OnInit {
       { label: 'Detaylara Git', icon: 'pi pi-fw pi-angle-right', command: () => this.inventoryDetail = true  },
       { label: 'İşlemler', icon: 'pi pi-fw pi-info',
         items: [
-          { label: 'Zimmetle', icon: 'pi pi-fw pi-user-plus',  },
+          { label: 'Zimmetle', icon: 'pi pi-fw pi-user-plus', command: () => this.embezzledShow() },
           { label: 'Zimmet Teslim Al', icon: 'pi pi-fw pi-refresh',  },
           { label: 'Servise Gönder', icon: 'pi pi-fw pi-cog',  },
           { label: 'Transfer Et', icon: 'pi pi-fw pi-car',  },
@@ -91,7 +99,14 @@ export class InventoryListComponent implements OnInit {
 
     this.searchInventory();
   }
+  ngOnDestroy() {
+    if(this.embezzledRef) {
+      this.embezzledRef.close();
+    }
+  }
 
+
+  //Company Start
   getCompanyAllList() {
     this.companyService.getCompanyAllList(this.page, this.pageSize).subscribe({
       next: (data) => {
@@ -110,8 +125,11 @@ export class InventoryListComponent implements OnInit {
   onRowCompanySelect(event: any) {
     this.selectedCompany = event?.value;
   }
+  //Company End
 
-  //Category
+
+
+  //Category Start
   getCategoryAllList() {
     this.categoryService.getCategoryAllList().subscribe({
       next: (data) => {
@@ -133,10 +151,11 @@ export class InventoryListComponent implements OnInit {
   setDataCategorySub(event: any) {
     this.selectedCategorySub = event?.value;
   }
+  //Category End
 
 
 
-  //Brand
+  //Brand Start
   getBrandAllList() {
     this.brandService.getBrandAllList().subscribe({
       next: (data) => {
@@ -158,6 +177,8 @@ export class InventoryListComponent implements OnInit {
   setDataModel(event: any) {
     this.selectedModel = event?.value;
   }
+  //Brand End
+
 
   searchInventory(){
     this.inventoryService
@@ -197,29 +218,40 @@ export class InventoryListComponent implements OnInit {
     }
   }
 
+
+
+
+  embezzledShow() {
+    this.embezzledRef = this.dialogService.open(EmbezzledComponent, {
+      header: 'Zimmetlenecek personel seç',
+      width: '70%',
+      contentStyle: { overflow: 'auto' },
+      baseZIndex: 10000,
+      maximizable: true
+    });
+
+    this.embezzledRef.onClose.subscribe((product: InventoryMovementModel) => {
+      if (product) {
+        this.messageService.add({ severity: 'info', summary: 'Product Selected', detail: product.embezzledUser });
+      }
+    });
+
+    this.embezzledRef.onMaximize.subscribe((value) => {
+      this.messageService.add({ severity: 'info', summary: 'Maximized', detail: `maximized: ${value.maximized}` });
+    });
+  }
+
+
+
+
+
   //InventoryDetail
   onDetailInventory(event: any) {
-    console.log(event);
+    this.selectedRow = event;
     this.inventoryDetail = true;
   }
 
 
-  //getPersonelList
-  getPersonelList(username: string) {
-    this.inventoryService.getPersonelList(username).subscribe({
-      next: (data) => {
-        console.log(data);
-      },
-      complete: () => {
-        this.loading = false;
-      },
-      error: (e) => {
-        this.messageService.add({ severity: 'error', summary: 'Hata', detail: `Personel listesi alınamadı \n${e}`, life: constants.TOAST_ERROR_LIFETIME });
-        this.messageService.clear('c');
-        this.loading = false;
-      }
-    });
-  }
 
 
 

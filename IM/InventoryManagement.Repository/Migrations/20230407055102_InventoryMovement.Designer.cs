@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagement.Repository.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230324112319_InventoryMovements")]
-    partial class InventoryMovements
+    [Migration("20230407055102_InventoryMovement")]
+    partial class InventoryMovement
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -255,15 +255,20 @@ namespace InventoryManagement.Repository.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<int>("InventoryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Process")
+                    b.Property<string>("EmbezzledUser")
                         .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<string>("ResponsibleUser")
+                    b.Property<int>("InventoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Perpetrator")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("Process")
                         .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");

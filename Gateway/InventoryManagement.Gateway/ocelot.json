@@ -491,6 +491,25 @@
         "Limit": 10
       },
       "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/inventorymovement",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/inventorymovement",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "POST" ]
     }
     //--------------------------------------- InventoryMovement -------------------------------------
 

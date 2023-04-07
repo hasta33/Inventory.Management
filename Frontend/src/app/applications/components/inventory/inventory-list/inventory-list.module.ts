@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { InventoryListRoutingModule } from './inventory-list-routing.module';
@@ -16,32 +16,37 @@ import {MessageModule} from "primeng/message";
 import {PaginatorModule} from "primeng/paginator";
 import {ToastModule} from "primeng/toast";
 import {ContextMenuModule} from "primeng/contextmenu";
-import {DialogModule} from "primeng/dialog";
 import {TabViewModule} from "primeng/tabview";
+import {DialogModule} from "primeng/dialog";
+import {EmbezzledComponent} from "../embezzled/embezzled.component";
 
 
 @NgModule({
-  declarations: [
-    InventoryListComponent
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
   ],
-    imports: [
-        CommonModule,
-        InventoryListRoutingModule,
-        TableModule,
-        ButtonModule,
-        InputTextModule,
-        CardModule,
-        DropdownModule,
-        InputNumberModule,
-        FormsModule,
-        RippleModule,
-        OverlayPanelModule,
-        MessageModule,
-        PaginatorModule,
-        ToastModule,
-        ContextMenuModule,
-        DialogModule,
-        TabViewModule
-    ]
+  declarations: [
+    InventoryListComponent,
+    EmbezzledComponent
+  ],
+  imports: [
+    CommonModule,
+    InventoryListRoutingModule,
+    TableModule,
+    ButtonModule,
+    InputTextModule,
+    CardModule,
+    DropdownModule,
+    InputNumberModule,
+    FormsModule,
+    RippleModule,
+    OverlayPanelModule,
+    MessageModule,
+    PaginatorModule,
+    ToastModule,
+    ContextMenuModule,
+    TabViewModule,
+    DialogModule,
+  ]
 })
 export class InventoryListModule { }

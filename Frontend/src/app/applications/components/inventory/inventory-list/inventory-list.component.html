@@ -5,69 +5,69 @@
 
 
 <ng-template [ngIf]="inventoryDetail == true">
-  <p-dialog header="{{selectedRow.barcode + ' ' +selectedRow.name}}" [(visible)]="inventoryDetail" [style]="{ width: '100vw', height: '100vh' }">
+  <p-dialog header="{{selectedRow?.barcode + ' ' +selectedRow?.name}}" [(visible)]="inventoryDetail" [style]="{ width: '100vw', height: '100vh' }">
     <p-tabView>
       <p-tabPanel header="Envanter Bilgileri">
+
         <div class="field grid">
           <label class="col-fixed" style="width:100px">Barkod</label>
           <div class="col">
-            <label class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow.barcode}}</label>
+            <label class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow?.barcode}}</label>
           </div>
         </div>
 
         <div class="field grid">
           <label class="col-fixed" style="width:100px">Cihaz Adı</label>
           <div class="col">
-            <label class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow.name}}</label>
+            <label class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow?.name}}</label>
           </div>
         </div>
 
         <div class="field grid">
           <label class="col-fixed" style="width:100px">Seri Numarası</label>
           <div class="col">
-            <label class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow.serialNumber}}</label>
+            <label class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow?.serialNumber}}</label>
           </div>
         </div>
 
         <div class="field grid">
           <label class="col-fixed" style="width:100px">Imei</label>
           <div class="col">
-            <label class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow.imei}}</label>
+            <label class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow?.imei}}</label>
           </div>
         </div>
 
         <div class="field grid">
           <label class="col-fixed" style="width:100px">Mac</label>
           <div class="col">
-            <label class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow.mac}}</label>
+            <label class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow?.mac}}</label>
           </div>
         </div>
 
         <div class="field grid">
           <label class="col-fixed" style="width:100px">Kayıt Tarihi</label>
           <div class="col">
-            <label  class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow.inventoryDate | date:"dd.mm.yyyy HH:mm:ss"}}</label>
+            <label  class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow?.inventoryDate | date:"dd.mm.yyyy HH:mm:ss"}}</label>
           </div>
         </div>
 
         <div class="field grid">
           <label class="col-fixed" style="width:100px">Fatura Tarihi</label>
           <div class="col">
-            <label class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow.invoiceDate | date:"dd.mm.yyyy HH:mm:ss"}}</label>
+            <label class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow?.invoiceDate | date:"dd.mm.yyyy HH:mm:ss"}}</label>
           </div>
         </div>
 
         <div class="field grid">
           <label class="col-fixed" style="width:100px">Son Güncelleme</label>
           <div class="col">
-            <label class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow.updatedDate | date:"dd.mm.yyyy HH:mm:ss"}}</label>
+            <label class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary" style="width:100px">{{selectedRow?.updatedDate | date:"dd.mm.yyyy HH:mm:ss"}}</label>
           </div>
         </div>
-
       </p-tabPanel>
 
       <p-tabPanel header="Zimmet">
-        <p>Zimmet işlemleri        </p>
+        <p>Zimmet işlemleri</p>
       </p-tabPanel>
 
       <p-tabPanel header="Cihaz Hareketleri">
@@ -271,7 +271,6 @@
         <td>
           <div class="flex align-items-center justify-content-center gap-2">
             <button (click)="onDetailInventory(rowDataInventory)" class="p-button-rounded p-button-text" icon="pi pi-book" pButton pRipple type="button"></button>
-            <!-- <button class="p-button-rounded p-button-text p-button-secondary" icon="pi pi-list" pButton pRipple></button> -->
           </div>
         </td>
       </tr>

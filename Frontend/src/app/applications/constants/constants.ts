@@ -53,6 +53,7 @@ export const constants = {
 
   //Inventory Movement
   GET_INVENTORY_MOVEMENT_URL : `${environment.gatewayUrl}/api/services/inventory/inventorymovement`,
+  POST_INVENTORY_MOVEMENT: `${environment.gatewayUrl}/api/services/inventory/inventorymovement`,
 
 
   TOAST_ERROR_LIFETIME:5000, //Toast timeout

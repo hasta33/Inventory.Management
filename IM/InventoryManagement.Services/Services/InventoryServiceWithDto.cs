@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using InventoryManagement.Core.DTOs;
 using InventoryManagement.Core.DTOs.Inventory;
+using InventoryManagement.Core.DTOs.InventoryMovement;
 using InventoryManagement.Core.Models;
 using InventoryManagement.Core.Repositories;
 using InventoryManagement.Core.Services;
@@ -12,9 +13,11 @@ namespace InventoryManagement.Services.Services
     public class InventoryServiceWithDto : ServiceWithDto<Inventory, InventoryDto>, IInventoryServiceWithDto
     {
         private readonly IInventoryRepository _inventoryRepository;
+        //private readonly IInventoryMovementRepository _inventoryMovementRepository;
         public InventoryServiceWithDto(IGenericRepository<Inventory> repository, IUnitOfWork unitOfWork, IMapper mapper, IInventoryRepository inventoryRepository) : base(repository, unitOfWork, mapper)
         {
             _inventoryRepository = inventoryRepository;
+            //_inventoryMovementRepository = inventoryMovementRepository;
         }
 
         public async Task<CustomResponseDto<InventoryDto>> AddAsync(InventoryCreateDto dto)
@@ -22,6 +25,12 @@ namespace InventoryManagement.Services.Services
             var newEntity = _mapper.Map<Inventory>(dto);
             await _inventoryRepository.AddAsync(newEntity);
             await _unitOfWork.CommitAsync();
+
+            ////Movement add
+            //var newMovementEntity = _mapper.Map<InventoryMovement>(dto);
+            //await _inventoryMovementRepository.AddAsync(newMovementEntity);
+            //await _unitOfWork.CommitAsync();
+            ////movement add end
 
             var newDto = _mapper.Map<InventoryDto>(newEntity);
             return CustomResponseDto<InventoryDto>.Success(StatusCodes.Status200OK, newDto);

@@ -1,4 +1,4 @@
-export class PersonelListModel {
+export class PersonalListModel {
   id: string | any;
   userName: string | any;
   firstName: string | any;

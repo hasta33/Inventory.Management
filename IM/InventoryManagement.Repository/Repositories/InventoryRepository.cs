@@ -2,7 +2,6 @@
 using InventoryManagement.Core.Models;
 using InventoryManagement.Core.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography.X509Certificates;
 
 namespace InventoryManagement.Repository.Repositories
 {
