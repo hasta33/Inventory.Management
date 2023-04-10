@@ -59,9 +59,10 @@ export class InventoryService {
       .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
   }
 
-  getPersonalList(username: string) { //</users?username=test&first=5&max=10
+  //`${environment.gatewayUrl}/api/services/inventory/keycloak/user/`,
+  getPersonalList(searchData: string) { //</users?username=test&first=5&max=10
     return this.httpClient
-      .get<{data: PersonalListModel}>(constants.GET_PERSONEL_LIST + `users?${username}&first=5&max=5`)
+      .get<{data: PersonalListModel}>(constants.GET_PERSONAL_LIST + `users?search=${searchData}`)
       .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
   }
 

@@ -15,9 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryManagement.Service
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1A76A1FC-4587-4F86-AC5D-A191D4683B3B}"
 	ProjectSection(SolutionItems) = preProject
-		html.txt = html.txt
 		Services Port List.txt = Services Port List.txt
-		TextFile1.txt = TextFile1.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{D2883697-C0A3-4BBD-9A65-24835530451E}"

@@ -12,6 +12,11 @@
      Http Port  : https://localhost:2010
      Https Port : https://localhost:2011
 
+-- > RabbitMq
+     Http Port  : https://localhost:2012
+     Https Port : https://localhost:2011
+
+
 
 
 __________________________ Keycloak roller __________________________
@@ -35,3 +40,8 @@ __________________________ Keycloak roller __________________________
 dotnet cli üzerinden db update komutlarý
 dotnet ef migrations add InitialCreate
 dotnet ef database update
+
+
+chrome Localhost ssl sertifikalarýna izin vermek : chrome://flags/#allow-insecure-localhost
+https://stackoverflow.com/questions/7580508/getting-chrome-to-accept-self-signed-localhost-certificate
+

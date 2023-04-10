@@ -12,18 +12,19 @@ import {PersonalListModel} from "../../../models/personal-list/personal-list";
 })
 
 export class EmbezzledComponent implements OnInit {
-  personalList: any; //PersonalListModel[] = [];
+  personalList: any;
+  searchPersonal: any;
 
   constructor(private messageService: MessageService,
               private inventoryService: InventoryService) {
   }
 
   ngOnInit() {
-    this.getPersonalList('testfx001');
+    //this.getPersonalList();
   }
 
-  getPersonalList(username: any) {
-    this.inventoryService.getPersonalList(username).subscribe({
+  getPersonalList() {
+    this.inventoryService.getPersonalList(this.searchPersonal).subscribe({
       next: (data) => {
         //this.categoryList = data?.data;
         console.log(data)
@@ -39,4 +40,12 @@ export class EmbezzledComponent implements OnInit {
       },
     });
   }
+  keyDownFunction(event: any) {
+    //console.log(event)
+    if (event.keyCode === 13) {
+      this.getPersonalList();
+    }
+  }
+
+
 }

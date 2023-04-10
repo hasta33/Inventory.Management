@@ -19,6 +19,7 @@ import {ContextMenuModule} from "primeng/contextmenu";
 import {TabViewModule} from "primeng/tabview";
 import {DialogModule} from "primeng/dialog";
 import {EmbezzledComponent} from "../embezzled/embezzled.component";
+import {ToolbarModule} from "primeng/toolbar";
 
 
 @NgModule({
@@ -47,6 +48,7 @@ import {EmbezzledComponent} from "../embezzled/embezzled.component";
     ContextMenuModule,
     TabViewModule,
     DialogModule,
+    ToolbarModule,
   ]
 })
 export class InventoryListModule { }
