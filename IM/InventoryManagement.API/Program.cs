@@ -16,6 +16,7 @@ using InventoryManagement.Repository.UnitOfWork;
 using InventoryManagement.Services;
 using InventoryManagement.Services.Mapping;
 using InventoryManagement.Services.Services;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
@@ -91,7 +92,8 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 
 #region Sql Server Connection
-/*builder.Services.AddDbContext<DataContext>(x =>
+/* Single db
+ * builder.Services.AddDbContext<DataContext>(x =>
 {
     x.UseSqlServer(builder.Configuration.GetConnectionString("IMDbConnection"), options =>
     {
@@ -99,6 +101,7 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
     });
 });*/
 
+//multiple db
 builder.Services.AddDbContext<DataContext>(options =>
 {
     var provider = builder.Configuration.GetValue("provider", SqlServer.Name);
@@ -186,6 +189,18 @@ builder.Services.AddHttpClient<KeycloakServiceTest>(client =>
 builder.Services.AddHttpClient<IdentityModel.Client.TokenClient>();
 builder.Services.AddSingleton(builder.Configuration.GetSection("ClientCredentialsTokenRequest").Get<ClientCredentialsTokenRequest>());
 #endregion
+
+
+
+
+#region RabbitMQ settings
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq();
+});
+#endregion
+
+
 
 
 var app = builder.Build();

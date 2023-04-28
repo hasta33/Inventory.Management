@@ -1,22 +1,26 @@
 ﻿using AutoMapper;
 using InventoryManagement.Core.DTOs;
 using InventoryManagement.Core.DTOs.Inventory;
-using InventoryManagement.Core.DTOs.InventoryMovement;
 using InventoryManagement.Core.Models;
 using InventoryManagement.Core.Repositories;
 using InventoryManagement.Core.Services;
 using InventoryManagement.Core.UnitOfWork;
+using MassTransit;
 using Microsoft.AspNetCore.Http;
+using SharedModels;
 
 namespace InventoryManagement.Services.Services
 {
     public class InventoryServiceWithDto : ServiceWithDto<Inventory, InventoryDto>, IInventoryServiceWithDto
     {
         private readonly IInventoryRepository _inventoryRepository;
+        private readonly IPublishEndpoint _publishEndpoint;
+
         //private readonly IInventoryMovementRepository _inventoryMovementRepository;
-        public InventoryServiceWithDto(IGenericRepository<Inventory> repository, IUnitOfWork unitOfWork, IMapper mapper, IInventoryRepository inventoryRepository) : base(repository, unitOfWork, mapper)
+        public InventoryServiceWithDto(IGenericRepository<Inventory> repository, IUnitOfWork unitOfWork, IMapper mapper, IPublishEndpoint publishEndpoint, IInventoryRepository inventoryRepository) : base(repository, unitOfWork, mapper)
         {
             _inventoryRepository = inventoryRepository;
+            _publishEndpoint = publishEndpoint;
             //_inventoryMovementRepository = inventoryMovementRepository;
         }
 
@@ -33,6 +37,17 @@ namespace InventoryManagement.Services.Services
             ////movement add end
 
             var newDto = _mapper.Map<InventoryDto>(newEntity);
+
+
+            //rabbitmq notification
+            await _publishEndpoint.Publish<CreatedInventory>(new
+            {
+                newEntity.Id,
+                newEntity.Name,
+                newEntity.Barcode,
+                newEntity.SerialNumber
+            });
+
             return CustomResponseDto<InventoryDto>.Success(StatusCodes.Status200OK, newDto);
         }
 
