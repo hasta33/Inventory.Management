@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagement.Repository.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230410125954_InitialCreate")]
+    [Migration("20230317072118_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -183,11 +183,6 @@ namespace InventoryManagement.Repository.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Embezzled")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
                     b.Property<int>("Imei")
                         .HasMaxLength(250)
                         .HasColumnType("int");
@@ -211,6 +206,11 @@ namespace InventoryManagement.Repository.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
+                    b.Property<string>("Responsible")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
                     b.Property<string>("SerialNumber")
                         .IsRequired()
                         .HasMaxLength(250)
@@ -229,58 +229,6 @@ namespace InventoryManagement.Repository.Migrations
                     b.HasIndex("CompanyId");
 
                     b.ToTable("Inventory", (string)null);
-                });
-
-            modelBuilder.Entity("InventoryManagement.Core.Models.InventoryMovement", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BusinessCode")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Company")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<string>("EmbezzledUser")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<int>("InventoryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Perpetrator")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<string>("Process")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InventoryId");
-
-                    b.ToTable("InventoryMovement", (string)null);
                 });
 
             modelBuilder.Entity("InventoryManagement.Core.Models.Model", b =>
@@ -359,17 +307,6 @@ namespace InventoryManagement.Repository.Migrations
                     b.Navigation("Company");
                 });
 
-            modelBuilder.Entity("InventoryManagement.Core.Models.InventoryMovement", b =>
-                {
-                    b.HasOne("InventoryManagement.Core.Models.Inventory", "Inventory")
-                        .WithMany("InventoryMovements")
-                        .HasForeignKey("InventoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Inventory");
-                });
-
             modelBuilder.Entity("InventoryManagement.Core.Models.Model", b =>
                 {
                     b.HasOne("InventoryManagement.Core.Models.Brand", "Brand")
@@ -398,11 +335,6 @@ namespace InventoryManagement.Repository.Migrations
                     b.Navigation("Categories");
 
                     b.Navigation("Inventories");
-                });
-
-            modelBuilder.Entity("InventoryManagement.Core.Models.Inventory", b =>
-                {
-                    b.Navigation("InventoryMovements");
                 });
 #pragma warning restore 612, 618
         }

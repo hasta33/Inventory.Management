@@ -20,7 +20,7 @@ namespace InventoryManagement.API.Controllers
 
 
         [HttpGet("{page}/{pageSize}")]
-        //[Authorize(Roles = "CompanyRole", Policy = "company#get")]
+        [Authorize(Roles = "CompanyRole", Policy = "company#get")]
         public async Task<IActionResult> GetCompanyAllList(int page, int pageSize)
         {
             return CreateActionResult(await _service.GetCompanyAllList(page, pageSize));
@@ -28,7 +28,7 @@ namespace InventoryManagement.API.Controllers
         
 
         [HttpGet("{companyId}/{page}/{pageSize}")]
-        //[Authorize(Roles = "CompanyRole", Policy = "company#get")]
+        [Authorize(Roles = "CompanyRole", Policy = "company#get")]
         public async Task<IActionResult> GetCompanyListWithSubTables(int companyId, int page, int pageSize)
         {
             return CreateActionResult(await _service.GetCompanyListWithSubTables(companyId, page, pageSize));
@@ -37,7 +37,7 @@ namespace InventoryManagement.API.Controllers
 
 
         [HttpPost]
-        //[Authorize(Roles = "CompanyRole", Policy = "company#create")]
+        [Authorize(Roles = "CompanyRole", Policy = "company#create")]
         public async Task<IActionResult> AddAsync([FromBody] CompanyCreateDto dto)
         {
             return CreateActionResult(await _service.AddAsync(dto));
@@ -46,7 +46,7 @@ namespace InventoryManagement.API.Controllers
 
 
         [HttpPut]
-        //[Authorize(Roles = "CompanyRole", Policy = "company#update")]
+        [Authorize(Roles = "CompanyRole", Policy = "company#update")]
         public async Task<IActionResult> UpdateAsync([FromBody] CompanyUpdateDto dto)
         {
             return CreateActionResult(await _service.UpdateAsync(dto));
@@ -55,7 +55,7 @@ namespace InventoryManagement.API.Controllers
 
 
         [HttpDelete("{id}")]
-       // [Authorize(Roles = "CompanyRole", Policy = "company#delete")]
+        [Authorize(Roles = "CompanyRole", Policy = "company#delete")]
         public async Task<IActionResult> RemoveAsync(int id)
         {
             return CreateActionResult(await _service.RemoveAsync(id));

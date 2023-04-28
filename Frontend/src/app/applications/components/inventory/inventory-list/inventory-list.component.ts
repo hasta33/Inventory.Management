@@ -11,8 +11,8 @@ import {BrandService} from "../../../service/brand/brand.service";
 import {BrandModel} from "../../../models/brand/brand";
 import {Router} from "@angular/router";
 import {DialogService, DynamicDialogRef} from "primeng/dynamicdialog";
+import {EmbezzledComponent} from "../embezzled/embezzled.component";
 import {InventoryMovementModel} from "../../../models/inventory/inventory-movement";
-import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-inventory-list',
@@ -54,7 +54,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   selectedName: any;
   selectedMac: any;
   selectedImei: any;
-  selectedEmbezzled: any;
+  selectedResponsible: any;
   selectedStatus: any;
 
   //Table row
@@ -66,8 +66,6 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
   //Zimmet dialog
   embezzledRef: DynamicDialogRef | undefined;
-  personalList: any;
-  selectedPersonal: any;
 
 
   constructor(
@@ -88,13 +86,12 @@ export class InventoryListComponent implements OnInit, OnDestroy {
       { label: 'Detaylara Git', icon: 'pi pi-fw pi-angle-right', command: () => this.inventoryDetail = true  },
       { label: 'İşlemler', icon: 'pi pi-fw pi-info',
         items: [
-          { label: 'Zimmetle', icon: 'pi pi-fw pi-user-plus', command: () => this.personalListShow() },
+          { label: 'Zimmetle', icon: 'pi pi-fw pi-user-plus', command: () => this.embezzledShow() },
           { label: 'Zimmet Teslim Al', icon: 'pi pi-fw pi-refresh',  },
           { label: 'Servise Gönder', icon: 'pi pi-fw pi-cog',  },
           { label: 'Transfer Et', icon: 'pi pi-fw pi-car',  },
         ] }
     ];
-
 
     this.getCompanyAllList();
     this.getCategoryAllList();
@@ -196,7 +193,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
         serialNumber: this?.selectedSerialNumber,
         mac: this?.selectedMac,
         imei: this?.selectedImei,
-        embezzled: this?.selectedEmbezzled,
+        responsibleUser: this?.selectedResponsible,
         status: this?.selectedStatus
       })
       .subscribe({
@@ -220,16 +217,11 @@ export class InventoryListComponent implements OnInit, OnDestroy {
       this.searchInventory();
     }
   }
-  //InventoryDetail
-  onDetailInventory(event: any) {
-    this.selectedRow = event;
-    this.inventoryDetail = true;
-  }
 
 
 
 
-  /*embezzledShow() {
+  embezzledShow() {
     this.embezzledRef = this.dialogService.open(EmbezzledComponent, {
       header: 'Zimmetlenecek personel seç',
       width: '70%',
@@ -247,17 +239,17 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     this.embezzledRef.onMaximize.subscribe((value) => {
       this.messageService.add({ severity: 'info', summary: 'Maximized', detail: `maximized: ${value.maximized}` });
     });
-  }*/
-
-  personalListShow() {
-
   }
 
 
 
 
 
-
+  //InventoryDetail
+  onDetailInventory(event: any) {
+    this.selectedRow = event;
+    this.inventoryDetail = true;
+  }
 
 
 

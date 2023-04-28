@@ -35,7 +35,7 @@
         public int Imei { get; set; }
         public string Mac { get; set; } = string.Empty; 
         public string Status { get; set; } = string.Empty;
-        public string Embezzled { get; set; } = string.Empty;
+        public string Responsible { get; set; } = string.Empty;
 
         #region RelationShip
         public ICollection<InventoryMovement> InventoryMovements { get; set; } = new List<InventoryMovement>();

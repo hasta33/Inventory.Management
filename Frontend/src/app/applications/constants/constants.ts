@@ -44,13 +44,11 @@ export const constants = {
   DELETE_MODEL_URL: `${environment.gatewayUrl}/api/services/inventory/model`,
 
 
-  //Inventory Start
+
   GET_INVENTORY_LIST_URL : `${environment.gatewayUrl}/api/services/inventory/inventory`,
   POST_INVENTORY_URL: `${environment.gatewayUrl}/api/services/inventory/inventory`,
   PUT_INVENTORY_URL: `${environment.gatewayUrl}/api/services/inventory/inventory`,
   DELETE_INVENTORY_URL: `${environment.gatewayUrl}/api/services/inventory/inventory`,
-  //EMBEZZLED_INVENTORY_URL: `${environment.gatewayUrl}/api/services/inventory/inventory/embezzled`,
-  //Inventory End
 
 
   //Inventory Movement

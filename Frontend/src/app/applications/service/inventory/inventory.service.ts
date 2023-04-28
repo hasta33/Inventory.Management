@@ -53,12 +53,6 @@ export class InventoryService {
       .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
   }
 
-  /*putInventoryEmbezzled(data: any): Observable<EmbezzledModel> {
-    return this.httpClient
-      .put<any>(constants.EMBEZZLED_INVENTORY_URL, data)
-      .pipe(retry(constants.HTTP_SERVICE_RETRY), catchError(this.handleError));
-  }*/
-
   deleteInventory(id: Number) {
     return this.httpClient
       .delete<any>(constants.DELETE_INVENTORY_URL+`/${id}`)

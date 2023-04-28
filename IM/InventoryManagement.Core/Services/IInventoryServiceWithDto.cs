@@ -12,7 +12,6 @@ namespace InventoryManagement.Core.Services
 
         Task<CustomResponseDto<InventoryDto>> AddAsync(InventoryCreateDto dto);
         Task<CustomResponseDto<NoContent>> UpdateAsync(InventoryUpdateDto dto);
-        Task<CustomResponseDto<NoContent>> UpdateAsyncEmbezzled(EmbezzledUpdateDto dto);
     }
 
 
