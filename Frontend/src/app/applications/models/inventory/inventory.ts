@@ -11,7 +11,7 @@ export class InventoryModel {
   imei: number | any;
   mac: string | any;
   status: string | any;
-  embezzled: string | any;
+  responsible: string | any;
   totalCount: number | any;
 
   inventoryDate: Date | undefined;
@@ -33,6 +33,6 @@ export type InventoryListParameters = {
   serialNumber?: string;
   mac?: string;
   imei?: number;
-  embezzled?: string;
+  responsibleUser?: string;
   status?: string;
 }

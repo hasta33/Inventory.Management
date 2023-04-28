@@ -11,7 +11,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
-  constructor(private injector: Injector) {}
+  constructor(private injector: Injector, private spinner:NgxSpinnerService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     /*if (!req.url.includes("albums")) {
@@ -21,14 +21,10 @@ export class LoadingInterceptor implements HttpInterceptor {
     //const loaderService = this.injector.get(LoadingService);
     const loaderService = this.injector.get(NgxSpinnerService);
 
-    //if (req.method === 'GET' || 'POST' || 'PUT' || 'DELETE') {
-    //  console.log('get metodugeldi')
-      loaderService.show();
-    //}
-
+    loaderService.show();
 
     return next.handle(req).pipe(
-      delay(250),
+      delay(1000),
       finalize(() => {
         loaderService.hide()
       })
