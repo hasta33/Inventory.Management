@@ -22,7 +22,7 @@ namespace InventoryManagement.Repository.Configurations
             builder.Property(x => x.Imei).HasMaxLength(250);
             builder.Property(x => x.Mac).HasMaxLength(250);
             builder.Property(x => x.Status).HasMaxLength(250);
-            builder.Property(x => x.Responsible).HasMaxLength(250);
+            builder.Property(x => x.Embezzled).HasMaxLength(250);
 
 
             builder.ToTable(nameof(Inventory));

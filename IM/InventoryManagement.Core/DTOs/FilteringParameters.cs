@@ -15,7 +15,7 @@
 
         public int? Imei { get; set; }
 
-        public string? ResponsibleUser { get; set; }
+        public string? Embezzled { get; set; }
         public string? Status { get; set; }
     }
 }

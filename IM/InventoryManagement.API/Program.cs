@@ -2,7 +2,6 @@
 using Autofac.Extensions.DependencyInjection;
 using IdentityModel.Client;
 using InventoryManagement.API.Authentication;
-using InventoryManagement.API.Authorization.Decision;
 using InventoryManagement.API.Authorization.RPT;
 using InventoryManagement.API.Filters;
 using InventoryManagement.API.MiddlewaresExtension;
@@ -19,13 +18,13 @@ using InventoryManagement.Services.Mapping;
 using InventoryManagement.Services.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
 using System.Text.Json.Serialization;
+using static InventoryManagement.DatabaseProviders;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +44,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.SuppressModelStateInvalidFilter = true;
 });
 builder.Services.AddEndpointsApiExplorer();
+
 
 //Custom FluentValidation
 builder.Services.AddCustomApplicationServices();
@@ -88,26 +88,44 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));
 builder.Services.AddScoped(typeof(NotFoundFilter<>));
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
-//var config = new MapperConfiguration(cfg =>
-//{
-//    cfg.AddProfile<AutoMapperProfile>();
-//});
-//var mapper = config.CreateMapper();
-//builder.Services.AddSingleton(mapper);
 #endregion
 
 
 
 #region Sql Server Connection
-builder.Services.AddDbContext<DataContext>(x =>
+/*//Single tenant
+ * builder.Services.AddDbContext<DataContext>(x =>
 {
     x.UseSqlServer(builder.Configuration.GetConnectionString("IMDbConnection"), options =>
     {
         options.MigrationsAssembly(Assembly.GetAssembly(typeof(DataContext)).GetName().Name);
     });
-    //x.UseSqlServer(builder.Configuration.GetConnectionString("IMDbConnection"));
+});*/
+
+//Multi tenant
+builder.Services.AddDbContext<DataContext>(options =>
+{
+    //var provider = config.GetValue("provider", SqlServer.Name);
+    var provider = builder.Configuration.GetValue("provider", SqlServer.Name);
+    if (provider == SqlServer.Name)
+    {
+        options.UseSqlServer(
+            builder.Configuration.GetConnectionString(SqlServer.Name)!,
+            x => x.MigrationsAssembly(SqlServer.Assembly)
+        );
+    }
+    if (provider == Postgresql.Name)
+    {
+        options.UseNpgsql(
+            builder.Configuration.GetConnectionString(Postgresql.Name)!,
+            x => x.MigrationsAssembly(Postgresql.Assembly)
+        );
+    }
 });
+
 #endregion
+
+
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new RepositoryServiceModule()));
@@ -175,6 +193,14 @@ builder.Services.AddSingleton(builder.Configuration.GetSection("ClientCredential
 
 
 var app = builder.Build();
+//Initialize Database
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<DataContext>();
+    await DataContext.InitializeAsync(db);
+}
+
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

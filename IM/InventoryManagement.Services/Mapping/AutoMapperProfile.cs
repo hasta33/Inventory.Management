@@ -7,6 +7,8 @@ using InventoryManagement.Core.DTOs.Inventory;
 using InventoryManagement.Core.DTOs.InventoryMovement;
 using InventoryManagement.Core.DTOs.Model;
 using InventoryManagement.Core.Models;
+using InventoryManagement.Repository.Repositories;
+using InventoryManagement.Services.Services;
 
 namespace InventoryManagement.Services.Mapping
 {
@@ -63,6 +65,7 @@ namespace InventoryManagement.Services.Mapping
             CreateMap<InventoryCreateDto, Inventory>();
             CreateMap<Inventory, InventoryDto>();
             CreateMap<InventoryUpdateDto, Inventory>();
+            CreateMap<EmbezzledUpdateDto, Inventory>();
             #endregion
 
             #region InventoryMovement

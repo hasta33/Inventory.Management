@@ -52,6 +52,12 @@ namespace InventoryManagement.Services.Services
             return CustomResponseDto<NoContent>.Success(StatusCodes.Status204NoContent);
         }
 
-
+        public async Task<CustomResponseDto<NoContent>> UpdateAsyncEmbezzled(EmbezzledUpdateDto dto)
+        {
+            var entity = _mapper.Map<Inventory>(dto);
+            _inventoryRepository.Update(entity);
+            await _unitOfWork.CommitAsync();
+            return CustomResponseDto<NoContent>.Success(StatusCodes.Status204NoContent);
+        }
     }
 }

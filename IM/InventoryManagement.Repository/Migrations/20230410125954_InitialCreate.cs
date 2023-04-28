@@ -93,7 +93,7 @@ namespace InventoryManagement.Repository.Migrations
                     Imei = table.Column<int>(type: "int", maxLength: 250, nullable: false),
                     Mac = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     Status = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    Responsible = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Embezzled = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     BusinessCode = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -155,6 +155,33 @@ namespace InventoryManagement.Repository.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "InventoryMovement",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    InventoryId = table.Column<int>(type: "int", nullable: false),
+                    Perpetrator = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Process = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Company = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    EmbezzledUser = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    BusinessCode = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InventoryMovement", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_InventoryMovement_Inventory_InventoryId",
+                        column: x => x.InventoryId,
+                        principalTable: "Inventory",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Brand_CompanyId",
                 table: "Brand",
@@ -176,6 +203,11 @@ namespace InventoryManagement.Repository.Migrations
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_InventoryMovement_InventoryId",
+                table: "InventoryMovement",
+                column: "InventoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Model_BrandId",
                 table: "Model",
                 column: "BrandId");
@@ -188,13 +220,16 @@ namespace InventoryManagement.Repository.Migrations
                 name: "CategorySub");
 
             migrationBuilder.DropTable(
-                name: "Inventory");
+                name: "InventoryMovement");
 
             migrationBuilder.DropTable(
                 name: "Model");
 
             migrationBuilder.DropTable(
                 name: "Category");
+
+            migrationBuilder.DropTable(
+                name: "Inventory");
 
             migrationBuilder.DropTable(
                 name: "Brand");

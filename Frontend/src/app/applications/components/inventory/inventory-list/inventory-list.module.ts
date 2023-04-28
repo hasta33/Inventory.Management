@@ -9,7 +9,7 @@ import {InputTextModule} from "primeng/inputtext";
 import {CardModule} from "primeng/card";
 import {DropdownModule} from "primeng/dropdown";
 import {InputNumberModule} from "primeng/inputnumber";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {RippleModule} from "primeng/ripple";
 import {OverlayPanelModule} from "primeng/overlaypanel";
 import {MessageModule} from "primeng/message";
@@ -18,8 +18,8 @@ import {ToastModule} from "primeng/toast";
 import {ContextMenuModule} from "primeng/contextmenu";
 import {TabViewModule} from "primeng/tabview";
 import {DialogModule} from "primeng/dialog";
-import {EmbezzledComponent} from "../embezzled/embezzled.component";
 import {ToolbarModule} from "primeng/toolbar";
+import {AutoCompleteModule} from "primeng/autocomplete";
 
 
 @NgModule({
@@ -27,8 +27,7 @@ import {ToolbarModule} from "primeng/toolbar";
     CUSTOM_ELEMENTS_SCHEMA
   ],
   declarations: [
-    InventoryListComponent,
-    EmbezzledComponent
+    InventoryListComponent
   ],
   imports: [
     CommonModule,
@@ -49,6 +48,8 @@ import {ToolbarModule} from "primeng/toolbar";
     TabViewModule,
     DialogModule,
     ToolbarModule,
+    ReactiveFormsModule,
+    AutoCompleteModule,
   ]
 })
 export class InventoryListModule { }

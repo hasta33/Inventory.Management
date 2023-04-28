@@ -67,7 +67,9 @@
       </p-tabPanel>
 
       <p-tabPanel header="Zimmet">
-        <p>Zimmet işlemleri</p>
+        <div class="field grid">
+
+        </div>
       </p-tabPanel>
 
       <p-tabPanel header="Cihaz Hareketleri">
@@ -172,7 +174,7 @@
                       <input id="deviceName" type="text" [style]="{'width':'199px'}" pInputText [(ngModel)]="selectedName" placeholder="Cihaz adı">
                     </div>
                     <div class="flex align-items-start justify-content-start m-0">
-                      <input id="responsible" type="text" [style]="{'width':'199px'}" pInputText [(ngModel)]="selectedResponsible" placeholder="Kullanıcı">
+                      <input id="embezzled" type="text" [style]="{'width':'199px'}" pInputText [(ngModel)]="selectedEmbezzled" placeholder="Kullanıcı">
                     </div>
                   </div>
                 </div>
@@ -263,7 +265,7 @@
         <td>{{rowDataInventory.id}}</td>
         <td>{{rowDataInventory.barcode}}</td>
         <td>{{rowDataInventory.name}}</td>
-        <td>{{rowDataInventory.responsible}}</td>
+        <td>{{rowDataInventory.embezzled}}</td>
         <td>{{rowDataInventory.serialNumber}}</td>
         <td>{{rowDataInventory.imei}}</td>
         <td>{{rowDataInventory.mac}}</td>

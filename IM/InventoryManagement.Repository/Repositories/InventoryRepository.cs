@@ -60,9 +60,9 @@ namespace InventoryManagement.Repository.Repositories
             {
                 query = query.Where(x => x.Imei == parameters.Imei).OrderByDescending(x => x.CreatedDate);
             }
-            if (parameters.ResponsibleUser != null)
+            if (parameters.Embezzled != null)
             {
-                query = query.Where(x => x.Responsible == parameters.ResponsibleUser).OrderByDescending(x => x.CreatedDate);
+                query = query.Where(x => x.Embezzled == parameters.Embezzled).OrderByDescending(x => x.CreatedDate);
             }
             if (parameters.Status != null)
             {
@@ -93,7 +93,7 @@ namespace InventoryManagement.Repository.Repositories
                     Name = x.Name,
                     SerialNumber = x.SerialNumber,
                     Status = x.Status,
-                    Responsible = x.Responsible,
+                    Embezzled = x.Embezzled,
                     UpdatedDate = x.UpdatedDate,
                     TotalCount = totalCount,
                 }).ToListAsync();

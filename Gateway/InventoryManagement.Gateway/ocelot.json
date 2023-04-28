@@ -467,6 +467,33 @@
       },
       "UpstreamHttpMethod": [ "PUT", "POST" ]
     },
+    /*
+    Embezzled Inventory PUT - https://localhost:2001/api/services/inventory/inventory
+    {
+      "id": 7,
+      "embezzled": "Zimmetlenecek kullanıcı adı"
+    }
+    */
+    {
+      "DownstreamPathTemplate": "/api/inventory/embezzled",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 2003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/services/inventory/inventory/embezzled",
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 30,
+        "Limit": 10
+      },
+      "UpstreamHttpMethod": [ "PUT" ]
+    },
+
     //--------------------------------------- Inventory -------------------------------------
 
 

@@ -15,7 +15,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Migrations\InventoryManagement.Postgresql\InventoryManagement.Postgresql.csproj" />
+	  <ProjectReference Include="..\..\Migrations\InventoryManagement.SqlServer\InventoryManagement.SqlServer.csproj" />
     <ProjectReference Include="..\InventoryManagement.Services\InventoryManagement.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Queries\" />
   </ItemGroup>
 
 </Project>

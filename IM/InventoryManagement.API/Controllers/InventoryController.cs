@@ -43,13 +43,22 @@ namespace InventoryManagement.API.Controllers
             return CreateActionResult(await _service.AddAsync(dto));
         }
 
-
+        
 
         [HttpPut]
         [Authorize(Roles = "InventoryRole", Policy = "inventory#update")]
         public async Task<IActionResult> UpdateAsync([FromBody] InventoryUpdateDto dto)
         {
             return CreateActionResult(await _service.UpdateAsync(dto));
+        }
+
+
+
+        [HttpPut("embezzled")]
+        [Authorize(Roles = "InventoryRole", Policy = "inventory#update")]
+        public async Task<IActionResult> UpdateAsyncEmbezzled([FromBody] EmbezzledUpdateDto dto)
+        {
+            return CreateActionResult(await _service.UpdateAsyncEmbezzled(dto));
         }
 
 
