@@ -45,7 +45,7 @@ namespace InventoryManagement.Repository
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost,1433;Database=IMDB;User=sa;Password=Aa123456789*-+;TrustServerCertificate=True");
+            //optionsBuilder.UseSqlServer("Server=localhost,1433;Database=IMDB;User=sa;Password=Aa123456789*-+;TrustServerCertificate=True");
             base.OnConfiguring(optionsBuilder);
         }
 
@@ -105,7 +105,14 @@ namespace InventoryManagement.Repository
 
 
 
+        public static async Task InitializeAsync(DataContext db)
+        {
+            await db.Database.MigrateAsync();
 
+            // already seeded
+            //if (db.Vehicles.Any())
+            //    return;
+        }
 
     }
 }
