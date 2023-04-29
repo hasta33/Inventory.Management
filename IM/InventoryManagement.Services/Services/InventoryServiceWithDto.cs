@@ -7,20 +7,24 @@ using InventoryManagement.Core.Services;
 using InventoryManagement.Core.UnitOfWork;
 using MassTransit;
 using Microsoft.AspNetCore.Http;
-using SharedModels;
+using InventoryManagement.Shared;
+using InventoryManagement.Shared.RabbitMQ.Commands;
+using InventoryManagement.Shared.RabbitMQ;
 
 namespace InventoryManagement.Services.Services
 {
     public class InventoryServiceWithDto : ServiceWithDto<Inventory, InventoryDto>, IInventoryServiceWithDto
     {
         private readonly IInventoryRepository _inventoryRepository;
-        private readonly IPublishEndpoint _publishEndpoint;
+        //private readonly IPublishEndpoint _publishEndpoint; //event type
+        private readonly ISendEndpointProvider _sendEndpointProvider; //command type
 
         //private readonly IInventoryMovementRepository _inventoryMovementRepository;
-        public InventoryServiceWithDto(IGenericRepository<Inventory> repository, IUnitOfWork unitOfWork, IMapper mapper, IPublishEndpoint publishEndpoint, IInventoryRepository inventoryRepository) : base(repository, unitOfWork, mapper)
+        public InventoryServiceWithDto(IGenericRepository<Inventory> repository, IUnitOfWork unitOfWork, IMapper mapper, ISendEndpointProvider sendEndpointProvider, IInventoryRepository inventoryRepository) : base(repository, unitOfWork, mapper)
         {
             _inventoryRepository = inventoryRepository;
-            _publishEndpoint = publishEndpoint;
+            _sendEndpointProvider = sendEndpointProvider;
+            //_publishEndpoint = publishEndpoint;
             //_inventoryMovementRepository = inventoryMovementRepository;
         }
 
@@ -39,14 +43,7 @@ namespace InventoryManagement.Services.Services
             var newDto = _mapper.Map<InventoryDto>(newEntity);
 
 
-            //rabbitmq notification
-            await _publishEndpoint.Publish<CreatedInventory>(new
-            {
-                newEntity.Id,
-                newEntity.Name,
-                newEntity.Barcode,
-                newEntity.SerialNumber
-            });
+            
 
             return CustomResponseDto<InventoryDto>.Success(StatusCodes.Status200OK, newDto);
         }
@@ -57,6 +54,39 @@ namespace InventoryManagement.Services.Services
             var inventory = await _inventoryRepository.GetInventoryList(parameters, page, pageSize);
             var inventoryDto = _mapper.Map<List<InventoryDto>>(inventory);
             return CustomResponseDto<List<InventoryDto>>.Success(StatusCodes.Status200OK, inventoryDto);
+        }
+
+        public async Task<CustomResponseDto<InventoryDto>> InventoryEmbezzled(InventoryEmbezzledDto dto)
+        {
+            var entity = _mapper.Map<Inventory>(dto);
+            _inventoryRepository.Update(entity);
+            await _unitOfWork.CommitAsync();
+
+
+            //Publisher
+            //rabbitmq notification
+            /*await _publishEndpoint.Publish<InventoryEmbezzledMessageCommand>(new
+            {
+                dto.Id,
+                dto.Responsible,
+                dto.Barcode,
+                dto.SerialNumber
+            });*/
+
+            //Command send
+            var sendCommandEndpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri("queue:inventory-embezzled"));
+            var embezzled = new InventoryEmbezzledMessageCommand();
+            embezzled.SerialNumber = dto.SerialNumber;
+            embezzled.Imei = dto.Imei;
+            embezzled.Responsible = dto.Responsible;
+            embezzled.Barcode = dto.Barcode;
+            embezzled.Mac = dto.Mac;
+            embezzled.Id = dto.Id;
+
+            await sendCommandEndpoint.Send<InventoryEmbezzledMessageCommand>(embezzled);
+
+            return CustomResponseDto<InventoryDto>.Success(StatusCodes.Status204NoContent);
+
         }
 
         public async Task<CustomResponseDto<NoContent>> UpdateAsync(InventoryUpdateDto dto)

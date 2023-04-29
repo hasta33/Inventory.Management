@@ -1,6 +1,6 @@
-﻿namespace InventoryManagement.Shared.RabbitMQ.Commands
+﻿namespace InventoryManagement.Core.DTOs.Inventory
 {
-    public class InventoryEmbezzledMessageCommand
+    public class InventoryEmbezzledDto
     {
         public int Id { get; set; }
         public int Barcode { get; set; }

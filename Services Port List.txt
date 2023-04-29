@@ -7,6 +7,10 @@
      Http Port  : https://localhost:2002
      Https Port : https://localhost:2003
 
+-- > Email.API
+     Http Port  : https://localhost:2004
+     Https Port : https://localhost:2005
+
 
 -- > Keycloak Jwt Token Services
      Http Port  : https://localhost:2010
@@ -34,9 +38,16 @@ __________________________ Keycloak roller __________________________
 
 
 
+//rabbitmq 
+Command(send): Tek bir servis kullanacaksa kullanýlýr. Command -> A Service
+Event(publish): Birden fazla servis ayný mesajý kullanacaksa kullanýlýr. Event -> A Service, B Service, C Service
 
 
 
+
+
+
+Helpers
 dotnet cli üzerinden db update komutlarý
 dotnet ef migrations add InitialCreate
 dotnet ef database update

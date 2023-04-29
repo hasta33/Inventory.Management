@@ -52,6 +52,12 @@ namespace InventoryManagement.API.Controllers
             return CreateActionResult(await _service.UpdateAsync(dto));
         }
 
+        [HttpPut("embezzled")]
+        public async Task<IActionResult> InventoryEmbezzled([FromBody] InventoryEmbezzledDto dto)
+        {
+            return CreateActionResult(await _service.InventoryEmbezzled(dto));
+        }
+
 
 
         [HttpDelete("{id}")]
