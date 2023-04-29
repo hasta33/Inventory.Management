@@ -24,7 +24,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
-using static InventoryManagement.DatabaseProviders;
+using static InventoryManagement.Provider;
 
 var builder = WebApplication.CreateBuilder(args);
 
