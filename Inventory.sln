@@ -22,11 +22,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{D288
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryManagement.Gateway", "Gateway\InventoryManagement.Gateway\InventoryManagement.Gateway.csproj", "{8C9DE995-BE19-4B8D-98E1-34ED9FB49E52}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{91395D00-5625-4658-B59D-51A19BE5DF69}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructures", "Infrastructures", "{91395D00-5625-4658-B59D-51A19BE5DF69}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryManagement.SqlServer", "Infrastructure\InventoryManagement.SqlServer\InventoryManagement.SqlServer.csproj", "{13DE165A-6CA7-4818-AB72-169AD230E58E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryManagement.SqlServer", "IM\Infrastructures\InventoryManagement.SqlServer\InventoryManagement.SqlServer.csproj", "{13DE165A-6CA7-4818-AB72-169AD230E58E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryManagement.Postgresql", "Infrastructure\InventoryManagement.Postgresql\InventoryManagement.Postgresql.csproj", "{E2FF6D72-BBEF-42C4-B254-EE34F26AC9F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryManagement.Postgresql", "IM\Infrastructures\InventoryManagement.Postgresql\InventoryManagement.Postgresql.csproj", "{E2FF6D72-BBEF-42C4-B254-EE34F26AC9F1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EMail", "EMail", "{674830BB-2282-4CDB-9ECC-99E01F134D42}"
 EndProject
