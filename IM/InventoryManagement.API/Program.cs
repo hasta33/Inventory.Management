@@ -39,6 +39,40 @@ builder.Services.AddControllers(options =>
     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault | JsonIgnoreCondition.WhenWritingNull; //db'de null olan değerleri getirme
 });
 
+#region Database Providers
+/* Single db
+ * builder.Services.AddDbContext<DataContext>(x =>
+{
+    x.UseSqlServer(builder.Configuration.GetConnectionString("IMDbConnection"), options =>
+    {
+        options.MigrationsAssembly(Assembly.GetAssembly(typeof(DataContext)).GetName().Name);
+    });
+});*/
+//multiple db
+builder.Services.AddDbContext<DataContext>(options =>
+{
+    var provider = builder.Configuration.GetValue("provider", SqlServer.Name);
+
+    if (provider == SqlServer.Name)
+    {
+        options.UseSqlServer(
+            builder.Configuration.GetConnectionString(SqlServer.Name)!,
+            x => x.MigrationsAssembly(SqlServer.Assembly)
+        );
+    }
+
+    if (provider == Postgresql.Name)
+    {
+        options.UseNpgsql(
+            builder.Configuration.GetConnectionString(Postgresql.Name)!,
+            x => x.MigrationsAssembly(Postgresql.Assembly)
+        );
+    }
+});
+#endregion
+
+
+
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
@@ -91,40 +125,7 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 
 
-#region Sql Server Connection
-/* Single db
- * builder.Services.AddDbContext<DataContext>(x =>
-{
-    x.UseSqlServer(builder.Configuration.GetConnectionString("IMDbConnection"), options =>
-    {
-        options.MigrationsAssembly(Assembly.GetAssembly(typeof(DataContext)).GetName().Name);
-    });
-});*/
 
-//multiple db
-builder.Services.AddDbContext<DataContext>(options =>
-{
-    var provider = builder.Configuration.GetValue("provider", SqlServer.Name);
-
-    if (provider == SqlServer.Name)
-    {
-        options.UseSqlServer(
-            builder.Configuration.GetConnectionString(SqlServer.Name)!,
-            x => x.MigrationsAssembly(SqlServer.Assembly)
-        );
-    }
-
-    if (provider == Postgresql.Name)
-    {
-        options.UseNpgsql(
-            builder.Configuration.GetConnectionString(Postgresql.Name)!,
-            x => x.MigrationsAssembly(Postgresql.Assembly)
-        );
-    }
-});
-
-
-#endregion
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new RepositoryServiceModule()));
