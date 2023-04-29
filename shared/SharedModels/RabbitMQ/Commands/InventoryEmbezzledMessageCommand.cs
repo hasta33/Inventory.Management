@@ -1,0 +1,16 @@
+﻿namespace InventoryManagement.Shared.RabbitMQ.Commands
+{
+    public class InventoryEmbezzledMessageCommand
+    {
+        public int Id { get; set; }
+        public int Barcode { get; set; }
+        public string SerialNumber { get; set; } = string.Empty;
+        public int Imei { get; set; }
+        public string Mac { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+
+
+
+        public string Email { get; set; } = string.Empty;
+    }
+}

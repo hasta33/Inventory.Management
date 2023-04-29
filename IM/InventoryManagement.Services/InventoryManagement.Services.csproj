@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\shared\SharedModels\SharedModels.csproj" />
+    <ProjectReference Include="..\..\shared\SharedModels\InventoryManagement.Shared.csproj" />
     <ProjectReference Include="..\InventoryManagement.Repository\InventoryManagement.Repository.csproj" />
   </ItemGroup>
 

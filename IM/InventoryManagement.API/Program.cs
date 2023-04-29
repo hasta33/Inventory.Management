@@ -194,9 +194,24 @@ builder.Services.AddSingleton(builder.Configuration.GetSection("ClientCredential
 
 
 #region RabbitMQ settings
-builder.Services.AddMassTransit(x =>
+builder.Services.AddMassTransit(mass =>
 {
-    x.UsingRabbitMq();
+    //Consumer tanımlamaları
+    //mass.AddConsumer<CreatedInventory>();
+
+    mass.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(builder.Configuration["RabbitMQ:Host"], "/", host =>
+        {
+            host.Username(builder.Configuration["RabbitMQ:Username"]);
+            host.Password(builder.Configuration["RabbitMQ:Password"]);
+        });
+
+        //cfg.ReceiveEndpoint($"queue:{RabbitMQSettingsConst.DocumentExecutedCreatedCompleted}", e =>
+        //{
+        //    e.ConfigureConsumer<CreatedInventory>(context);
+        //});
+    });
 });
 #endregion
 

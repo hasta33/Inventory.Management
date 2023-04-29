@@ -1,4 +1,4 @@
-﻿namespace SharedModels
+﻿namespace InventoryManagement.Shared
 {
     public interface CreatedInventory
     {
