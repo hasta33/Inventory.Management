@@ -5,18 +5,15 @@ using InventoryManagement.Core.Models;
 using InventoryManagement.Core.Repositories;
 using InventoryManagement.Core.Services;
 using InventoryManagement.Core.UnitOfWork;
+using InventoryManagement.Shared.RabbitMQ.Commands;
 using MassTransit;
 using Microsoft.AspNetCore.Http;
-using InventoryManagement.Shared;
-using InventoryManagement.Shared.RabbitMQ.Commands;
-using InventoryManagement.Shared.RabbitMQ;
 
 namespace InventoryManagement.Services.Services
 {
     public class InventoryServiceWithDto : ServiceWithDto<Inventory, InventoryDto>, IInventoryServiceWithDto
     {
         private readonly IInventoryRepository _inventoryRepository;
-        //private readonly IPublishEndpoint _publishEndpoint; //event type
         private readonly ISendEndpointProvider _sendEndpointProvider; //command type
 
         //private readonly IInventoryMovementRepository _inventoryMovementRepository;
@@ -24,8 +21,6 @@ namespace InventoryManagement.Services.Services
         {
             _inventoryRepository = inventoryRepository;
             _sendEndpointProvider = sendEndpointProvider;
-            //_publishEndpoint = publishEndpoint;
-            //_inventoryMovementRepository = inventoryMovementRepository;
         }
 
         public async Task<CustomResponseDto<InventoryDto>> AddAsync(InventoryCreateDto dto)
@@ -73,7 +68,7 @@ namespace InventoryManagement.Services.Services
                 dto.SerialNumber
             });*/
 
-            //Command send
+            ////Command send
             var sendCommandEndpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri("queue:inventory-embezzled"));
             var embezzled = new InventoryEmbezzledMessageCommand();
             embezzled.SerialNumber = dto.SerialNumber;

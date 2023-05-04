@@ -1,9 +1,14 @@
 # InventoryManagement
 
-Bu proje .net core 7 web api üzerine inşa eilmiştir. N katmanlı, repository pattern ve UnitOfWork kullanılarak dizayn edilmiştir.
+Bu proje .net core 7 web api üzerine inşa edilmiştir. 
+  Choreography Design pattern üzerine; N katmanlı, repository pattern ve UnitOfWork kullanılarak dizayn edilmiştir.
+
 - InventoryManagement.API içinde Autofac
 - InventoryManagement.Repository içinde Microsoft.EntityFrameworkCore, Microsoft.EntityFrameworkCore.Design, Microsoft.EntityFrameworkCore.SqlServer, Microsoft.EntityFrameworkCore.Tools
 - InventoryManagement.Services içinde AutoMapper.Extensions.Microsoft.DependencyInjection, FluentValidation.AspNetCore
+- InventoryManagement.Gateway: Ocelot, Microsoft.AspNetCore.Authentication.JwtBearer
+- Email.API: MailKit, MaasTransit.AspNetCore, MaasTransit.RabbitMQ
+
 
 Yerel adres
 https://localhost:2001;

@@ -1,6 +1,6 @@
-﻿using InventoryManagement.Core.DTOs;
+﻿using InventoryManagement.API.Services;
+using InventoryManagement.Core.DTOs;
 using InventoryManagement.Core.DTOs.Inventory;
-using InventoryManagement.Core.DTOs.InventoryMovement;
 using InventoryManagement.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +13,7 @@ namespace InventoryManagement.API.Controllers
     {
         private readonly IInventoryServiceWithDto _service;
         //private readonly IInventoryMovementServiceWithDto _movementService;
+       
 
         public InventoryController(IInventoryServiceWithDto service)
         {
@@ -55,6 +56,7 @@ namespace InventoryManagement.API.Controllers
         [HttpPut("embezzled")]
         public async Task<IActionResult> InventoryEmbezzled([FromBody] InventoryEmbezzledDto dto)
         {
+            //_logger2.LogWarning("sdfsddsf");
             return CreateActionResult(await _service.InventoryEmbezzled(dto));
         }
 

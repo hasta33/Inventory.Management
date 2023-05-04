@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\shared\SharedModels\InventoryManagement.Shared.csproj" />
+    <ProjectReference Include="..\..\Shared\InventoryManagement.Shared\InventoryManagement.Shared.csproj" />
   </ItemGroup>
 
 </Project>

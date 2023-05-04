@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManagement.Repository.Repositories
 {
-    public class BrandRepository : GenericRepository<Brand>, IBrandRepository
+    public class BrandRepositorySqlServer : GenericRepository<Brand>, IBrandRepository
     {
-        public BrandRepository(DataContext context) : base(context)
+        public BrandRepositorySqlServer(DataContext context) : base(context)
         {
 
         }
@@ -28,7 +28,7 @@ namespace InventoryManagement.Repository.Repositories
 
             int totalCount = query.Count();
 
-            var response = await query.Skip((pageSize * (page - 1)))
+            var response = await query.Skip(pageSize * (page - 1))
                 .Take(pageSize)
                 .Select(x => new Brand()
                 {

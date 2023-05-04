@@ -8,6 +8,7 @@ namespace InventoryManagement.Repository.Repositories
     {
         public CompanyRepository(DataContext context) : base(context)
         {
+
         }
 
         public async Task<List<Company>> GetCompanyListWithSubTables(int companyId, int page, int pageSize)
@@ -28,7 +29,7 @@ namespace InventoryManagement.Repository.Repositories
                 .OrderByDescending(x => x.CreatedDate);
             int totalCount = query.Count();
 
-            var response = await query.Skip((pageSize * (page - 1)))
+            var response = await query.Skip(pageSize * (page - 1))
                 .Take(pageSize)
                 .Select(x => new Company()
                 {

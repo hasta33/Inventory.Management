@@ -2,7 +2,6 @@
 using InventoryManagement.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 
 namespace InventoryManagement.API.Controllers
 {

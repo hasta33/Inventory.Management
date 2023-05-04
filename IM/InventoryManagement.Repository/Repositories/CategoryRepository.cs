@@ -38,7 +38,7 @@ namespace InventoryManagement.Repository.Repositories
 
             int totalCount = query.Count();
 
-            var response = await query.Skip((pageSize * (page - 1)))
+            var response = await query.Skip(pageSize * (page - 1))
                 .Take(pageSize)
                 .Select(x => new Category()
                 {

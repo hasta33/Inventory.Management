@@ -6,11 +6,13 @@ namespace InventoryManagement.Repository.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
+
         protected readonly DataContext _context;
         private readonly DbSet<T> _dbSet;
 
         public GenericRepository(DataContext context)
         {
+
             _context = context;
             _dbSet = _context.Set<T>();
         }

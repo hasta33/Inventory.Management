@@ -10,7 +10,6 @@ using InventoryManagement.API.Services;
 using InventoryManagement.Core.Repositories;
 using InventoryManagement.Core.Services;
 using InventoryManagement.Core.UnitOfWork;
-using InventoryManagement.Repository;
 using InventoryManagement.Repository.Repositories;
 using InventoryManagement.Repository.UnitOfWork;
 using InventoryManagement.Services;
@@ -20,11 +19,11 @@ using MassTransit;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NLog;
+using NLog.Web;
 using System.Text.Json.Serialization;
-using static InventoryManagement.Provider;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,37 +38,55 @@ builder.Services.AddControllers(options =>
     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault | JsonIgnoreCondition.WhenWritingNull; //db'de null olan değerleri getirme
 });
 
+
+#region Healt check example
+//Health check -> null check yapılacak
+/*builder.Services
+    .AddHealthChecks()
+    .AddSqlServer(connectionString: builder.Configuration.GetConnectionString("ConnectionStrings:SqlServer"),
+    healthQuery: "SELECT 1",
+    name: "MS SQL Server Check",
+    failureStatus: HealthStatus.Unhealthy | HealthStatus.Degraded,
+    tags: new string[] { "db", "sql", "sqlserver" });
+*/
+//builder.Services
+//    .AddHealthChecksUI(settings => settings.AddHealthCheckEndpoint("Service 1", "https://localhost:2003/health"))
+//    .AddSqlServerStorage(builder.Configuration["ConnectionStrings:SqlServer"]);
+
+//builder.Services
+//    .AddHealthChecks()
+//    .AddSqlServer(
+//    connectionString: builder.Configuration.GetConnectionString("ConnectionStrings:SqlServer"),
+//    name: "Sql Server Db Check",
+//    failureStatus: HealthStatus.Unhealthy | HealthStatus.Degraded,
+//    tags: new string[] { "sqlServer" });
+//builder.Services
+//    .AddHealthChecksUI(settings =>
+//    {
+//        settings.AddHealthCheckEndpoint("Service 1", "https://localhost:2003/health");
+//    });
+#endregion
+
 #region Database Providers
-/* Single db
- * builder.Services.AddDbContext<DataContext>(x =>
+/*builder.Services.AddDbContext<DataContext>(x =>
 {
-    x.UseSqlServer(builder.Configuration.GetConnectionString("IMDbConnection"), options =>
+    x.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"), options =>
     {
         options.MigrationsAssembly(Assembly.GetAssembly(typeof(DataContext)).GetName().Name);
     });
 });*/
-//multiple db
-builder.Services.AddDbContext<DataContext>(options =>
-{
-    var provider = builder.Configuration.GetValue("provider", SqlServer.Name);
-
-    if (provider == SqlServer.Name)
-    {
-        options.UseSqlServer(
-            builder.Configuration.GetConnectionString(SqlServer.Name)!,
-            x => x.MigrationsAssembly(SqlServer.Assembly)
-        );
-    }
-
-    if (provider == Postgresql.Name)
-    {
-        options.UseNpgsql(
-            builder.Configuration.GetConnectionString(Postgresql.Name)!,
-            x => x.MigrationsAssembly(Postgresql.Assembly)
-        );
-    }
-});
 #endregion
+
+
+//nlog
+var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+logger.Debug("init main");
+
+builder.Logging.ClearProviders();
+builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+builder.Host.UseNLog();
+builder.Services.AddTransient<GenericHelper>();
+
 
 
 
@@ -195,23 +212,36 @@ builder.Services.AddSingleton(builder.Configuration.GetSection("ClientCredential
 
 
 #region RabbitMQ settings
-builder.Services.AddMassTransit(mass =>
+//builder.Services.AddMassTransit(mass =>
+//{
+//    //Consumer tanımlamaları
+//    //mass.AddConsumer<CreatedInventory>();
+
+//    mass.UsingRabbitMq((context, cfg) =>
+//    {
+//        cfg.Host(builder.Configuration["RabbitMQ:Host"], "/", host =>
+//        {
+//            host.Username(builder.Configuration["RabbitMQ:Username"]);
+//            host.Password(builder.Configuration["RabbitMQ:Password"]);
+//        });
+
+//        //cfg.ReceiveEndpoint($"queue:{RabbitMQSettingsConst.DocumentExecutedCreatedCompleted}", e =>
+//        //{
+//        //    e.ConfigureConsumer<CreatedInventory>(context);
+//        //});
+//    });
+//});
+
+//online test
+builder.Services.AddMassTransit(x =>
 {
-    //Consumer tanımlamaları
-    //mass.AddConsumer<CreatedInventory>();
-
-    mass.UsingRabbitMq((context, cfg) =>
+    x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host(builder.Configuration["RabbitMQ:Host"], "/", host =>
+        cfg.Host(new Uri("amqps://toad.rmq.cloudamqp.com/vwlspurq"), h =>
         {
-            host.Username(builder.Configuration["RabbitMQ:Username"]);
-            host.Password(builder.Configuration["RabbitMQ:Password"]);
+            h.Username("vwlspurq");
+            h.Password("fVUxc97W6TQ0baVwjf_WevvGyEmpc6V6");
         });
-
-        //cfg.ReceiveEndpoint($"queue:{RabbitMQSettingsConst.DocumentExecutedCreatedCompleted}", e =>
-        //{
-        //    e.ConfigureConsumer<CreatedInventory>(context);
-        //});
     });
 });
 #endregion
@@ -220,13 +250,6 @@ builder.Services.AddMassTransit(mass =>
 
 
 var app = builder.Build();
-//Initialize Database
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<DataContext>();
-    await DataContext.InitializeAsync(db);
-}
-
 
 if (app.Environment.IsDevelopment())
 {
@@ -246,5 +269,19 @@ app.MapControllers(); //.RequireAuthorization();
 
 //Custom exceptions
 app.UseCustomException();
+
+//app.MapHealthChecks("/health");
+
+//app.UseHealthChecksUI(options => options.UIPath = "/health-ui");
+
+//app.UseHealthChecks("/health", new HealthCheckOptions/
+//{
+//    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+//});
+
+/*app.UseHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});*/
 
 app.Run();

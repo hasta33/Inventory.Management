@@ -13,12 +13,14 @@
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5" />
+    <PackageReference Include="NLog" Version="5.1.4" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.2.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\IM\Infrastructures\InventoryManagement.Postgresql\InventoryManagement.Postgresql.csproj" />
-    <ProjectReference Include="..\..\IM\Infrastructures\InventoryManagement.SqlServer\InventoryManagement.SqlServer.csproj" />
+    <ProjectReference Include="..\..\Shared\InventoryManagement.Shared\InventoryManagement.Shared.csproj" />
     <ProjectReference Include="..\InventoryManagement.Services\InventoryManagement.Services.csproj" />
   </ItemGroup>
 

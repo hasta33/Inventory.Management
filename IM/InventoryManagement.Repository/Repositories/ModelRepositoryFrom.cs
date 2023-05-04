@@ -3,9 +3,9 @@ using InventoryManagement.Core.Repositories;
 
 namespace InventoryManagement.Repository.Repositories
 {
-    public class ModelRepository : GenericRepository<Model>, IModelRepository
+    public class ModelRepositoryFrom : GenericRepository<Model>, IModelRepository
     {
-        public ModelRepository(DataContext context) : base(context)
+        public ModelRepositoryFrom(DataContext context) : base(context)
         {
         }
     }
