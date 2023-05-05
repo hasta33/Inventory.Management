@@ -1,5 +1,4 @@
-﻿using InventoryManagement.API.Services;
-using InventoryManagement.Core.DTOs;
+﻿using InventoryManagement.Core.DTOs;
 using InventoryManagement.Services.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Text.Json;
@@ -8,10 +7,8 @@ namespace InventoryManagement.API.MiddlewaresExtension
 {
     public static class UseCustomExceptionHandler
     {
-        //private readonly ILogger<GenericHelper> _logger2;
-        //private GenericHelper genericHelper;
-
-        public static void UseCustomException(this IApplicationBuilder app, ILogger<GenericHelper> logger2)
+        private static ILogger _logger;
+        public static void UseCustomException(this IApplicationBuilder app)
         {
             app.UseExceptionHandler(config =>
             {
@@ -30,12 +27,25 @@ namespace InventoryManagement.API.MiddlewaresExtension
                     context.Response.StatusCode = statusCode;
                     var response = CustomResponseDto<NoContent>.Fail(statusCode, exceptionFeature.Error.Message);
 
-                    logger2.LogError($"Something went wrong: {exceptionFeature.Error}");  //global logging
-                    //Console.WriteLine(exceptionFeature.Error);
+                    //Bu loglama tekrar değerlendirilecek
+                    if (statusCode == 500)
+                    {
+                        _logger.LogError($"{exceptionFeature.Error}");
+                    } else if (statusCode == 400)
+                    {
+                        _logger.LogWarning($"{exceptionFeature.Error}");
+                    } else if (statusCode == 404)
+                    {
+                        _logger.LogInformation($"{exceptionFeature.Error}");
+                    } else
+                    {
+                        _logger.LogInformation($"{exceptionFeature.Error}");
+                    }
 
                     await context.Response.WriteAsync(JsonSerializer.Serialize(response));
                 });
             });
         }
+
     }
 }

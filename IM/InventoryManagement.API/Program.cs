@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using IdentityModel.Client;
 using InventoryManagement.API.Authentication;
@@ -10,23 +11,26 @@ using InventoryManagement.API.Services;
 using InventoryManagement.Core.Repositories;
 using InventoryManagement.Core.Services;
 using InventoryManagement.Core.UnitOfWork;
+using InventoryManagement.Repository;
 using InventoryManagement.Repository.Repositories;
 using InventoryManagement.Repository.UnitOfWork;
 using InventoryManagement.Services;
 using InventoryManagement.Services.Mapping;
 using InventoryManagement.Services.Services;
-using MassTransit;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using NLog;
 using NLog.Web;
+using System.Reflection;
 using System.Text.Json.Serialization;
 
-var builder = WebApplication.CreateBuilder(args);
 
+
+var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers(options =>
@@ -39,53 +43,30 @@ builder.Services.AddControllers(options =>
 });
 
 
-#region Healt check example
-//Health check -> null check yapılacak
-/*builder.Services
-    .AddHealthChecks()
-    .AddSqlServer(connectionString: builder.Configuration.GetConnectionString("ConnectionStrings:SqlServer"),
-    healthQuery: "SELECT 1",
-    name: "MS SQL Server Check",
-    failureStatus: HealthStatus.Unhealthy | HealthStatus.Degraded,
-    tags: new string[] { "db", "sql", "sqlserver" });
-*/
-//builder.Services
-//    .AddHealthChecksUI(settings => settings.AddHealthCheckEndpoint("Service 1", "https://localhost:2003/health"))
-//    .AddSqlServerStorage(builder.Configuration["ConnectionStrings:SqlServer"]);
-
-//builder.Services
-//    .AddHealthChecks()
-//    .AddSqlServer(
-//    connectionString: builder.Configuration.GetConnectionString("ConnectionStrings:SqlServer"),
-//    name: "Sql Server Db Check",
-//    failureStatus: HealthStatus.Unhealthy | HealthStatus.Degraded,
-//    tags: new string[] { "sqlServer" });
-//builder.Services
-//    .AddHealthChecksUI(settings =>
-//    {
-//        settings.AddHealthCheckEndpoint("Service 1", "https://localhost:2003/health");
-//    });
-#endregion
 
 #region Database Providers
-/*builder.Services.AddDbContext<DataContext>(x =>
+builder.Services.AddDbContext<DataContext>(x =>
 {
     x.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"), options =>
     {
         options.MigrationsAssembly(Assembly.GetAssembly(typeof(DataContext)).GetName().Name);
     });
-});*/
+});
 #endregion
 
 
 //nlog
-var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
-logger.Debug("init main");
+//var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+//var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+//logger.Debug("init start");
+//builder.Logging.ClearProviders();
+//builder.Host.UseNLog();
 
-builder.Logging.ClearProviders();
-builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+logger.Debug("Application started...");
 builder.Host.UseNLog();
-builder.Services.AddTransient<GenericHelper>();
+
+
 
 
 
@@ -232,18 +213,18 @@ builder.Services.AddSingleton(builder.Configuration.GetSection("ClientCredential
 //    });
 //});
 
-//online test
-builder.Services.AddMassTransit(x =>
-{
-    x.UsingRabbitMq((context, cfg) =>
-    {
-        cfg.Host(new Uri("amqps://toad.rmq.cloudamqp.com/vwlspurq"), h =>
-        {
-            h.Username("vwlspurq");
-            h.Password("fVUxc97W6TQ0baVwjf_WevvGyEmpc6V6");
-        });
-    });
-});
+//////online test
+////builder.Services.AddMassTransit(x =>
+////{
+////    x.UsingRabbitMq((context, cfg) =>
+////    {
+////        cfg.Host(new Uri("amqps://toad.rmq.cloudamqp.com/vwlspurq"), h =>
+////        {
+////            h.Username("vwlspurq");
+////            h.Password("fVUxc97W6TQ0baVwjf_WevvGyEmpc6V6");
+////        });
+////    });
+////});
 #endregion
 
 
@@ -269,19 +250,4 @@ app.MapControllers(); //.RequireAuthorization();
 
 //Custom exceptions
 app.UseCustomException();
-
-//app.MapHealthChecks("/health");
-
-//app.UseHealthChecksUI(options => options.UIPath = "/health-ui");
-
-//app.UseHealthChecks("/health", new HealthCheckOptions/
-//{
-//    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-//});
-
-/*app.UseHealthChecks("/health", new HealthCheckOptions
-{
-    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-});*/
-
 app.Run();

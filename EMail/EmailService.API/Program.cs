@@ -1,5 +1,6 @@
 ﻿using Email.API.Consumers;
 using Email.API.Services;
+using InventoryManagement.Shared.RabbitMQ;
 using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,7 +26,8 @@ builder.Services.AddMassTransit(x =>
         });
 
 
-        cfg.ReceiveEndpoint("inventory-embezzled", e =>
+        //zimmet alanı
+        cfg.ReceiveEndpoint(RabbitMQSettingsConst.InventoryEmbezzled, e =>
         {
             e.ConfigureConsumer<InventoryEmbezzledConsumer>(context);
         });

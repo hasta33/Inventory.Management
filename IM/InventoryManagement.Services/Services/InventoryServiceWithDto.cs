@@ -14,14 +14,19 @@ namespace InventoryManagement.Services.Services
     public class InventoryServiceWithDto : ServiceWithDto<Inventory, InventoryDto>, IInventoryServiceWithDto
     {
         private readonly IInventoryRepository _inventoryRepository;
-        private readonly ISendEndpointProvider _sendEndpointProvider; //command type
+        //private readonly ISendEndpointProvider _sendEndpointProvider; //command type
 
         //private readonly IInventoryMovementRepository _inventoryMovementRepository;
-        public InventoryServiceWithDto(IGenericRepository<Inventory> repository, IUnitOfWork unitOfWork, IMapper mapper, ISendEndpointProvider sendEndpointProvider, IInventoryRepository inventoryRepository) : base(repository, unitOfWork, mapper)
+        //public InventoryServiceWithDto(IGenericRepository<Inventory> repository, IUnitOfWork unitOfWork, IMapper mapper, ISendEndpointProvider sendEndpointProvider, IInventoryRepository inventoryRepository) : base(repository, unitOfWork, mapper)
+        //{
+        //    _inventoryRepository = inventoryRepository;
+        //    //_sendEndpointProvider = sendEndpointProvider;
+        //}
+        public InventoryServiceWithDto(IGenericRepository<Inventory> repository, IUnitOfWork unitOfWork, IMapper mapper, IInventoryRepository inventoryRepository) : base(repository, unitOfWork, mapper)
         {
             _inventoryRepository = inventoryRepository;
-            _sendEndpointProvider = sendEndpointProvider;
         }
+
 
         public async Task<CustomResponseDto<InventoryDto>> AddAsync(InventoryCreateDto dto)
         {
@@ -68,17 +73,17 @@ namespace InventoryManagement.Services.Services
                 dto.SerialNumber
             });*/
 
-            ////Command send
-            var sendCommandEndpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri("queue:inventory-embezzled"));
-            var embezzled = new InventoryEmbezzledMessageCommand();
-            embezzled.SerialNumber = dto.SerialNumber;
-            embezzled.Imei = dto.Imei;
-            embezzled.Responsible = dto.Responsible;
-            embezzled.Barcode = dto.Barcode;
-            embezzled.Mac = dto.Mac;
-            embezzled.Id = dto.Id;
+            //////Command send
+            //var sendCommandEndpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri("queue:inventory-embezzled"));
+            //var embezzled = new InventoryEmbezzledMessageCommand();
+            //embezzled.SerialNumber = dto.SerialNumber;
+            //embezzled.Imei = dto.Imei;
+            //embezzled.Responsible = dto.Responsible;
+            //embezzled.Barcode = dto.Barcode;
+            //embezzled.Mac = dto.Mac;
+            //embezzled.Id = dto.Id;
 
-            await sendCommandEndpoint.Send<InventoryEmbezzledMessageCommand>(embezzled);
+            //await sendCommandEndpoint.Send<InventoryEmbezzledMessageCommand>(embezzled);
 
             return CustomResponseDto<InventoryDto>.Success(StatusCodes.Status204NoContent);
 

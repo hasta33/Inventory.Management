@@ -13,18 +13,18 @@ namespace InventoryManagement.API.Controllers
     {
         private readonly IInventoryServiceWithDto _service;
         //private readonly IInventoryMovementServiceWithDto _movementService;
-       
-
-        public InventoryController(IInventoryServiceWithDto service)
+        private readonly ILogger<InventoryController> _logger;
+        public InventoryController(IInventoryServiceWithDto service, ILogger<InventoryController> logger = null)
         {
             _service = service;
+            _logger = logger;
             //_movementService = movementService;
         }
 
 
 
         [HttpGet("{page}/{pageSize}")]
-        [Authorize(Roles = "InventoryRole", Policy = "inventory#get")]
+        //[Authorize(Roles = "InventoryRole", Policy = "inventory#get")]
         public async Task<IActionResult> GetInventoryList([FromQuery]FilteringParameters parameters, int page, int pageSize)
         {
             return CreateActionResult(await _service.GetInventoryList(parameters, page, pageSize));
@@ -53,11 +53,22 @@ namespace InventoryManagement.API.Controllers
             return CreateActionResult(await _service.UpdateAsync(dto));
         }
 
+
+
         [HttpPut("embezzled")]
         public async Task<IActionResult> InventoryEmbezzled([FromBody] InventoryEmbezzledDto dto)
         {
-            //_logger2.LogWarning("sdfsddsf");
-            return CreateActionResult(await _service.InventoryEmbezzled(dto));
+            ////_logger2.LogWarning("sdfsddsf");
+            _logger.LogWarning("Hata geliyor...");
+            //_logger.LogError("fdsfdsfdsf");
+            //_logger.LogInformation("sdfdsf");
+            //_logger.LogTrace("sdfsdf");
+            //_logger.LogCritical("dsfdsfdsfsfd");
+
+            throw new Exception("sonuncu olan throw");
+
+            return Ok();
+            //return CreateActionResult(await _service.InventoryEmbezzled(dto));
         }
 
 

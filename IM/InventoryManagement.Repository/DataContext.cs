@@ -102,17 +102,5 @@ namespace InventoryManagement.Repository
 
             return base.SaveChangesAsync(cancellationToken);
         }
-
-
-
-        public static async Task InitializeAsync(DataContext db)
-        {
-            await db.Database.MigrateAsync();
-
-            // already seeded
-            //if (db.Vehicles.Any())
-            //    return;
-        }
-
     }
 }
