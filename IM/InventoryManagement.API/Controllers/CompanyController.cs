@@ -21,7 +21,7 @@ namespace InventoryManagement.API.Controllers
 
 
         [HttpGet("{page}/{pageSize}")]
-        //[Authorize(Roles = "CompanyRole", Policy = "company#get")]
+        [Authorize(Roles = "CompanyRole", Policy = "company#get")]
         public async Task<IActionResult> GetCompanyAllList(int page, int pageSize)
         {
             return CreateActionResult(await _service.GetCompanyAllList(page, pageSize));

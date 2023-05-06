@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using IdentityModel.Client;
 using InventoryManagement.API.Authentication;
@@ -21,10 +20,15 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using NLog.Web;
+using Serilog;
+using Serilog.Events;
+using Serilog.Formatting.Json;
+using Serilog.Sinks.MSSqlServer;
+using System.Collections.ObjectModel;
+using System.Data;
+using System.Globalization;
 using System.Reflection;
 using System.Text.Json.Serialization;
 
@@ -53,22 +57,6 @@ builder.Services.AddDbContext<DataContext>(x =>
     });
 });
 #endregion
-
-
-//nlog
-//var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
-//var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
-//logger.Debug("init start");
-//builder.Logging.ClearProviders();
-//builder.Host.UseNLog();
-
-var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
-logger.Debug("Application started...");
-builder.Host.UseNLog();
-
-
-
-
 
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
@@ -229,6 +217,20 @@ builder.Services.AddSingleton(builder.Configuration.GetSection("ClientCredential
 
 
 
+#region Logging
+var logger = new LoggerConfiguration()
+  .MinimumLevel.Information()
+  .ReadFrom.Configuration(builder.Configuration)
+  .WriteTo.Seq("http://localhost:5341/")
+  .WriteTo.MSSqlServer(
+    connectionString: builder.Configuration.GetConnectionString("SerilogDatabase"),
+    sinkOptions: new MSSqlServerSinkOptions { AutoCreateSqlDatabase = true, AutoCreateSqlTable = true, TableName = "LogEvents" })
+  .CreateLogger();
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
+#endregion
+
+
 
 var app = builder.Build();
 
@@ -237,12 +239,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
+//app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 
 
 
